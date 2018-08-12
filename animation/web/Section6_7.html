@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Appendix F Animation by Y. Daniel Liang</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="jquery-latest.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+<script src="jquery.alerts.js"></script> 
+<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      #highlight {
+          background-color: #EB0D1B;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:30px;
+          height: 30px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+          max-height: 25px;
+          min-height: 25px;
+          max-width: 27px;
+          min-width: 27px;
+      }
+
+      #currentFly {
+          background-color:orange;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 45px;
+          line-height: 29px;
+          text-align: middle;
+          top: 79px;
+          left: 62px;
+      }
+
+      #sortedFly {
+          background-color: #37826C;
+          opacity: 0.20;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 25px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #explanation1 {
+          background-color:lightcoral;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      .cell {
+          position:absolute;
+          width:40px;
+          height: 40px;
+          left:20px;
+          top:40px;
+          border-width: 2px;
+          border: 1px black solid;
+          background-color: white;
+          text-align: center;
+          display:inline;
+      }
+
+      .cell1 {
+          display:inline;
+      }
+
+      div.inline { float:left; }
+      .clearBoth { clear:both; }
+
+      .button {
+          margin-bottom: 0px; margin-top: 0px; background-color: #37826C; color:white;
+          /*    width: 70px;
+              height: 30px;*/
+          display:inline;
+          color:#fff;
+          font-size: 16px;
+          background: #3070a8;
+          border: none;
+      }
+
+      .text {
+          position:absolute;
+          text-align: center;
+          width: 133px;
+          height: 23px;
+          font-family: times;
+      }
+    </style>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="" style="font-family: times; font-size: 16px;">     
+
+    <div id="question" style="white-space: nowrap;">
+      <input id="tb1" type="text" value="A" style="width: 24px; color: #EB0D1B; text-align: center;">
+      <input id="tb2" type="text" value="B" style="width: 24px; color: #EB0D1B; text-align: center;">
+      <input id="tb3" type="text" value="8" style="width: 24px; color: #EB0D1B; text-align: center;">
+      <input id="tb4" type="text" value="C" style="width: 24px; color: #EB0D1B; text-align: center;">
+      =
+      <span style="font-size: 14px">
+        <span id="tb5" style="color: #EB0D1B; text-align: center; font-size: 16px;">A</span> &times; 16 <sup>3</sup> +
+        <span id="tb6" style="color: #EB0D1B; text-align: center; font-size: 16px;">B</span> &times; 16 <sup>2</sup> +
+        <span id="tb7" style="color: #EB0D1B; text-align: center; font-size: 16px;">8</span> &times; 16 <sup>1</sup> +
+        <span id="tb8" style="color: #EB0D1B; text-align: center; font-size: 16px;">C</span> &times; 16 <sup>0</sup>
+      </span>
+
+      <button id = "check1" type="button" class="button" onclick="check1()"
+              style='margin-left: 5px;'>Compute</button>
+      <span id="answer" style="color: #37826C; margin-left: 10px;"></span>
+    </div>
+
+    <div id="place1" style="position: absolute; font-size: 16px; margin-top: 2px;">
+      16 <sup>3</sup>
+    </div>
+    <div id="place2" style="position: absolute; font-size: 16px; margin-top: 2px;">
+      16 <sup>2</sup>
+    </div>    
+    <div id="place3" style="position: absolute; font-size: 16px; margin-top: 2px;">
+      16 <sup>1</sup>
+    </div>
+    <div id="place4" style="position: absolute; font-size: 16px; margin-top: 2px;">
+      16 <sup>0</sup>
+    </div>
+    <div style='position: absolute' id ='result'>= 7423</div>
+
+
+
+    <script type="text/javascript">
+      slowAnimationSpeed = 400;
+
+      $("#check1").click(function () {
+      });
+
+      function init() {
+          pos1 = getElementPos(document.getElementById('tb1'));
+          document.getElementById('place1').style.left = pos1.x + 3 + "px";
+          document.getElementById('place1').style.top = pos1.y + 20 + "px";
+
+          pos1 = getElementPos(document.getElementById('tb2'));
+          document.getElementById('place2').style.left = pos1.x + 3 + "px";
+          document.getElementById('place2').style.top = pos1.y + 20 + "px";
+          pos1 = getElementPos(document.getElementById('tb3'));
+          document.getElementById('place3').style.left = pos1.x + 3 + "px";
+          document.getElementById('place3').style.top = pos1.y + 20 + "px";
+          pos1 = getElementPos(document.getElementById('tb4'));
+          document.getElementById('place4').style.left = pos1.x + 3 + "px";
+          document.getElementById('place4').style.top = pos1.y + 20 + "px";
+
+          check1();
+          document.getElementById('result').style.left = pos1.x + 100 + "px";
+          document.getElementById('result').style.top = pos1.y + 25 + "px";
+      }
+
+      function isHex(n) {
+          if (n == 'A' || n == 'B' || n == 'C' || n == 'D' || n == 'E' || n == 'F')
+              return true;
+          else {
+              temp = parseInt(n);
+              if (isNaN(temp) || temp > 9 || temp < 0)
+                  return false;
+              else
+                  return true;
+          }
+      }
+
+      function check1() {
+                          if ($('#tb1').val() == '')
+              $('#tb1').val('0');
+          if ($('#tb2').val() == '')
+              $('#tb2').val('0');
+          if ($('#tb3').val() == '')
+              $('#tb3').val('0');
+          if ($('#tb4').val() == '')
+              $('#tb4').val('0');
+        
+          tb1 = $('#tb1').val();
+          if (!isHex(tb1.toUpperCase())) {
+              jAlert("The first number " + $('#tb1').val() + " is incorrect.");
+              return;
+          }
+          tb2 = $('#tb2').val();
+          if (!isHex(tb2.toUpperCase())) {
+              jAlert("The second number " + $('#tb2').val() + " is incorrect.");
+              return;
+          }
+          tb3 = $('#tb3').val();
+          if (!isHex(tb1.toUpperCase())) {
+              jAlert("The third number " + $('#tb3').val() + " is incorrect.");
+              return;
+          }
+          tb4 = $('#tb4').val();
+          if (!isHex(tb4.toUpperCase())) {
+              jAlert("The fourth number " + $('#tb4').val() + " is incorrect.");
+              return;
+          }
+
+          document.getElementById('tb5').innerHTML = getValue($('#tb1').val());
+          document.getElementById('tb6').innerHTML = getValue($('#tb2').val());
+          document.getElementById('tb7').innerHTML = getValue($('#tb3').val());
+          document.getElementById('tb8').innerHTML = getValue($('#tb4').val());
+
+          
+          pos1 = getElementPos(document.getElementById('tb5'));
+          document.getElementById('result').innerHTML =
+                  '=&nbsp;' + (getValue($('#tb1').val()) * 16 * 16 * 16 +
+                          getValue($('#tb2').val()) * 16 * 16 +
+                          getValue($('#tb3').val()) * 16 +
+                          getValue($('#tb4').val()) * 1);
+      }
+      
+      function getValue(n) {
+        n = n.toUpperCase();
+        if (isNaN(n)) {
+          if (n == 'A') return 10;
+          if (n == 'B') return 11;
+          if (n == 'C') return 12;
+          if (n == 'D') return 13;
+          if (n == 'E') return 14;
+          if (n == 'F') return 15;
+        }
+        else {
+          return parseInt(n);
+        }
+      }
+
+      function check2() {
+          reset();
+          document.getElementById('answer2').innerHTML = "&nbsp;&nbsp;"
+                  + 15;
+      }
+
+
+      function reset() {
+          needNextPass = true;
+          isFindFirst = true;
+          k = 1;
+          current = -1;
+          minPosition = 0;
+
+          i = 0;
+          document.getElementById('highlight').style.visibility = 'hidden';
+          document.getElementById('currentFly').style.visibility = 'hidden';
+          document.getElementById('sortedFly').style.visibility = 'hidden';
+          document.getElementById('iPosition').style.visibility = 'hidden';
+          document.getElementById('iValue').style.visibility = 'hidden';
+      }
+    </script>
+  </body>
+</html>

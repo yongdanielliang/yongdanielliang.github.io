@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Figure1.3 by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="jquery-latest.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+    <link rel="stylesheet" type="text/css" href="codecolor.css" />
+
+    <STYLE>
+      .highlight {
+          background-color:#37826C;
+          opacity: 0.10;
+          position:absolute;
+          width:318px;
+          height: 10px;
+          padding: 3px;
+          margin-top: 0px;
+          top: 89px;
+          left: 72px;
+      }
+
+      .arrow {
+          position:absolute;
+          width:100px;
+          font-size: 150%;
+      }
+
+      .hLine {
+          position:absolute;
+          border-top: 1px solid black;
+          width: 100px;          
+      }
+
+      .verticalLine {
+          position:absolute;
+          border-left: 2px solid black;
+          height: 123px;          
+      }
+
+      .text {
+          /*          position:absolute;*/
+          width: 133px;
+          height: 23px;
+          font-family: times;
+      }
+
+      .box {
+          /*          position:absolute;*/
+          width: 360px;
+          height: 124px;
+          /*          line-height: 30px;*/
+          left:20px;
+          top:3px;
+          padding-left: 8px; 
+          border: 1px chocolate solid;
+          /*          background-color: white;*/
+          font-family: times;
+          color: black;
+          font-size: 125%;
+          /*          vertical-align: middle;*/
+      }
+
+      .text {
+          /*          position:absolute;*/
+          /*          text-align: center;*/
+          width: 450px;
+          height: 23px;
+          font-size: 100%;
+          font-family: times;
+          font-weight: bold;
+      }
+    </STYLE>
+
+    <script>
+
+      function init() {
+
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="init()" style="width: 100%; 
+        margin-left:auto;
+        margin-right:auto; 
+        ">   
+
+
+    <div id ="p1" style="width: 560px; margin: 0 auto;">
+
+      <svg width="560" height="161">
+      <!--  <ellipse cx="100" cy="50" rx="80" ry="30" style="fill:gray;stroke:black;stroke-width:1" />
+        <ellipse cx="100" cy="100" rx="80" ry="30" style="fill:gray;stroke:black;stroke-width:1" />-->
+
+      <defs>
+      <marker id="arrow" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgb(0,128,0);stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:rgb(159,169,169);stop-opacity:0.2" />
+      </linearGradient>
+      <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgb(0,128,0);stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:rgb(0,128,0);stop-opacity:0.2" />
+      </linearGradient>
+      </defs>
+      <!--  <ellipse cx="200" cy="70" rx="85" ry="55" fill="url(#grad1)" />
+      -->
+      <text x="16" y="53" fill="black" style="font-family: times; border: 2px solid yellow; height: 24px
+            font-weight: normal; font-style: normal; font-size: 100%">Assembly Source File</text>  
+      <text x="74" y="91" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 119%">...</text>  
+      <text x="19" y="111" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 119%">add 2, 3, result</text>  
+      <text x="74" y="131" fill="black" style="font-family: monospace; border: 1px solid;
+            font-weight: normal; font-style: normal; font-size: 119%">...</text>  
+
+      <path d="M10,50 a35,10 0 1, 0 155,0 v80  
+            a35,10 0 1, 1 -155,0 M10,50 v80 "
+            fill="url(#grad1)" stroke="gray" stroke-width="2"  />
+
+      <path d="M10,50 a35,10 0 1, 1 155,0 a35,10 0 1, 1 -155,0"
+            fill="url(#grad2)" stroke="gray" stroke-width="2"  />
+
+      <path d="M165,100 h50"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow);"/>
+
+      <rect x='221' y = '84' width="84" height="30" style="fill:url(#grad2);stroke-width:1;stroke:rgb(0,0,0)" />
+      <text x="226" y="104" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 109%">Assembler</text>  
+      <path d="M305,100 h50"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow);"/>
+      
+            <text x="376" y="53" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 100%">Machine-Code File</text>  
+      <text x="424" y="91" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 119%">...</text>  
+      <text x="369" y="111" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 119%">1101101010011010</text>  
+      <text x="424" y="131" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 119%">...</text>  
+
+      <path d="M360,50 a35,10 0 1, 0 155,0 v80  
+            a35,10 0 1, 1 -155,0 M360,50 v80 "
+            fill="url(#grad1)" stroke="gray" stroke-width="2"  />
+
+      <path d="M360,50 a35,10 0 1, 1 155,0 a35,10 0 1, 1 -155,0"
+            fill="url(#grad2)" stroke="gray" stroke-width="2"  />
+
+      
+
+      </svg>
+    </div>
+
+  </body>
+</html>

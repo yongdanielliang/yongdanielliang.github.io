@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>Selection Sort Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+    <script type="text/javascript" src="processing-1.4.1.js"></script>
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+<script src="jquery.alerts.js"></script> 
+<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+    <script language="JavaScript" type="text/javascript">
+      function step(id) {
+        var pjs = Processing.getInstanceById(id);    
+        var isSorted = pjs.step();
+        if (isSorted) {
+          jAlert("The list is now sorted.\nClick Reset to start over" );        
+        }; 
+      }
+      
+      function reset(id) {
+        var pjs = Processing.getInstanceById(id);
+        pjs.reset();
+        pjs.draw();
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+  <body>   
+    <div> 
+      Usage: Perform selection sort for a list of 20 distinct integers from 1 to 20.
+      Click the Step button to swap the first element (highlighted in red) with the smallest element in the remaining unsorted list. 
+      Click the Reset button to start over with a new random list.
+    </div>
+    <br></br>
+    <div align="center">
+      <canvas id="SelectionSort" data-processing-sources="SelectionSort.pde" style="border-style:solid"></canvas></div>
+    <p></p> 
+    <div align="center" >
+      <button type="button" class = "button" onclick="step('SelectionSort')">Step</button>
+      <button type="button" class = "button" onclick="reset('SelectionSort')">Reset</button></div>
+  </body>
+</html>

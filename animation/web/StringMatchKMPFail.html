@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>String Match Animation by Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">-->
+
+        <script src="jquery-1.7.2.min.js"></script>
+        <script src="jquery-ui.min.js"></script>
+        <script src="jquery.ui.touch-punch.min.js"></script>
+        <script src="jquery.alerts.js"></script> 
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #highlight {
+                background-color: #EB0D1B;
+                opacity: 0.2;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 30px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+                /*          max-height: 25px;
+                          min-height: 25px;
+                          max-width: 27px;
+                          min-width: 27px;*/
+            }
+
+            #currentFly {
+                background-color:orange;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 45px;
+                line-height: 29px;
+                text-align: middle;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #sortedFly {
+                background-color: #37826C;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline { float:left; }
+            .clearBoth { clear:both; }
+
+            .button {
+                margin-bottom: 0px; margin-top: 0px; background-color: #37826C; color:white;
+                /*    width: 70px;
+                    height: 30px;*/
+                display:inline;
+                color:#fff;
+                font-size: 14px;
+                background: #3070a8;
+                border: none;
+            }
+        </style>
+        <!-- Global Site Tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            ;
+            gtag('js', new Date());
+            gtag('config', 'UA-89940905-27');
+        </script>
+    
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+    <body onload="init()" onresize="init()" style="font-family: times new roman; max-width: 800px; "> 
+        <div> 
+            Usage: Obtain failure function for the Knuth-Morris-Pratt algorithm. Enter a pattern of size
+            10. 
+            click the Next button to see a step in the algorithm.
+            Click the Reset button to start over with a new pattern.
+        </div>
+        <div style="height: 70px; font-size: 200%"></div>
+        <div id ="iValue" style="position: absolute; height: 100px;">i: 1</div>
+        <div id ="iPosition" style="position: absolute; height: 100px; font-size: 200%">&#8595;</div>
+
+        <div id ="tLabel" style="position:absolute;">
+            pattern1
+        </div>
+        <div id ="pLabel" style="position:absolute;">
+            pattern2
+        </div>
+        <div id ="fLabel" style="position:absolute;">
+            fail
+        </div>
+
+        <div>
+            <div id = 'text' style="display: table; overflow: hidden; width: 200px; margin: 0 auto; position: absolute;">
+                <script>
+                    SIZE = 10;
+                    for (var i = 0; i < SIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white;' +
+                                'width: 20px; height: 30px; min-width: 20px; max-width: 20px; text-align: center; ">' +
+                                '<div id="list' + i + '" style="color: black; weight: bold; "></div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+
+            <div id = 'pattern' style="display: inline-block; overflow: hidden; width: 230px; 
+                 margin: 0 auto; position: absolute;">
+                <script>
+                    pSIZE = 10;
+                    for (var i = 0; i < pSIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white; ' +
+                                'width: 20px; height: 30px; min-width: 20px; max-width: 20px;  text-align: center;">' +
+                                '<div id="pattern' + i + '" style="color: black; weight: bold">45</div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+
+            <div id = 'failure' style="display: inline-block; overflow: hidden; width: 230px; margin: 0 auto; position: absolute;">
+                <script>
+                    for (var i = 0; i < pSIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white; ' +
+                                'width: 20px; height: 30px; min-width: 20px; max-width: 20px;  text-align: center;">' +
+                                '<div id="failure' + i + '" style="color: black; weight: bold"></div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+        </div>
+        <div id = 'check' style="display: inline-block; overflow: hidden;  width: 230px; margin: 0 auto; position: absolute;">
+            <script>
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px white solid; background: white;' +
+                            'width: 30px; height: 30px; min-width: 20px; max-width: 20px;  text-align: center;">' +
+                            '<div id="check' + i + '" style="color: #EB0D1B; weight: bold">&#x2713;</div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+        <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 30px; height: 30px; max-width: 30px; text-align: center;">
+            <div id="currentFly" style="opacity:1.0"></div>
+            <div id="highlight" style="opacity:0.2; "></div>
+            <div id="sortedFly"></div>
+        </div>
+
+        <div id = "buttons" align="center" style="margin-top: 100px;">
+            <div id = "buttons" align="center">
+                <button id = "step" type="button" class="button" onclick="step()">Next</button>
+                <button id = "reset" type="button" class="button" onclick="reset()">Reset</button></div>
+            <div style="width:400px; max-width:400px; text-align: center; margin-top: 1em">
+                <span id = "remark" style = "background-color: white; color: #EB0D1B; alignment-adjust: central; text-align: center; max-wdith: 800px; margin-left: auto; margin-right: auto">
+                    A list is filled with random numbers.
+                </span>
+            </div>
+        </div>
+
+        <script>
+            slowAnimationSpeed = 400;
+
+            $("#step").click(function () {
+                step1();
+            });
+
+            function init() {
+                reset();
+            }
+
+            function reset() {
+                for (var x = 0; x < SIZE; x++)
+                    document.getElementById('check' + x).innerHTML = "";
+
+                $('#text').css({top: 110 + 'px'}).css({left: 130.5 + "px"});
+                
+        pos = getElementPos($('#list0')[0]); // getElementPos(document.getElementById('list0'));
+                $('#check').css({top: pos.y + 89 + "px"}).css({left: pos.x - 1 + "px"});
+                $('#tLabel').css({top: pos.y - 3 + 'px'}).css({left: pos.x - 60.5 + "px"});
+                $('#fLabel').css({top: pos.y + 60 + "px"}).css({left: pos.x - 40.5 + "px"});
+                $('#failure').css({top: pos.y + 55 + "px"}).css({left: pos.x - 1 + "px"});
+
+        pos = getElementPos($('#list1')[0]); // getElementPos(document.getElementById('list0'));
+                $('#highlight').css({top: pos.y - 3 + 'px'}).css({width: pos.w + 'px'}).css({height: 3 * pos.h + 10 + "px"});
+                $('#pattern').css({top: pos.y + 25 + "px"}).css({left: pos.x - 1 + "px"});
+                $('#pLabel').css({top: pos.y + 33 + "px"}).css({left: pos.x - 60.5 + "px"});
+
+                done = false;
+
+                i = 1;
+                k = 0;
+
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('currentFly').style.visibility = 'hidden';
+                document.getElementById('sortedFly').style.visibility = 'hidden';
+                document.getElementById('iPosition').style.visibility = 'hidden';
+                document.getElementById('iValue').style.visibility = 'hidden';
+//                resetColor();
+                document.getElementById('remark').innerHTML = '';
+                //          document.getElementById('value').disabled = false;
+
+//                for (var j = 0; j < SIZE; j++) {
+//                    id = 'check' + j;
+//                    document.getElementById(id).innerHTML = "F";
+//                }
+
+                setFixedValue();
+
+//                document.getElementById('pattern').style.visibility = 'hidden';
+            }
+
+            function resetColor() {
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).style.backgroundColor = "white";
+                    document.getElementById(id).style.color = "black";
+                }
+            }
+
+            function setFixedValue() {
+                fail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                listValues = "";
+                pattern = [];
+//                for (var i = 0; i < SIZE; i++) {
+//                    listValues.push(String.fromCharCode(Math.floor(Math.random() * 4) + "A".charCodeAt(0)));
+//                }
+
+                patternString = 'ABCDEFG';
+                for (var i = 0; i < pSIZE; i++) {
+                    id = 'pattern' + i;
+                    document.getElementById(id).innerHTML = ' ';
+                    document.getElementById('list' + i).innerHTML = ' ';
+                    document.getElementById('failure' + i).innerHTML = ' ';
+                }
+
+                jPrompt("The text is already generated. If you don't see it, move this box." + '\nEnter the pattern with 10 characters. If less than 10, \
+        it will be filled \nwith character A. If greater than 10, it will be truncated \nto 10 characters.', '',
+                        'Prompt Input for Pattern', function (r) {
+                            if (r) {
+                                patternString = r;
+                            }
+
+                            if (patternString.length > 10) {
+                                patternString = patternString.substring(0, 10);
+                            } else {
+                                for (var i = patternString.length; i < 10; i++)
+                                    patternString += 'A';
+                            }
+
+                            for (var i = 0; i < pSIZE; i++) {
+                                id = 'pattern' + i;
+                                document.getElementById(id).innerHTML =
+                                        patternString[i];
+                                id = 'list' + i;
+                                document.getElementById(id).innerHTML =
+                                        patternString[i];
+                            }
+
+                            listValues = patternString;
+                            for (var i = 0; i < pSIZE; i++) {
+                                document.getElementById('failure' + i).innerHTML = 0;
+                            }
+                            
+     document.getElementById('remark').innerHTML = 'A new pattern is entered and fail is initialized to 0.';
+
+                        });
+            }
+
+            function step1() {
+                if (done) {
+                    return;
+                }
+
+                if (i == patternString.length) {
+                    document.getElementById('remark').innerHTML = 'Done. Click Reset to restart.';
+                    done = true;
+                    return;
+                }
+
+                for (var x = 0; x < SIZE; x++)
+                    document.getElementById('check' + x).innerHTML = "";
+
+                setPointerPosition(i);
+                movePattern(i - k);
+
+                if (listValues[i] == patternString[k]) {
+                    fail[i] = k + 1;
+                    document.getElementById('failure' + i).innerHTML = fail[i];
+
+                    document.getElementById('remark').innerHTML =
+                            "i is " + i + " and k is " + k + ". The characters (" +
+                            listValues[i] + " vs. " + patternString[k]
+                            + ") match. Assign k + 1 to fail[" + i + "]. Next increase i and k by 1.";
+
+                    move(i, i);
+                    document.getElementById('check' + i).innerHTML = "&#x2713;";
+
+                    i++;
+                    k++;
+                } else {
+                    document.getElementById('remark').innerHTML =
+                      "i is " + i + " and k is " + k + ". The characters (" +
+                            listValues[i] + " vs. " + patternString[k] + ") don't match.";
+
+                    document.getElementById('check' + i).innerHTML = "&#x2717;";
+
+                    move(i, i);
+
+                    if (k > 0) {
+                        k = fail[k - 1]; // Matching prefix position
+                        document.getElementById('remark').innerHTML += " Next shift pattern2 to align pattern1[" + i + "] with pattern2[" + k + "] by assigning fail[k - 1] to k.";
+//                        movePattern(i - k);
+                    } else {
+                        i++; // No prefix
+                        document.getElementById('remark').innerHTML += " Next increase i by 1 and shift pattern2 to align pattern1[" + i + "] with pattern2[" + k + "].";
+//                        movePattern(i);
+
+                    }
+                }
+            }
+
+            function swap(p1, p2) {
+                posLoc1 = getElementPos(document.getElementById('list' + p1));
+                posLoc = getElementPos(document.getElementById('list' + p2));
+
+                c = p1;
+                m = p2;
+
+                $("#highlight").animate({top: posLoc.y - 55}, slowAnimationSpeed, function () {
+                    $("#highlight").animate({left: posLoc1.x}, slowAnimationSpeed, function () {
+                        $("#highlight").animate({top: posLoc1.y - 6, left: posLoc1.x}, slowAnimationSpeed, function () {
+                            id = 'list' + c;
+                            document.getElementById(id).innerHTML = listValues[c];
+                        });
+                    });
+                });
+
+                $("#currentFly").animate({top: posLoc1.y - 55}, slowAnimationSpeed, function () {
+                    $("#currentFly").animate({left: posLoc.x}, slowAnimationSpeed, function () {
+                        $("#currentFly").animate({top: posLoc.y - 6, left: posLoc.x}, slowAnimationSpeed, function () {
+                            id = 'list' + m;
+                            document.getElementById(id).innerHTML = listValues[m];
+                        });
+                    });
+                });
+            }
+
+            function colorSorted(size) {
+                if (current < 1)
+                    return;
+                p3 = getElementPos(document.getElementById('list0'));
+                document.getElementById('sortedFly').style.top =
+                        p3.y - 6 + "px";
+                document.getElementById('sortedFly').style.left =
+                        p3.x + "px";
+                document.getElementById('sortedFly').style.width =
+                        (p3.w + 7.1) * size + "px";
+                document.getElementById('sortedFly').style.height =
+                        p3.h + 17 + "px";
+                document.getElementById('sortedFly').style.visibility = 'visible';
+            }
+
+            function setPointerPosition(current) {
+                document.getElementById('iPosition').style.visibility = 'visible';
+                document.getElementById('iValue').style.visibility = 'visible';
+                posLoc = getElementPos(document.getElementById('list' + current));
+                document.getElementById('iPosition').style.top
+                        = posLoc.y - 40 + "px";
+                document.getElementById('iPosition').style.left
+                        = posLoc.x + posLoc.w / 2 - 5 + "px";
+
+                document.getElementById('iValue').style.top
+                        = posLoc.y - 53 + "px";
+                document.getElementById('iValue').style.left
+                        = posLoc.x + posLoc.w / 2 - 7 + "px";
+                document.getElementById('iValue').innerHTML = "i: " + current;
+            }
+
+            function findFirst() {
+                setPointerPosition();
+                colorSorted(current);
+                min = listValues[current];
+                minPosition = current;
+
+                for (var i = current + 1; i < SIZE; i++) {
+                    if (min > listValues[i]) {
+                        min = listValues[i];
+                        minPosition = i;
+                    }
+                }
+
+                setMinPosition();
+                setCurrentPosition();
+
+                document.getElementById('remark').innerHTML = 'The minimum value is ' + min + ' and the first value is ' + listValues[current] + ' in the unsorted sublist.';
+            }
+
+            function setCurrentPosition() {
+                posLoc = getElementPos(document.getElementById('list' + current));
+                document.getElementById('currentFly').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('currentFly').style.left =
+                        posLoc.x + "px";
+                document.getElementById('currentFly').style.width =
+                        posLoc.w + 6 + "px";
+                document.getElementById('currentFly').style.height =
+                        posLoc.h + 17 + "px";
+                document.getElementById('currentFly').innerHTML = listValues[current];
+                document.getElementById('currentFly').style.visibility = 'visible';
+            }
+
+            function setMinPosition() {
+                posLoc = getElementPos(document.getElementById('list' + minPosition));
+                document.getElementById('highlight').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('highlight').style.left =
+                        posLoc.x + "px";
+                document.getElementById('highlight').style.width =
+                        posLoc.w + "px";
+
+                document.getElementById('highlight').style.height =
+                        posLoc.h + 11 + "px";
+                document.getElementById('highlight').innerHTML = listValues[minPosition];
+                document.getElementById('highlight').style.visibility = 'visible';
+            }
+
+            function move(p1, p2) {
+                document.getElementById('highlight').style.visibility = 'visible';
+                posLoc1 = getElementPos(document.getElementById('list' + p1));
+                posLoc2 = getElementPos(document.getElementById('list' + p2));
+
+                $('#highlight').css({left: posLoc1.x + "px"});
+                $("#highlight").animate({left: posLoc2.x}, slowAnimationSpeed, function () {
+                });
+            }
+
+            // Compute failure function
+            function computeFailure(pattern) {
+                fail = []
+                for (var i = 0; i < pattern.length; i++)
+                    fail.push(0);
+
+
+                var i = 1;
+                var k = 0;
+                while (i < pattern.length) {
+                    if (pattern[i] == pattern[k]) {
+                        fail[i] = k + 1;
+                        i++;
+                        k++;
+                    } else if (k > 0) {
+                        k = fail[k - 1];
+                    } else {
+                        i++;
+                    }
+                }
+
+                return fail;
+            }
+
+            function movePattern(p1) {
+                pos = getElementPos(document.getElementById('list' + p1));
+                $("#pattern").animate({top: pos.y + 25, left: pos.x - 1}, slowAnimationSpeed, function () {
+                    pos1 = getElementPos(document.getElementById('pattern0'));
+                    document.getElementById('pLabel').style.top = pos1.y - 3 + "px";
+                    document.getElementById('pLabel').style.left = pos1.x - 60.5 + "px";
+                });
+//                $("#failure").animate({top: pos.y + 55, left: pos.x - 1}, slowAnimationSpeed, function () {
+//                    pos1 = getElementPos(document.getElementById('pattern0'));
+//                    document.getElementById('fLabel').style.top = pos1.y + 30 + "px";
+//                    document.getElementById('fLabel').style.left = pos1.x - 30.5 + "px";
+//                });
+
+
+            }
+        </script>
+    </body>
+</html>

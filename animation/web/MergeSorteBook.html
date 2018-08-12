@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Merge Two Sorted Lists Animation Animation by Y. Daniel Liang</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="jquery-latest.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+    <link rel="stylesheet" type="text/css" href="codecolor.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      #cover {
+          background-color: white;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #cover3 {
+          background-color: white;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+      
+            #cover4 {
+          background-color: white;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #highlight {
+          background-color: #EB0D1B;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #currentFly {
+          background-color:orange;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 45px;
+          line-height: 29px;
+          text-align: middle;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #sortedFly {
+          background-color: #37826C;
+          opacity: 0.20;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #explanation1 {
+          background-color:lightcoral;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      .cell {
+          position:absolute;
+          width:40px;
+          height: 40px;
+          left:20px;
+          top:40px;
+          border-width: 2px;
+          border: 1px black solid;
+          background-color: white;
+          text-align: center;
+          display:inline;
+      }
+
+      .cell1 {
+          display:inline;
+      }
+
+      div.inline { float:left; }
+      .clearBoth { clear:both; }
+
+
+    </style>
+
+
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="init()" style="font-family: times new roman;"> 
+<!--    <h3 align="center"><b>Merge <a href="http://cs.armstrong.edu/liang/animation/animation.html" >Animation</a></b> by 
+      <a href="http://www.cs.armstrong.edu/liang/" >Y. Daniel Liang</a></h3>-->
+    <div> 
+      Usage: Merge two sorted lists list1 and list2 into temp. Click the Next button to perform one comparison and move an element to temp. Click the Reset button to start over with two new random lists.  
+    </div>
+    <div style="height: 55px; font-size: 200%"></div>
+    <div id ="current1Value" style="position: absolute; height: 100px; color: #EB0D1B;">low: 1</div>
+    <div id ="current1Position" style="position: absolute; color: #37826C; font-size: 150%; ">&#8595;</div>
+    <div id ="current3Value" style="position: absolute; height: 100px; color: #EB0D1B">low: 1</div>
+    <div id ="current3Position" style="position: absolute; color: #37826C; font-size: 150%">&#8595;</div>
+    <div id ="current2Value" style="position: absolute; height: 100px; color: #EB0D1B">low: 1</div>
+    <div id ="current2Position" style="position: absolute; color: #37826C; font-size: 150%">&#8595;</div>
+
+    <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+      <script>
+        SIZE = 16;
+        for (var i = 0; i < SIZE + 1; i++) {
+            document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                    'border: 1px blue solid; background: white;' +
+                    'width: 30px; height: 30px; min-width: 30px; max-width: 30px;  text-align: center;">' +
+                    '<div id="list' + i + '" style="color: black; weight: bold">45</div>' +
+                    '</div>');
+        }
+      </script>      
+    </div>
+
+    <div style="display: table-cell; vertical-align: middle;
+         background: white;
+         width: 30px; height: 65px; max-width: 30px; text-align: center;"></div>
+
+    <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+      <script>
+        SIZE = 16;
+        for (var i = 0; i < SIZE + 1; i++) {
+            document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                    'border: 1px blue solid; background: white;' +
+                    'width: 30px; height: 30px; min-width: 30px; max-width: 30px;  text-align: center;">' +
+                    '<div id="newList' + i + '" style="color: black; weight: bold">0</div>' +
+                    '</div>');
+        }
+      </script>      
+    </div>
+
+    <div style="display: table-cell; vertical-align: middle;
+         background: white;
+         width: 30px; height: 45px; max-width: 30px; text-align: center;">
+      <div id="cover"></div>
+      <div id="cover3"></div>
+      <div id="cover4"></div>
+      <div id="highlight"></div>
+      <div id="currentFly"></div>
+      <div id="sortedFly"></div>
+    </div>
+
+    <div align="center" >
+      <button id = "step" type="button" class="button" onclick="step()">Next</button>
+      <button id = "reset" type="button" class="button" onclick="reset()">Reset</button></div>
+
+    <div style="text-align: center; margin-top: 1em">
+      <span id = "remark" style = "background-color: white; color: #EB0D1B; alignment-adjust: central; text-align: center; max-wdith: 800px; margin-left: auto; margin-right: auto">
+        A list is filled with random numbers.
+      </span>
+    </div>
+
+    <script>
+      slowAnimationSpeed = 400;
+
+      $("#step").click(function () {
+          takeAStep();
+      });
+
+      function init() {
+          reset();
+      }
+
+      function reset() {
+          list1SIZE = 7;
+          list2SIZE = 16;
+
+          setCover();
+          done = false;
+          setRandomValue();
+          current1 = 0;
+          current2 = 9;
+          current3 = 0;
+          setPosition3("current3Position", "current3Value", 0, "current3", -18, -2);
+          setPosition("current1Position", "current1Value", 0, "current1", -18, 7);
+          setPosition("current2Position", "current2Value", 9, "current2", -18, 7);
+
+          isFindFirst = true;
+          current = 0;
+          minPosition = 0;
+
+          i = 0;
+          document.getElementById('highlight').style.visibility = 'hidden';
+          document.getElementById('currentFly').style.visibility = 'hidden';
+          document.getElementById('sortedFly').style.visibility = 'hidden';
+          document.getElementById('current1Position').style.visibility = 'visible';
+          document.getElementById('current1Value').style.visibility = 'visible';
+
+          resetColor();
+          document.getElementById('remark').innerHTML = 'Two sorted lists list1 and list2 are created';
+//          document.getElementById('value').disabled = false;
+      }
+
+      function resetColor() {
+          for (var i = 0; i < SIZE; i++) {
+              id = 'list' + i;
+              document.getElementById(id).style.backgroundColor = "white";
+              document.getElementById(id).style.color = "black";
+          }
+      }
+
+      function sortNumber(a, b) {
+          return a - b;
+      }
+
+      function setRandomValue() {
+          list1 = [];
+          for (var i = 0; i < list1SIZE; i++) {
+              list1.push(Math.floor(Math.random() * 100));
+          }
+          list1.sort(sortNumber);
+
+          list2 = [];
+          for (var i = 0; i < list1SIZE + 2; i++) {
+              list2.push(Math.floor(Math.random() * 100));
+          }
+          list2.sort(sortNumber);
+
+          listValues = [];
+          for (var i = 0; i < list1SIZE; i++) {
+              listValues[i] = list1[i];
+          }
+          for (var i = 7; i < list2SIZE; i++) {
+              listValues[i] = list2[i - 7];
+          }
+//listValues[7] = ' ';
+//listValues[8] = ' ';
+
+          for (var i = 0; i < SIZE; i++) {
+              id = 'list' + i;
+              document.getElementById(id).innerHTML =
+                      listValues[i];
+          }
+
+          for (var i = 0; i < SIZE; i++) {
+              id = 'newList' + i;
+              document.getElementById(id).innerHTML =
+                      ' ';
+          }
+      }
+
+      function f1() {
+          current3++;
+          current1++;
+          setPosition3("current3Position", "current3Value", current3, "current3", -18, -2);
+          setPosition("current1Position", "current1Value", current1, "current1", -18, 7);
+      }
+
+      function f2() {
+          current3++;
+          current2++;
+          setPosition3("current3Position", "current3Value", current3, "current3", -18, -2);
+          setPosition("current2Position", "current2Value", current2, "current2", -18, 7);
+      }
+
+      var k = 0;
+      var current = 0;
+      var isFindFirst = true;
+
+      done = false;
+
+      function takeAStep() {
+        if (done) {
+            document.getElementById('remark').innerHTML = 
+                    'Merge completed. Click Rest to restart it.';          
+          return;
+        }
+          if (current1 < list1SIZE && current2 < list2SIZE) {
+              if (listValues[current1] < listValues[current2]) {
+            document.getElementById('remark').innerHTML = 'Copy ' +
+                    listValues[current1] + ' from list1 to temp[' + current3 + '].';
+                  move(current1, current3, f1);
+              }
+              else {
+            document.getElementById('remark').innerHTML = 'Copy ' +
+                    listValues[current2] + ' from list2 to temp[' + current3 + '].';
+                  move(current2, current3, f2);
+              }
+          }
+          else if (current1 < list1SIZE) {
+            document.getElementById('remark').innerHTML = 'Copy ' +
+                    listValues[current1] + ' from list1 to temp[' + current3 + '].';
+              move(current1, current3, f1);
+          }
+          else if (current2 < list2SIZE) {
+            document.getElementById('remark').innerHTML = 'Copy ' +
+                    listValues[current2] + ' from list2 to temp[' + current3 + '].';
+              move(current2, current3, f2);
+          }
+          else {
+            done = true;
+              return true;
+            }
+
+          return false;
+      }
+
+      function step1() {
+          if (current > SIZE - 2) {
+              document.getElementById('highlight').style.visibility = 'hidden';
+              document.getElementById('currentFly').style.visibility = 'hidden';
+              document.getElementById('remark').innerHTML = 'The list is now sorted. Click Rest to restart.';
+//              current++;
+              colorSorted(SIZE);
+              return;
+          }
+
+          if (isFindFirst) {
+              findFirst();
+              isFindFirst = false;
+          }
+          else {
+              swap();
+              isFindFirst = true;
+              current++;
+          }
+      }
+
+      function colorSorted(size) {
+          if (current < 1)
+              return;
+          p3 = getElementPos(document.getElementById('list0'));
+          document.getElementById('sortedFly').style.top =
+                  p3.y - 6 + "px";
+          document.getElementById('sortedFly').style.left =
+                  p3.x + 1 + "px";
+          document.getElementById('sortedFly').style.width =
+                  (p3.w + 7.1) * size + "px";
+          document.getElementById('sortedFly').style.height =
+                  p3.h + 17 + "px";
+          document.getElementById('sortedFly').style.visibility = 'visible';
+      }
+
+      function setCover() {
+          posLoc = getElementPos(document.getElementById('list7'));
+          document.getElementById('cover').style.top
+                  = posLoc.y - 15 + "px";
+          document.getElementById('cover').style.left
+                  = posLoc.x + 0 + "px";
+          document.getElementById('cover').style.height
+                  = posLoc.h + 45 + "px";
+          document.getElementById('cover').style.width
+                  = posLoc.w * 2 + 10 + "px";
+
+          posLoc = getElementPos(document.getElementById('list16'));
+          document.getElementById('cover4').style.top
+                  = posLoc.y - 15 + "px";
+          document.getElementById('cover4').style.left
+                  = posLoc.x + 2 + "px";
+          document.getElementById('cover4').style.height
+                  = posLoc.h + 45 + "px";
+          document.getElementById('cover4').style.width
+                  = posLoc.w * 1 + 13 + "px";
+
+    
+    posLoc = getElementPos(document.getElementById('newList14'));
+          document.getElementById('cover3').style.top
+                  = posLoc.y - 20 + "px";
+          document.getElementById('cover3').style.left
+                  = posLoc.x + 2 + "px";
+          document.getElementById('cover3').style.height
+                  = posLoc.h + 55 + "px";
+          document.getElementById('cover3').style.width
+                  = posLoc.w * 3 + 25 + "px";
+      }
+
+      function setPosition3(id, idValue, index, name, hx, dy) {
+          document.getElementById(id).style.visibility = 'visible';
+          document.getElementById(idValue).style.visibility = 'visible';
+          posLoc = getElementPos(document.getElementById('newList' + index));
+          document.getElementById(id).style.top
+                  = posLoc.y - 40 + dy + "px";
+          document.getElementById(id).style.left
+                  = posLoc.x + posLoc.w / 2 - 5 + "px";
+          document.getElementById(idValue).style.top
+                  = posLoc.y - 53 + dy + "px";
+          document.getElementById(idValue).style.left
+                  = posLoc.x + posLoc.w / 2 - 7 + hx + "px";
+          document.getElementById(idValue).innerHTML = name;
+      }
+
+      function setPosition(id, idValue, index, name, hx, dy) {
+       // if (index >= 16) return;
+          document.getElementById(id).style.visibility = 'visible';
+          document.getElementById(idValue).style.visibility = 'visible';
+          posLoc = getElementPos(document.getElementById('list' + index));
+          document.getElementById(id).style.top
+                  = posLoc.y - 40 + dy + "px";
+          document.getElementById(id).style.left
+                  = posLoc.x + posLoc.w / 2 - 5 + "px";
+          document.getElementById(idValue).style.top
+                  = posLoc.y - 53 + dy + "px";
+          document.getElementById(idValue).style.left
+                  = posLoc.x + posLoc.w / 2 - 7 + hx + "px";
+          document.getElementById(idValue).innerHTML = name;
+      }
+
+      function setPointerPosition() {
+          document.getElementById('current1Position').style.visibility = 'visible';
+          document.getElementById('current1Value').style.visibility = 'visible';
+          posLoc = getElementPos(document.getElementById('list' + current));
+          document.getElementById('current1Position').style.top
+                  = posLoc.y - 40 + "px";
+          document.getElementById('current1Position').style.left
+                  = posLoc.x + posLoc.w / 2 - 5 + "px";
+
+          document.getElementById('current1Value').style.top
+                  = posLoc.y - 53 + "px";
+          document.getElementById('current1Value').style.left
+                  = posLoc.x + posLoc.w / 2 - 7 + "px";
+          document.getElementById('current1Value').innerHTML = name;
+      }
+
+      function findFirst() {
+          setPointerPosition();
+          colorSorted(current);
+          min = listValues[current];
+          minPosition = current;
+
+          for (var i = current + 1; i < SIZE; i++) {
+              if (min > listValues[i]) {
+                  min = listValues[i];
+                  minPosition = i;
+              }
+          }
+
+          setMinPosition();
+          setCurrentPosition();
+
+          document.getElementById('remark').innerHTML = 'The minimum value is ' + min + ' and the first value is ' + listValues[current] + ' in the unsorted sublist.';
+      }
+
+      function setCurrentPosition(current) {
+          posLoc = getElementPos(document.getElementById('list' + current));
+          document.getElementById('currentFly').style.top =
+                  posLoc.y - 6 + "px";
+          document.getElementById('currentFly').style.left =
+                  posLoc.x + "px";
+          document.getElementById('currentFly').style.width =
+                  posLoc.w + 6 + "px";
+          document.getElementById('currentFly').style.height =
+                  posLoc.h + 17 + "px";
+          document.getElementById('currentFly').innerHTML = listValues[current];
+          document.getElementById('currentFly').style.visibility = 'visible';
+      }
+
+      function setMinPosition(minPosition) {
+          posLoc = getElementPos(document.getElementById('list' + minPosition));
+          document.getElementById('highlight').style.top =
+                  posLoc.y - 6 + "px";
+          document.getElementById('highlight').style.left =
+                  posLoc.x + "px";
+          document.getElementById('highlight').style.width =
+                  posLoc.w + "px";
+          document.getElementById('highlight').style.height =
+                  posLoc.h + 11 + "px";
+          document.getElementById('highlight').innerHTML = listValues[minPosition];
+          document.getElementById('highlight').style.visibility = 'visible';
+      }
+
+      function move(minPosition, current5, f) {
+          setMinPosition(minPosition);
+
+          posLoc1 = getElementPos(document.getElementById('newList' + current5));
+          posLoc = getElementPos(document.getElementById('list' + minPosition));
+
+          $("#highlight").animate({top: posLoc.y, left: posLoc.x}, slowAnimationSpeed, function () {
+//              $("#highlight").animate({left: posLoc1.x}, slowAnimationSpeed, function () {
+              $("#highlight").animate({top: posLoc1.y - 14, left: posLoc1.x}, slowAnimationSpeed, function () {
+                  document.getElementById('newList' + current5).innerHTML
+                          = listValues[minPosition];
+                  f();
+              });
+          });
+//          });
+
+//          $("#currentFly").animate({top: posLoc1.y - 55}, slowAnimationSpeed, function () {
+//              $("#currentFly").animate({left: posLoc.x}, slowAnimationSpeed, function () {
+//                  $("#currentFly").animate({top: posLoc.y - 6, left: posLoc.x}, slowAnimationSpeed, function () {
+//                      id = 'list' + m;
+//                      document.getElementById(id).innerHTML = listValues[m];
+//                  });
+//              });
+//          });
+
+      }
+    </script>
+  </body>
+</html>

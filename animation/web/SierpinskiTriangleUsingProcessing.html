@@ -1,0 +1,40 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sierpinski Triangle by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script src="processing-1.4.1.js"></script>
+
+    <script type="text/javascript">
+      function drawSomeText(id) {
+        var pjs = Processing.getInstanceById(id);
+        var text = document.getElementById('inputtext').value.trim();
+        pjs.setOrder(text); 
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+  <body>   
+    <canvas id="SierpinskiTriangle" data-processing-sources="SierpinskiTriangle.pde"></canvas>
+    <p></p> <p></p>
+    Enter an order: <input type="text" value="4" id="inputtext" align="right">
+    <button type="button" class = "button" onclick="drawSomeText('SierpinskiTriangle')">Change Order</button>
+  </body>
+</html>

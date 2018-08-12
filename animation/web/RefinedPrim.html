@@ -1,0 +1,1445 @@
+<html>
+  <head>
+    <title>New Figure for Improved Prim's Algorithm</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+    <style>
+      .button {
+          display:inline;
+          width: 40px;
+          height: 30px;
+          color:#fff;
+          font-size: 14px;
+          background: #3070a8;
+          border: none;
+      }
+    </style>
+    
+            <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+    <script>
+      function zero() {
+          reset();
+          document.getElementById('zero').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  "Let us pick <span style='color:#EB0D1B'>0</span> as a starting vertex. Set <span style='color:black'>cost[0]</span> to <span style='color:black'>0</span> and <span style='color:black'>cost[i]</span> to <span style='color:black'>&#8734;</span> for all other vertices. <span style='color:black'>parent[0]</span> is set to <span style='color:black'>-1</span>, which indiciates that vertex <span style='color:black'>0</span> is the root. Initially, <span style='color:#EB0D1B'>T</span> is empty. Note that the algorithm will select the vertex with the smallest cost and add it to <span style='color:#EB0D1B'>T</span> in the next step. In this case, the vertex is <span style='color:#37826C'>0</span>, which will be added to <span style='color:#EB0D1B'>T</span>.";
+          document.getElementById('p0').style.visibility = 'visible';
+      }
+
+      function buttonA() {
+          reset();
+          document.getElementById('buttonA').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  "The algorithm adds <span style='color:#EB0D1B'>0</span> to <span style='color:#EB0D1B'>T</span>. Afterwards, it adjusts the cost for each vertex adjacent to <span style='color:#EB0D1B'>0</span>. The cost for vertices <span style='color:orange'>1</span> and <span style='color:orange'>5</span> and their parents are updated. In the next step, the algorithm will select the vertex in V - T with the smallest cost and add it to <span style='color:#EB0D1B'>T</span>. This vertex will be <span style='color:#37826C'>5</span>.";
+          document.getElementById('pa').style.visibility = 'visible';
+      }
+
+      function buttonB() {
+          reset();
+          document.getElementById('buttonB').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  "Add <span style='color:#EB0D1B'>5</span> to <span style='color:#EB0D1B'>T</span>. Update the cost for each vertex adjacent to <span style='color:#EB0D1B'>0</span>. The cost for vertices <span style='color:orange'>1</span> and <span style='color:orange'>5</span> and their parents. cost[6] is set to 7 and parent[6] is set to 5. cost[4] is set to 12 and parent[4] to 5. In the next step, the algorithm will select the vertex in V - T with the smallest cost and add it to <span style='color:#EB0D1B'>T</span>. This vertex will be <span style='color:#37826C'>1</span>.";
+          document.getElementById('pb').style.visibility = 'visible';
+      }
+
+      function buttonC() {
+          reset();
+          document.getElementById('buttonC').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  'Add vertex <span style="color:#EB0D1B">1</span> to <span style="color:#EB0D1B">T</span>. Update cost and parent for the vertices adjacent in V - T if applicable. cost[2] is updated to 10 and parent[2] to 1. Vertices <span style="color:orange">2</span>, <span style="color:orange">6</span>, and <span style="color:orange">4</span> in V - T are connected to the vertices in <span style="color:#EB0D1B">T</span>. Since <span style="color:#37826C">6</span> has smallest cost, it will be added to <span style="color:#EB0D1B">T</span> in the next step.';
+          document.getElementById('pc').style.visibility = 'visible';
+      }
+
+      function buttonD() {
+          reset();
+          document.getElementById('buttonD').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  'Add vertex <span style="color:#EB0D1B">6</span> to <span style="color:#EB0D1B">T</span>. Update cost and parent for vertices <span style="color:#EB0D1B">6</span> adjacent to in V - T. cost[2] is set to 5 and parent[2] to 6. cost[4] is set to 7 and parent[4] to 6. Vertices <span style="color:orange">2</span> and <span style="color:orange">4</span> in V - T are connected to the vertices in <span style="color:#EB0D1B">T</span>. Since cost[2] is smaller, <span style="color:#37826C">2</span> will be added to <span style="color:#EB0D1B">T</span> in the next step.';
+          document.getElementById('pd').style.visibility = 'visible';
+      }
+
+      function buttonE() {
+          reset();
+          document.getElementById('buttonE').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                  'Add vertex <span style="color:#EB0D1B">2</span> to <span style="color:#EB0D1B">T</span>. Update cost and parent for vertices <span style="color:#EB0D1B">2</span> adjacent to in V - T. cost[3] is set to 8 and parent[3] to 2. Vertices <span style="color:orange">3</span> and <span style="color:orange">4</span> in V - T are connected to the vertices in <span style="color:#EB0D1B">T</span>. Since cost[4] is smaller, <span style="color:#37826C">4</span> will be added to <span style="color:#EB0D1B">T</span> in the next step.';
+
+          document.getElementById('pe').style.visibility = 'visible';
+      }
+
+      function buttonF() {
+          reset();
+          document.getElementById('buttonF').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                   'Add vertex <span style="color:#EB0D1B">4</span> to <span style="color:#EB0D1B">T</span>. Update cost and parent for vertices <span style="color:#EB0D1B">4</span> adjacent to in V - T if applicable. In this case, there is no update. The algorithm will add <span style="color:#37826C">3</span> to <span style="color:#EB0D1B">T</span> in the next step.';
+
+    document.getElementById('pf').style.visibility = 'visible';
+      }
+
+      function buttonG() {
+          reset();
+          document.getElementById('buttonG').style.background = "purple";
+          document.getElementById('text1').innerHTML =
+                   'Add vertex <span style="color:#EB0D1B">3</span> to <span style="color:#EB0D1B">T</span>. Done!';
+
+    document.getElementById('pg').style.visibility = 'visible';
+      }
+
+  function reset() {
+          document.getElementById('zero').style.background = "#3070a8";
+          document.getElementById('buttonA').style.background = "#3070a8";
+          document.getElementById('buttonB').style.background = "#3070a8";
+          document.getElementById('buttonC').style.background = "#3070a8";
+          document.getElementById('buttonD').style.background = "#3070a8";
+          document.getElementById('buttonE').style.background = "#3070a8";
+          document.getElementById('buttonF').style.background = "#3070a8";
+          document.getElementById('buttonG').style.background = "#3070a8";
+          document.getElementById('p0').style.visibility = 'hidden';
+          document.getElementById('pa').style.visibility = 'hidden';
+          document.getElementById('pb').style.visibility = 'hidden';
+          document.getElementById('pc').style.visibility = 'hidden';
+          document.getElementById('pd').style.visibility = 'hidden';
+          document.getElementById('pe').style.visibility = 'hidden';
+          document.getElementById('pf').style.visibility = 'hidden';
+          document.getElementById('pg').style.visibility = 'hidden';
+      }
+
+      function init() {
+          reset();
+          zero();
+          document.getElementById('p0').style.visibility = 'visible';
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="" style="width: 540px; margin: 0 auto;">   
+    <div id = "program1" style="border: 1px solid #EB0D1B; width: 100%; height: 60px; font-family: courier; font-size: 100.5%; margin: 0px auto; border: 1px; text-align: center;">
+      <span style="padding: 3px">
+        <button id ="zero" class="button" style = "width: 100px" type="button" onClick="zero()">Initial State</button>  
+        <button id = "buttonA" class="button" type="button" onClick="buttonA()">(a)</button>  
+        <button id = "buttonB" class="button" type="button" onClick="buttonB()">(b)</button>
+        <button id = "buttonC" class="button" type="button" onClick="buttonC()">(c)</button>
+        <button id = "buttonD" class="button" type="button" onClick="buttonD()">(d)</button>
+        <button id = "buttonE" class="button" type="button" onClick="buttonE()">(e)</button>
+        <button id = "buttonF" class="button" type="button" onClick="buttonF()">(f)</button>
+        <button id = "buttonG" class="button" type="button" onClick="buttonG()">(g)</button>
+      </span>    
+    </div>
+
+    <div id ="p0" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="33" y="105" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="173" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="343" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="116" y="20" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="256" y="20" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="115" y="200" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="255" y="200" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L120,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path05" d="M50,100 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path26" d="M260,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+      <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="428" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="478" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="503" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="528" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+
+      <text x="378" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="399" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="428" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="503" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="528" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+
+      <text x="378" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {}</text>   
+      </svg>
+    </div>
+
+    <div id ="pa" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="173" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="343" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="116" y="20" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="256" y="20" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="115" y="200" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="255" y="200" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L120,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path05" d="M50,100 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path26" d="M260,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+      <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="428" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="478" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="503" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="503" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0}</text>   
+      </svg>
+    </div>
+
+    <div id ="pb" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow1" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="173" y="110" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="343" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="116" y="20" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="256" y="20" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="255" y="200" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L120,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow1);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path26" d="M260,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+      <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="428" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="475" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">12</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5}</text>   
+      </svg>
+    </div>
+
+    <div id ="pc" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow2" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="173" y="110" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="343" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="116" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="256" y="20" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="255" y="200" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L113,38"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow2);"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow2);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path26" d="M260,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+      <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="424" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">10</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="475" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">12</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5, 1}</text>   
+      </svg>
+    </div>
+
+    <div id ="pd" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow3" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="173" y="110" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="black" stroke-width="1" fill="black" />
+      <text x="343" y="110" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="116" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="256" y="20" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="255" y="200" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L113,38"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow3);"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow3);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L183,97"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow3);"/>
+      <path id = "path26" d="M260,30 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+      <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="427" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">&#8734;</text>   
+      <text x="478" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%"></text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5, 1, 6}</text>   
+      </svg>
+    </div>
+
+    <div id ="pe" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow4" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="173" y="110" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="orange" stroke-width="1" fill="orange" />
+      <text x="343" y="110" fill="orange" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="116" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="256" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="255" y="200" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L113,38"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow4);"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow4);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L183,97"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow4);"/>
+      <path id = "path62" d="M190,105 L253,36"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow4);"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+            <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="427" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">8</text>   
+      <text x="478" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="478" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5, 1, 6, 2}</text>   
+      </svg>
+    </div>
+
+    <div id ="pf" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow5" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="173" y="110" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="#37826C" stroke-width="1" fill="#37826C" />
+      <text x="343" y="110" fill="#37826C" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="116" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="256" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="255" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L113,38"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow5);"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow5);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L183,97"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow5);"/>
+      <path id = "path62" d="M190,105 L253,36"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow5);"/>
+      <path id = "path23" d="M260,30 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L253,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow5);"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+            <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>   
+      <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="427" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="453" y="48" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">8</text>   
+      <text x="478" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="453" y="128" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="478" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="black" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5, 1, 6, 2, 4}</text>   
+      </svg>
+    </div>
+
+    <div id ="pg" style="position:absolute; margin-top: -20px; margin-left: -10px;">
+      <svg width="550" height="250">
+      <defs>
+      <marker id="arrow6" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+        <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+      </marker>
+      </defs>
+
+      <!-- vertex 0 -->
+      <circle cx="50" cy="100" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="33" y="105" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">0</text>   
+
+      <!-- vertex 6 -->
+      <circle cx="190" cy="105" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="173" y="110" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">6</text>   
+
+      <!-- vertex 3 -->
+      <circle cx="330" cy="105" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="343" y="110" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">3</text>   
+
+      <!-- vertex 1 -->
+      <circle cx="120" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="116" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">1</text>   
+
+      <!-- vertex 2 -->
+      <circle cx="260" cy="30" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="256" y="20" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">2</text>  
+
+      <!-- vertex 5 -->
+      <circle cx="120" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="115" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">5</text>   
+
+      <!-- vertex 4 -->
+      <circle cx="260" cy="180" r="5" stroke="#EB0D1B" stroke-width="1" fill="#EB0D1B" />
+      <text x="255" y="200" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 99%">4</text>   
+
+      <path id = "path01" d="M50,100 L113,38"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow6);"/>
+      <path id = "path05" d="M50,100 L113,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow6);"/>
+      <path id = "path15" d="M120,30 L120,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path12" d="M120,30 L260,30"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path16" d="M120,30 L183,97"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow6);"/>
+      <path id = "path62" d="M190,105 L253,36"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow6);"/>
+      <path id = "path23" d="M260,30 L324,98"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow6);"/>
+      <path id = "path24" d="M260,30 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path56" d="M120,180 L190,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path54" d="M120,180 L260,180"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <path id = "path64" d="M190,105 L253,173"
+            style="stroke:#EB0D1B; stroke-width: 1px; fill: none;marker-end: url(#arrow6);"/>
+      <path id = "path23" d="M260,180 L330,105"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+      <text id ="edge01" x="75" y="59" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">6</text>        <text id ="edge12" x="185" y="22" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text>       <text id ="edge23" x="305" y="69" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        
+      <text id ="edge16" x="145" y="82" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>        <text id ="edge15" x="105" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text>        <text id ="edge05" x="71" y="155" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text>        <text id ="edge54" x="186" y="199" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">12</text>      
+      <text id ="edge56" x="147" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text>     
+      <text id ="edge64" x="227" y="139" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">7</text> 
+      <text id ="edge62" x="229" y="79" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">5</text> 
+      <text id ="edge24" x="265" y="109" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">10</text> 
+      <text id ="edge34" x="304" y="149" fill="black" style="position: absolute; 
+            wdith: 250px; font-family: times, serif; font-size: 14px;">8</text> 
+
+            <text x="370" y="21" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">cost</text>        <path id = "cost" d="m370,30 h175 v25 h-175 v-25 
+            M395,30 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="378" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="427" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="453" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">8</text>   
+      <text x="478" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+      <text x="503" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="48" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">7</text>   
+
+      <text x="378" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="68" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="370" y="101" fill="black" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 125%">parent</text>   
+      <path id = "cost" d="m370,110 h175 v25 h-175 v-25 
+            M395,110 v25 m25,0 v-25 m25,0 v25 m25,0 v-25 m25,0 v25 m25,0 v-25"
+            style="stroke:black; stroke-width: 1px; fill: none;"/>
+      <text x="375" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">-1</text>   
+      <text x="403" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="428" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="453" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="478" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+      <text x="503" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="528" y="128" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+
+      <text x="378" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">0</text>   
+      <text x="403" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">1</text>   
+      <text x="428" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">2</text>   
+      <text x="453" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">3</text>   
+      <text x="478" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">4</text>   
+      <text x="503" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">5</text>   
+      <text x="528" y="148" fill="#EB0D1B" style="font-family: monospace; 
+            font-weight: normal; font-style: normal; font-size: 120%">6</text>   
+
+      <text x="368" y="198" fill="#EB0D1B" style="font-family: times; 
+            font-weight: normal; font-style: normal; font-size: 105%">
+      T: {0, 5, 1, 6, 2, 4, 3}</text>   
+      </svg>
+    </div>
+
+    <div id ="text1" style="position:absolute; margin-top: 200px; margin-left: auto; margin-right: auto; color: black; width: 560px; text-align: center;">
+      Let us pick <span style='color:#EB0D1B'>0</span> as a starting vertex. Add <span style='color:#EB0D1B'>0</span> to <span style="color:#EB0D1B">T</span>. <span style='color:orange'>1</span> and <span style='color:orange'>5</span> are the vertices in V - T that are connected to the vertices in <span style="color:#EB0D1B">T</span>.
+    </div>
+
+    <!--    <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 20px; height: 30px; max-width: 30px; text-align: center;">
+          <div id="highlight"></div>
+        </div>-->
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Merge Two Sorted Lists Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+    <script>
+      var list1 = new Array();
+      var list2 = new Array();
+      var temp = new Array();
+      var current1 = 0; // Current index in list1
+      var current2 = 0; // Current index in list2
+      var current3 = 0; // Current index in temp
+      var merged = false;
+      
+      function reset() {
+        current1 = 0; // Current index in list1
+        current2 = 0; // Current index in list2
+        current3 = 0; // Current index in temp
+        merged = false;
+        
+        size = 6;
+        for (var i = 0; i < size; i++) {
+          list1[i] = Math.floor(Math.random() * 90 + 10);
+          list2[i] = Math.floor(Math.random() * 90 + 10);
+        }
+
+        for (var i = 0; i < 2 * size; i++) {
+          temp[i] = 0;
+        }
+
+        list1.sort();
+        list2.sort();
+
+        draw();
+      }
+
+      function draw() {
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 140;        
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawList(context, list1, 0, 20, "list1");
+        drawList(context, list2, 250, 20, "list2");
+        drawList(context, temp, 0, 120, "temp");
+
+        drawLine(context, 0, 20, current1, "current1");
+        drawLine(context, 250, 20, current2, "current2");
+        drawLine(context, 0, 120, current3, "current3");
+        
+        if (merged) {
+          context.fillText("The lists are now merged", canvas.width / 2 - 50, canvas.height - 20);
+        }
+        context.stroke();
+      }
+
+      function drawList(context, list, startX, startY, title) {
+        context.fillText(title, 30 * (0 + 1) + startX - 5, 60 + startY);
+        for (var i = 0; i < list.length; i++) {
+          if (list[i] != 0) {
+            context.fillText(list[i] + "", 30 * (i + 2) + 5 + startX, 60 + startY);
+          }
+          context.rect(30 * (i + 2) + startX, 40 + startY, 30, 30);
+        }
+      }
+
+      function drawLine(context, startX, startY, index, title) {
+        context.fillText(title, 30 * (index + 1) + startX + 15, startY);
+        var x = 30 * (index + 1) + startX + 45;
+        var y = startY + 5;
+        drawArrowLine(context, x, y, x, y + 35);
+      }
+
+      function drawArrowLine(context, x1, y1, x2, y2) {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+
+        // find slope of this line
+        var slope = (y1 - y2) / (x1 - x2);
+
+        var arctan = Math.atan(slope);
+
+        // This will flip the arrow 45 off of a
+        // perpendicular line at pt x2
+        var set45 = 1.57 / 2;
+
+        // arrows should always point towards i, not i+1
+        if (x1 < x2) {
+          // add 90 degrees to arrow lines
+          set45 = -1.57 * 1.5;
+        }
+
+        // set length of arrows
+        var arrlen = 15;
+
+        // draw arrows on line
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+                y2 + Math.sin(arctan + set45) * arrlen);
+
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+                y2 + Math.sin(arctan - set45) * arrlen);
+      }
+
+      function step() {
+        if (takeAStep()) {
+          merged = true;
+        }
+
+        draw();
+      }
+
+      function takeAStep() {
+        if (current1 < list1.length && current2 < list2.length) {
+          if (list1[current1] < list2[current2])
+            temp[current3++] = list1[current1++];
+          else
+            temp[current3++] = list2[current2++];
+        }
+        else if (current1 < list1.length)
+          temp[current3++] = list1[current1++];
+        else if (current2 < list2.length)
+          temp[current3++] = list2[current2++];
+        else
+          return true;
+
+        return false;
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="reset()" onresize="draw()" style="width: 600px; max-width: 600px;">   
+    <p> 
+      Usage: Merge two sorted lists list1 and list2 into temp. Click the Step button to perform one comparison and move an element to temp. Click the Reset button to start over with two new random lists. 
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right">
+      <canvas id="canvas" width="400" height="240"></canvas>
+    </div>
+    <div style="text-align: center; margin-top: 1em">
+      <button type="button" class = "button" onclick="step()">Step</button>
+      <button type="button" class = "button" onclick="reset()">Reset</button>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>MultipleSubtractionQuestions by Y. Daniel Liang</title>
+        <script src="jqueryForJPrompt.js" type="text/javascript"></script>
+        <script src="jquery.alerts.js" type="text/javascript"></script>
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+        
+        <script type = "text/javascript">
+  function gradeAnswers() {
+    // Get answers
+    var answers = document.getElementsByName("answer");
+        
+    var output = "";
+    for (var i = 0; i < answers.length; i++) {
+      var op1 = operand1[i];
+      var op2 = operand2[i];
+      var answer = answers[i].value;
+      
+      output += op1 + " - " + op2 + " = " + answer + " is " + 
+        ((op1 - op2 == answer) ? "correct" : "incorrect") + "\n";
+    }
+    
+    jAlert(output);        
+  }
+  
+  function getNewQuestions() {
+    document.location.reload(); // Reload the page
+  }
+</script>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+<body>
+<form name = "subtractionForm">
+  <table>
+  <script type = "text/javascript">
+    var NUMBER_OF_QUESTIONS = 10; // Number of questions
+    var operand1 = new Array(NUMBER_OF_QUESTIONS);
+    var operand2 = new Array(NUMBER_OF_QUESTIONS);
+    
+    for (var i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+      // Generate two random integers
+      var number1 = Math.floor(Math.random() * 100);
+      var number2 = Math.floor(Math.random() * 100);
+
+      // If number1 < number2, swap number1 with number2
+      if (number1 < number2) {
+        var temp = number1;
+        number1 = number2;
+        number2 = temp;
+      }
+
+      // Assign the numbers to operand arrays
+      operand1[i] = number1;
+      operand2[i] = number2;
+          
+      document.write("<tr>");
+      document.write("<td>" + operand1[i] + "</td>");
+      document.write("<td>-</td>");
+      document.write("<td>" + operand2[i] + "</td>");
+      document.write("<td>=</td>");
+      document.write("<td><input type=\"text\" name = \"answer\"" + 
+        "size = \"8\"></td>");
+      document.write("</tr>");
+    }
+  </script>
+  </table>
+
+  <input type = "button" value = "Submit Answer" 
+     onclick = "gradeAnswers()"/>
+  <input type = "button" value = "New Questions" 
+     onclick = "getNewQuestions()"/>
+</form>
+</body>
+</html>

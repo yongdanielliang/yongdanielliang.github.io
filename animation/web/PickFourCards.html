@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Binary Search Tree Animation by Y. Daniel Liang</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+        <script src="Stack.js"></script>
+        <script>
+
+            deck = [];
+            for (var i = 0; i < 52; i++) {
+                deck[i] = i + 1;
+            }
+
+            function shuffle() {
+                for (var i = 0; i < 52; i++) {
+                    index = Math.floor(Math.random() * 52);
+                    temp = deck[index];
+                    deck[index] = deck[i];
+                    deck[i] = temp;
+                }
+            }
+
+            function refresh() {
+                shuffle();
+                document.getElementById('image1').src = +deck[0] + ".png";
+                document.getElementById('image2').src = +deck[1] + ".png";
+                document.getElementById('image3').src = +deck[2] + ".png";
+                document.getElementById('image4').src = +deck[3] + ".png";
+                document.getElementById('result1').value = " ";
+            }
+
+
+            // Not used, kept for future reference.
+            function padSpaceInString(s) {
+                result = "";
+                for (var i = 0; i < s.length; i++) {
+                    if (isNaN(s[i])) {
+                        result = result + " " + s[i] + " ";
+                    }
+                    else {
+                        result = result + s[i];
+                    }
+                }
+                return result;
+            }
+        </script>
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+    <body onload="refresh()"> 
+        <div style="text-align: center;">
+            <div>
+                <img src="1.png" id = "image1" alt="Lamp" width="72" height="96">
+                <img src="2.png" id = "image2" alt="Lamp" width="72" height="96">
+                <img src="3.png" id = "image3" alt="Lamp" width="72" height="96">
+                <img src="4.png" id = "image4" alt="Lamp" width="72" height="96">
+            </div>
+            <button type="button" class="button" onclick="refresh()">Pick Four Cards</button>
+        </div>
+    </body>
+</html>

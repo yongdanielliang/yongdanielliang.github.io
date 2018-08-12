@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LinkedList Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+    <script src="LinkedList.js"></script>
+    <script >
+      list = new LinkedList();
+      list.add(31); list.add(4); list.add(51);   
+      
+      function draw() {
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 165;        
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+        
+        if (list.isEmpty()) {
+          context.fillText("head: null", 10, 15); 
+          context.fillText("tail: null", 10, 30); 
+        }
+        else {
+          x = 20;
+          y = 60;
+          interval = 90;
+          rectWidth = 40;
+          rectHeight = 20;
+          context.fillText("head", 10, 15); 
+          drawArrowLine(context, 20, 25, x + 10, y);
+          for (var i = 0; i < list.getSize(); i++) {
+            value = list.get(i);
+            context.fillText(list.get(i) + "", x + 15, y + 15); 
+            context.rect(x, y, rectWidth, rectHeight);
+            context.rect(x, y, rectWidth + 20, rectHeight);
+            if (i < list.getSize() - 1) {
+              drawArrowLine(context, x + rectWidth + 10, y + rectHeight / 2,
+              x + interval, y + rectHeight / 2);
+            }
+            x += interval;
+          }
+          
+          context.fillText("tail", x - interval + 30, 15); 
+          drawArrowLine(context, x - interval + 30, 25, x -interval + 10, y);
+           
+        }
+  
+        context.stroke();
+      }
+      
+      function drawArrowLine(context, x1, y1, x2, y2) {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+
+        // find slope of this line
+        var slope = (y1 - y2) / (x1 - x2);
+
+        var arctan = Math.atan(slope);
+
+        // This will flip the arrow 45 off of a
+        // perpendicular line at pt x2
+        var set45 = 1.57 / 3;
+    
+        // arrows should always point towards i, not i+1
+        if (x1 < x2) {
+          // add 90 degrees to arrow lines
+          set45 = -1.57 * 1.5;
+        }
+
+        // set length of arrows
+        var arrlen = 9;
+
+        // draw arrows on line
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+        y2 + Math.sin(arctan + set45) * arrlen);
+
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+        y2 + Math.sin(arctan - set45) * arrlen);
+      }
+      
+      function search() {
+        var value = document.getElementById('value').value.trim();
+        if (list.contains(value)) {
+          alert("The value " + value + " is at index " + list.indexOf(value) 
+            + " in the list");
+        }
+        else {
+          alert("The value " + value + " is not in the list");
+        }
+      }
+      
+      function insert() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          alert("no value entered");
+          return;
+        }
+        
+        var index = document.getElementById('index').value.trim();
+        if (index == "") {
+          list.add(value);
+        }
+        else {
+          list.insert(index, value);
+        }
+        
+        draw();
+      }
+      
+      function remove1() {
+        var value = document.getElementById('value').value.trim();
+        if (value != "") {
+          if (list.contains(value)) {
+            list.remove(value); 
+            draw();
+            return true;
+          }
+          else {
+            alert(value + " is not in the list");          
+            return false
+          }
+        }
+        else {
+          var index = document.getElementById('index').value.trim();
+          if (index != "") {
+            if (index >= 0 && index < list.getSize()) {
+              list.removeAt(index);
+              draw();
+              return true;
+            }
+            else {
+              alert(index + " is out of range");
+            }
+          }
+        };
+        
+        alert("No value or index entered");
+        return false;
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="draw()" onresize="draw()">   
+    <p> 
+      Usage: Enter a value and click the Search, Insert, or Delete button to search, insert, or delete the value from the list. 
+      Enter a value and an index and then click the Insert button to insert the value in the specified index. 
+      Enter an index and then click the Delete button to delete the value in the specified index.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 140px;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div style="text-align: center; margin-top: 1em">
+      Enter a value: <input type="text" value="" id="value" style="width: 3em; text-align: right">
+      Enter an index: <input type="text" value="" id="index" style="width: 2em; text-align: right">
+      <button type="button" class="button" onclick="search()">Search</button>
+      <button type="button" class="button" onclick="insert()">Insert</button>
+      <button type="button" class="button" onclick="remove1()">Delete</button>
+    </div>
+  </body>
+</html>

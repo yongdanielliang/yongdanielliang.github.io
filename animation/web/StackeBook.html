@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stack Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+ <script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+<script src="jquery.alerts.js"></script> 
+<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <script src="Stack.js"></script>
+    <script >
+      stack = new Stack();
+
+      function draw() {
+          var canvas = document.getElementById('canvas');
+          var context = canvas.getContext("2d");
+
+          // Reset size will clear the canvas, but not for IE9
+          canvas.width = window.innerWidth - 20;
+          canvas.height = 140; // window.innerHeight - 130;
+          context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+          context.font = "14px sans-serif";
+          context.strokeStyle = "#100"; // Set a pen color
+
+          if (stack.isEmpty()) {
+              context.fillText("stack is empty", canvas.width / 2 - 50, 15);
+          }
+          else {
+              x = canvas.width / 2 - 30;
+              y = canvas.height - 30;
+              rectWidth = 40;
+              rectHeight = 20;
+
+              list = stack.list;
+              for (var i = 0; i < list.length; i++) {
+                  value = list[i];
+                  context.fillText(list[i] + "", x + 15, y + 15);
+                  context.rect(x, y, rectWidth, rectHeight);
+                  y -= rectHeight;
+              }
+              context.fillText("Top", x - 85, y + rectHeight + 10);
+              drawArrowLine(context, x - 45, y + rectHeight + 10,
+                      x, y + rectHeight + 10);
+          }
+
+          context.stroke();
+      }
+
+      function peek() {
+          if (stack.isEmpty()) {
+              jAlert("The stack is empty");
+          }
+          else {
+              jAlert("The top element is " + stack.peek());
+          }
+      }
+
+      function pop() {
+          if (stack.isEmpty()) {
+              jAlert("The stack is empty");
+          }
+          else {
+              stack.pop();
+              draw();
+          }
+      }
+
+      function push() {
+          var value = document.getElementById('value').value.trim();
+          if (value == "") {
+              jAlert("no value entered");
+          }
+          else {
+              stack.push(value);
+          }
+
+          draw();
+      }
+
+      function drawArrowLine(context, x1, y1, x2, y2) {
+          context.moveTo(x1, y1);
+          context.lineTo(x2, y2);
+
+          // find slope of this line
+          var slope = (y1 - y2) / (x1 - x2);
+
+          var arctan = Math.atan(slope);
+
+          // This will flip the arrow 45 off of a
+          // perpendicular line at pt x2
+          var set45 = 1.57 / 2;
+
+          // arrows should always point towards i, not i+1
+          if (x1 < x2) {
+              // add 90 degrees to arrow lines
+              set45 = -1.57 * 1.5;
+          }
+
+          // set length of arrows
+          var arrlen = 15;
+
+          // draw arrows on line
+          context.moveTo(x2, y2);
+          context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+                  y2 + Math.sin(arctan + set45) * arrlen);
+
+          context.moveTo(x2, y2);
+          context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+                  y2 + Math.sin(arctan - set45) * arrlen);
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="draw()" onresize="draw()">   
+
+    <p> 
+      Usage: Enter a value and click the Push button to push the value into the stack.
+      Click the Pop button to remove the top element from the stack.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 160px;">
+      <canvas id="canvas" ></canvas>
+    </div>
+    <div style="text-align: center; margin-top: 1em">
+      <span style="border: 1px solid #37826C; padding: 3px">
+        Enter a value: <input type="text" value="" id="value" style="width: 3em; text-align: right">
+        <button type="button" class="button" onclick="push()">Push</button>
+      </span>
+      <button type="button" class="button" onclick="pop()">Pop</button>
+      <button type="button" class="button" onclick="peek()">Peek</button>
+    </div>
+  </body>
+</html>

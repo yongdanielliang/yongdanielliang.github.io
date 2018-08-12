@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Quick Sort Animation by Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+        <script src="jquery-latest.js"></script>
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #highlight {
+                background-color: #EB0D1B;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #currentFly {
+                background-color:orange;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 45px;
+                line-height: 29px;
+                text-align: middle;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #sortedFly {
+                background-color: #37826C;
+                opacity: 0.20;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline { float:left; }
+            .clearBoth { clear:both; }
+
+
+        </style>
+
+
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+    <body onload="init()" onresize="init()" style="font-family: times new roman;"> 
+        <div> 
+            Usage: Use a pivot to partition the list into two parts. Click the Next button to move low, high, or swap a small element at low with a large element at high. Click the Reset button to start over with a new random list.  
+        </div>
+        <div style="height: 70px; font-size: 200%"></div>
+        <div id ="lowValue" style="position: absolute; height: 100px; color: #EB0D1B;">low: 1</div>
+        <div id ="lowPosition" style="position: absolute; color: #37826C; font-size: 150%; ">&#8595;</div>
+        <div id ="pivotValue" style="position: absolute; height: 100px; color: #EB0D1B">low: 1</div>
+        <div id ="pivotPosition" style="position: absolute; color: #37826C; font-size: 200%">&#8593;</div>
+        <div id ="highValue" style="position: absolute; height: 100px; color: #EB0D1B">low: 1</div>
+        <div id ="highPosition" style="position: absolute; color: #37826C; font-size: 250%">&#8595;</div>
+
+        <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+            <script>
+                SIZE = 16;
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px #37826C solid; background: white;' +
+                            'width: 30px; height: 30px; min-width: 15px; max-width: 30px;  text-align: center;">' +
+                            '<div id="list' + i + '" style="color: black; weight: bold">45</div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+        <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+            <script>
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px white solid; background: white;' +
+                            'width: 30px; height: 30px; min-width: 15px; max-width: 30px;  text-align: center;">' +
+                            '<div id="check' + i + '" style="color: #EB0D1B; weight: bold"></div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+        <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 30px; height: 20px; max-width: 30px; text-align: center;">
+            <div id="highlight"></div>
+            <div id="currentFly"></div>
+            <div id="sortedFly"></div>
+        </div>
+
+        <div align="center" >
+            <button id = "step" type="button" class="button" onclick="step()">Next</button>
+            <button id = "reset" type="button" class="button" onclick="reset()">Reset</button></div>
+
+        <div style="text-align: center; margin-top: 1em">
+            <span id = "remark" style = "background-color: white; color: #EB0D1B; alignment-adjust: central; text-align: center; max-wdith: 800px; margin-left: auto; margin-right: auto">
+                A list is filled with random numbers.
+            </span>
+        </div>
+
+        <script>
+            slowAnimationSpeed = 400;
+
+            $("#step").click(function () {
+                takeAStep();
+            });
+
+            function init() {
+                reset();
+//                document.getElementById('list0').innerHTML = '50';
+            }
+
+            function reset() {
+                done = false;
+                setRandomValue();
+                low = 1;
+                high = SIZE - 1;
+                pivot = listValues[0];
+                setPositionPivot("pivotPosition", "pivotValue", 0, "pivot", -8, 0);
+                setPosition("lowPosition", "lowValue", 1, "low", 0, 7);
+                setPosition("highPosition", "highValue", SIZE - 1, "high", -5, -12);
+
+                isFindFirst = true;
+                current = 0;
+                minPosition = 0;
+
+                i = 0;
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('currentFly').style.visibility = 'hidden';
+                document.getElementById('sortedFly').style.visibility = 'hidden';
+                document.getElementById('lowPosition').style.visibility = 'visible';
+                document.getElementById('lowValue').style.visibility = 'visible';
+
+
+                resetColor();
+                document.getElementById('remark').innerHTML = 'A new random list is created';
+//                document.getElementById('value').disabled = false;
+
+                for (var j = 0; j < SIZE; j++) {
+                    id = 'check' + j;
+                    document.getElementById(id).innerHTML = "";
+                }
+            }
+
+            function resetColor() {
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).style.backgroundColor = "white";
+                    document.getElementById(id).style.color = "black";
+                }
+            }
+
+            function setRandomValue() {
+                listValues = [];
+                for (var i = 0; i < SIZE; i++) {
+                    listValues.push(Math.floor(Math.random() * 100));
+                }
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).innerHTML =
+                            listValues[i];
+                }
+            }
+
+            var k = 0;
+            var current = 0;
+            var isFindFirst = true;
+
+            done = false;
+            function takeAStep() {
+                if (done)
+                    return true;
+
+                if (high > low) {
+                    // Search forward from left
+                    if (low <= high && listValues[low] <= pivot) {
+                        low++;
+                        setPosition("lowPosition", "lowValue", low, "low", 0, 7);
+                        document.getElementById('remark').innerHTML =
+                                'Since list[row] <= pivot, low was moved forward.';
+                        return false;
+                    }
+
+                    // Search backward from right
+                    if (low <= high && listValues[high] > pivot) {
+                        high--;
+                        setPosition("highPosition", "highValue", high, "high", -5, -12);
+                        document.getElementById('remark').innerHTML =
+                                'Since list[high] > pivot, high was moved backward.';
+                        return false;
+                    }
+
+                    // Swap two elements in the list
+                    if (high > low) {
+                        document.getElementById('remark').innerHTML =
+                                listValues[low] + ' was swapped with ' + listValues[high] + '.';
+                        swap(low, high);
+                        return false;
+                    }
+                }
+
+                if (high > 0 && listValues[high] >= pivot) {
+                    high--;
+                    setPosition("highPosition", "highValue", high, "high", -5, -12);
+                    document.getElementById('remark').innerHTML =
+                            'Since list[high] >= pivot, move high backward.';
+                    return false;
+                }
+
+                // Swap pivot with list[high]
+                if (pivot > listValues[high]) {
+                    document.getElementById('remark').innerHTML =
+                            'The pivot ' + pivot + ' was swapped with '
+                            + listValues[high] +
+                            '. The partition is completed. Click Reset to start over.';
+                    swap(0, high);
+                setPositionPivot("pivotPosition", "pivotValue", high, "pivot", -8, 0);
+                    done = true;
+                    return true;
+                } else {
+                    pivotIndex = 0;
+                    document.getElementById('remark').innerHTML =
+                            'The pivot ' + pivot + ' is already in place. The partition is completed. Click Reset to start over.';
+
+                    done = true;
+                    return true;
+                }
+            }
+
+            function step1() {
+                if (current > SIZE - 2) {
+                    document.getElementById('highlight').style.visibility = 'hidden';
+                    document.getElementById('currentFly').style.visibility = 'hidden';
+                    document.getElementById('remark').innerHTML = 'The list is now sorted. Click Reset to restart.';
+                    //              current++;
+                    colorSorted(SIZE);
+                    return;
+                }
+
+                if (isFindFirst) {
+                    findFirst();
+                    isFindFirst = false;
+                } else {
+                    swap();
+                    isFindFirst = true;
+                    current++;
+                }
+            }
+
+            function colorSorted(size) {
+                if (current < 1)
+                    return;
+                p3 = getElementPos(document.getElementById('list0'));
+                document.getElementById('sortedFly').style.top =
+                        p3.y - 6 + "px";
+                document.getElementById('sortedFly').style.left =
+                        p3.x + "px";
+                document.getElementById('sortedFly').style.width =
+                        (p3.w + 7.1) * size + "px";
+                document.getElementById('sortedFly').style.height =
+                        p3.h + 17 + "px";
+                document.getElementById('sortedFly').style.visibility = 'visible';
+            }
+
+            function setPositionPivot(id, idValue, index, name, hx, dy) {
+                document.getElementById(id).style.visibility = 'visible';
+                document.getElementById(idValue).style.visibility = 'visible';
+                posLoc = getElementPos(document.getElementById('list' + index));
+                document.getElementById(id).style.top
+                        = posLoc.y + 20 + dy + "px";
+                document.getElementById(id).style.left
+                        = posLoc.x + posLoc.w / 2 - 5 + "px";
+                document.getElementById(idValue).style.top
+                        = posLoc.y + 53 + dy + "px";
+                document.getElementById(idValue).style.left
+                        = posLoc.x + posLoc.w / 2 - 7 + hx + "px";
+                document.getElementById(idValue).innerHTML = name;
+            }
+            
+            function setPosition(id, idValue, index, name, hx, dy) {
+                document.getElementById(id).style.visibility = 'visible';
+                document.getElementById(idValue).style.visibility = 'visible';
+                posLoc = getElementPos(document.getElementById('list' + index));
+                document.getElementById(id).style.top
+                        = posLoc.y - 40 + dy + "px";
+                document.getElementById(id).style.left
+                        = posLoc.x + posLoc.w / 2 - 5 + "px";
+                document.getElementById(idValue).style.top
+                        = posLoc.y - 53 + dy + "px";
+                document.getElementById(idValue).style.left
+                        = posLoc.x + posLoc.w / 2 - 7 + hx + "px";
+                document.getElementById(idValue).innerHTML = name;
+            }
+
+            function setPointerPosition() {
+                document.getElementById('lowPosition').style.visibility = 'visible';
+                document.getElementById('lowValue').style.visibility = 'visible';
+                posLoc = getElementPos(document.getElementById('list' + current));
+                document.getElementById('lowPosition').style.top
+                        = posLoc.y - 40 + "px";
+                document.getElementById('lowPosition').style.left
+                        = posLoc.x + posLoc.w / 2 - 5 + "px";
+
+                document.getElementById('lowValue').style.top
+                        = posLoc.y - 53 + "px";
+                document.getElementById('lowValue').style.left
+                        = posLoc.x + posLoc.w / 2 - 7 + "px";
+                document.getElementById('lowValue').innerHTML = name;
+            }
+
+            function findFirst() {
+                setPointerPosition();
+                colorSorted(current);
+                min = listValues[current];
+                minPosition = current;
+
+                for (var i = current + 1; i < SIZE; i++) {
+                    if (min > listValues[i]) {
+                        min = listValues[i];
+                        minPosition = i;
+                    }
+                }
+
+                setMinPosition();
+                setCurrentPosition();
+
+                document.getElementById('remark').innerHTML = 'The minimum value is ' + min + ' and the first value is ' + listValues[current] + ' in the unsorted sublist.';
+            }
+
+            function setCurrentPosition(current) {
+                posLoc = getElementPos(document.getElementById('list' + current));
+                document.getElementById('currentFly').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('currentFly').style.left =
+                        posLoc.x + "px";
+                document.getElementById('currentFly').style.width =
+                        posLoc.w + 6 + "px";
+                document.getElementById('currentFly').style.height =
+                        posLoc.h + 17 + "px";
+                document.getElementById('currentFly').innerHTML = listValues[current];
+                document.getElementById('currentFly').style.visibility = 'visible';
+            }
+
+            function setMinPosition(minPosition) {
+                posLoc = getElementPos(document.getElementById('list' + minPosition));
+                document.getElementById('highlight').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('highlight').style.left =
+                        posLoc.x + "px";
+                document.getElementById('highlight').style.width =
+                        posLoc.w + "px";
+                document.getElementById('highlight').style.height =
+                        posLoc.h + 11 + "px";
+                document.getElementById('highlight').innerHTML = listValues[minPosition];
+                document.getElementById('highlight').style.visibility = 'visible';
+            }
+
+            function swap(current, minPosition) {
+                setMinPosition(minPosition);
+                setCurrentPosition(current);
+
+                //          if (minPosition == current) {
+                //              document.getElementById('remark').innerHTML = 'The minimum element is the first element in the remaining list. No swap is needed.';
+                //              return;
+                //          }
+                //          else {
+                //              document.getElementById('remark').innerHTML = min + ' is swapped with ' + listValues[current];
+                //          }
+
+                min = listValues[minPosition];
+                listValues[minPosition] = listValues[current];
+                listValues[current] = min;
+                c = current;
+                m = minPosition;
+
+                if (current < minPosition) {
+                    posLoc1 = getElementPos(document.getElementById('list' + current));
+                    posLoc = getElementPos(document.getElementById('list' + minPosition));
+
+                    $("#highlight").animate({top: posLoc.y - 55}, slowAnimationSpeed, function () {
+                        $("#highlight").animate({left: posLoc1.x}, slowAnimationSpeed, function () {
+                            $("#highlight").animate({top: posLoc1.y - 6, left: posLoc1.x}, slowAnimationSpeed, function () {
+                                id = 'list' + c;
+                                document.getElementById(id).innerHTML = listValues[c];
+                            });
+                        });
+                    });
+
+                    $("#currentFly").animate({top: posLoc1.y - 55}, slowAnimationSpeed, function () {
+                        $("#currentFly").animate({left: posLoc.x}, slowAnimationSpeed, function () {
+                            $("#currentFly").animate({top: posLoc.y - 6, left: posLoc.x}, slowAnimationSpeed, function () {
+                                id = 'list' + m;
+                                document.getElementById(id).innerHTML = listValues[m];
+                            });
+                        });
+                    });
+                }
+            }
+        </script>
+    </body>
+</html>

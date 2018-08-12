@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>String Match Using Boyer Moore Algorithm by Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">-->
+
+        <script src="jquery-1.7.2.min.js"></script>
+        <script src="jquery-ui.min.js"></script>
+        <script src="jquery.ui.touch-punch.min.js"></script>
+        <script src="jquery.alerts.js"></script> 
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #highlight {
+                background-color: #EB0D1B;
+                opacity: 0.2;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 30px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+                /*          max-height: 25px;
+                          min-height: 25px;
+                          max-width: 27px;
+                          min-width: 27px;*/
+            }
+
+            #currentFly {
+                background-color:orange;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 45px;
+                line-height: 29px;
+                text-align: middle;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #sortedFly {
+                background-color: #37826C;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline { float:left; }
+            .clearBoth { clear:both; }
+
+           
+        </style>
+        <!-- Global Site Tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            ;
+            gtag('js', new Date());
+            gtag('config', 'UA-89940905-27');
+        </script>
+    
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+    <body onload="init()" onresize="init()" style="font-family: times new roman;"> 
+        <div> 
+            Usage: Perform string match using the Boyer-Moore algorithm. A random text is created using 
+            four characters A, B, C, D. The text and pattern sizes are fixed to 20 and 7.
+            click the Next button to see a step in the algorithm.
+            Click the Reset button to start over with a new text and a pattern.
+        </div>
+        <div style="height: 70px; font-size: 200%"></div>
+        <div id ="iValue" style="position: absolute; height: 100px;">i: 1</div>
+        <div id ="iPosition" style="position: absolute; height: 100px; font-size: 200%">&#8595;</div>
+
+
+        <div id ="tLabel" style="position:absolute;">
+            text
+        </div>
+        <div id ="pLabel" style="position:absolute;">
+            pattern
+        </div>
+
+        <div>
+            <div id = 'text' style="display: table; overflow: hidden; width: 350px; margin: 0 auto; ">
+                <script>
+                    SIZE = 20;
+                    for (var i = 0; i < SIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white;' +
+                                'width: 20px; height: 30px; min-width: 20px; max-width: 20px; text-align: center; ">' +
+                                '<div id="list' + i + '" style="color: black; weight: bold; ">45</div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+
+            <div id = 'pattern' style="display: inline-block; overflow: hidden; width: 170px; margin: 0 auto; position: absolute;">
+                <script>
+                    pSIZE = 7;
+                    for (var i = 0; i < pSIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white; ' +
+                                'width: 20px; height: 30px; min-width: 20px; max-width: 20px;  text-align: center;">' +
+                                '<div id="pattern' + i + '" style="color: black; weight: bold">45</div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+        </div>
+        <div id = 'check' style="display: table; overflow: hidden;  width: 350px; margin: 0 auto; position: absolute;">
+            <script>
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px white solid; background: white;' +
+                            'width: 30px; height: 30px; min-width: 20px; max-width: 20px;  text-align: center;">' +
+                            '<div id="check' + i + '" style="color: #EB0D1B; weight: bold"></div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+
+        <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 30px; height: 30px; max-width: 30px; text-align: center;">
+            <div id="currentFly" style="opacity:1.0"></div>
+            <div id="highlight" style="opacity:0.1; "></div>
+            <div id="sortedFly"></div>
+        </div>
+
+        <div id = "buttons" align="center" style="margin-top: 50px;">
+            <div id = "buttons" align="center">
+                <button id = "step" type="button" class="button" onclick="step()">Next</button>
+                <button id = "reset" type="button" class="button" onclick="reset()">Reset</button></div>
+            <div style="width:400px; max-width:400px; text-align: center; margin-top: 1em">
+                <span id = "remark" style = "background-color: white; color: #EB0D1B; 
+                      alignment-adjust: central; text-align: center; 
+                      width:200px; max-width: 200px; margin-left: auto; margin-right: auto">
+                    A list is filled with random numbers.
+                </span>
+            </div>
+        </div>
+
+        <script>
+            slowAnimationSpeed = 2400;
+
+            $("#step").click(function () {
+                step1();
+            });
+
+            function init() {
+                reset();
+            }
+
+            function reset() {
+                for (var x = 0; x < SIZE; x++)
+                    document.getElementById('check' + x).innerHTML = "";
+
+        pos = getElementPos($('#list0')[0]); // getElementPos(document.getElementById('list0'));
+                posLoc = getElementPos(document.getElementById('list' + 0));
+                $("#iPosition").css({top: pos.y - 40, left: pos.x + pos.w / 2 - 5});
+
+                $("#iValue").css({top: pos.y - 53, left: pos.x + pos.w / 2 - 7});
+
+                $('#tLabel').css({top: pos.y - 3 + 'px'}).css({left: pos.x - 30.5 + "px"});
+                $('#highlight').css({top: pos.y - 3 + 'px'}).css({width: pos.w + 'px'}).css({height: 3 * pos.h + 10 + "px"});
+
+                //               document.getElementById('tLabel').style.top = pos.y - 3 + "px";
+                //               document.getElementById('tLabel').style.left = pos.x - 30.5 + "px";
+
+                $('#buttons').css({top: pos.y + 60 + 'px'}).css({left: pos.x + 130.5 + "px"});
+                
+                $('#check').css({top: pos.y + 60 + "px"}).css({left: pos.x - 1 + "px"});
+                $('#pattern').css({top: pos.y + 25 + "px"}).css({left: pos.x - 1 + "px"});
+                
+//                document.getElementById('pattern').style.top = pos.y + 25 + "px";
+//                document.getElementById('pattern').style.left = pos.x - 1 + "px";
+
+                pos = getElementPos($('#pattern0')[0]); // getElementPos(document.getElementById('pattern0'));
+                $('#pLabel').css({top: pos.y - 3 + "px"}).css({left: pos.x - 50.5 + "px"});
+//                document.getElementById('pLabel').style.top = pos.y - 3 + "px";
+//                document.getElementById('pLabel').style.left = pos.x - 50.5 + "px";
+
+                done = false;
+                needNextPass = true;
+                isFindFirst = true;
+                k = 1;
+                current = 6;
+                minPosition = 0;
+
+                i = 0;
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('currentFly').style.visibility = 'hidden';
+                document.getElementById('sortedFly').style.visibility = 'hidden';
+                document.getElementById('iPosition').style.visibility = 'hidden';
+                document.getElementById('iValue').style.visibility = 'hidden';
+//                resetColor();
+                document.getElementById('remark').innerHTML = 'A new random text is created';
+                //          document.getElementById('value').disabled = false;
+
+//                for (var j = 0; j < SIZE; j++) {
+//                    id = 'check' + j;
+//                    document.getElementById(id).innerHTML = "";
+//                }
+
+                setFixedValue();
+//                document.getElementById('pattern').style.visibility = 'hidden';
+            }
+
+            function resetColor() {
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).style.backgroundColor = "white";
+                    document.getElementById(id).style.color = "black";
+                }
+            }
+
+            function setFixedValue() {
+                listValues = [];
+                pattern = [];
+                for (var i = 0; i < SIZE; i++) {
+                    listValues.push(String.fromCharCode(Math.floor(Math.random() * 4) + "A".charCodeAt(0)));
+                }
+
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).innerHTML =
+                            listValues[i];
+                }
+
+                listValues = listValues.join("");
+
+                patternString = 'ABCDEFG';
+                for (var i = 0; i < pSIZE; i++) {
+                    id = 'pattern' + i;
+                    document.getElementById(id).innerHTML =
+                            ' ';
+                }
+
+                jPrompt("The text is already generated. If you don't see it, move this box." + '\nEnter the pattern with 7 characters. If less than 7, \
+        it will be filled \nwith character A. If greater than 7, it will be truncated \nto 7 characters.', '',
+                        'Prompt Input for Pattern', function (r) {
+                            if (r) {
+                                patternString = r;
+                            }
+
+                            if (patternString.length > 7) {
+                                patternString = patternString.substring(0, 7);
+                            } else {
+                                for (var i = patternString.length; i < 7; i++)
+                                    patternString += 'A';
+                            }
+
+                            for (var i = 0; i < pSIZE; i++) {
+                                id = 'pattern' + i;
+                                document.getElementById(id).innerHTML =
+                                        patternString[i];
+                            }
+
+                            document.getElementById('remark').innerHTML = 'A new random text is created and a pattern is entered.';
+
+                        });
+            }
+
+            var k = 1;
+            previousCurrent = 6;
+            current = 6;
+            var isFindFirst = true;
+            needNextPass = true;
+            done = false;
+
+
+            function step1() {
+                current1 = current;
+                if (done) {
+                    return;
+                }
+                if (current > 19) {
+                    document.getElementById('remark').innerHTML = 'No match. Search is exhausted';
+                    done = true;
+                    return;
+                } else {
+                    pos = getElementPos(document.getElementById('list' + (current - 6)));
+                    $("#pattern").animate({top: pos.y + 25, left: pos.x - 1}, slowAnimationSpeed, function () {
+
+                        k = 0;
+                        while (k <= 6 && listValues[current1 - k] == patternString[6 - k]) {
+                            k++;
+                        }
+                        if (k > 6)
+                            k = 6;
+                        move(current1, current1 - k);
+                    });
+//                    document.getElementById('pattern').style.top = pos.y + 25 + "px";
+//                    document.getElementById('pattern').style.left = pos.x - 1 + "px";
+                    // pos = getElementPos(document.getElementById('pattern0'));
+                    $("#pLabel").animate({top: pos.y + pos.h + 18, left: pos.x - 50.5}, slowAnimationSpeed, function () {
+                    });
+//                    document.getElementById('pLabel').style.top = pos.y - 3 + "px";
+//                    document.getElementById('pLabel').style.left = pos.x - 50.5 + "px";
+                }
+
+                for (var x = 0; x < SIZE; x++)
+                    document.getElementById('check' + x).innerHTML = "";
+
+        setPointerPosition();
+                //          colorSorted(current);
+
+                i = current - 6;
+
+                if (listValues.substring(i, i + 7) == patternString) {
+                    document.getElementById('remark').innerHTML = 'A match is found. Click Reset to restart.';
+                    done = true;
+                 for (var x = i; x < current + 1; x++)
+                        document.getElementById('check' + x).innerHTML = "&#x2713;";
+                    
+                } else if (i == 13) {
+                    document.getElementById('remark').innerHTML = 'No match. Search is exhausted. Click Reset to restart.';
+                    done = true;
+                } else {
+                    k = 0;
+                    while (k <= 6 && listValues[current - k] == patternString[6 - k]) {
+                        k++;
+                    }
+
+                for (var x = current - k + 1; x < current + 1; x++)
+                        document.getElementById('check' + x).innerHTML = "&#x2713;";
+
+                     document.getElementById('check' + (current - k)).innerHTML = "&#x2717;";
+
+                    mismatchedChar = listValues[current - k];
+                    document.getElementById('remark').innerHTML = listValues.substring(i, i + 7)
+                            + ' and ' + patternString + " don't match at text[" + (current - k) +
+                            "] (" + listValues[current - k] + "). ";
+                    j = k;
+                    k++;
+                    while (k <= 6 && listValues[current - j] != patternString[6 - k]) {
+                        k++;
+                    }
+
+                    if (k > 6) {
+                        document.getElementById('remark').innerHTML += "Since " + mismatchedChar + " is not in pattern[0 .. "
+                                + (6 - j) + "], slide the pattern " + (k - j) +
+                                (k - j == 1 ? " position" : " positions") + " to the right."
+                    } else {
+                        document.getElementById('remark').innerHTML += "Since " + mismatchedChar + " matches " + "pattern[" +
+                                +(6 - k) + "], slide the pattern " + (k - j) +
+                                (k - j == 1 ? " position" : " positions") + " to the right."
+                    }
+
+                    current = current + (k - j);
+                }
+            }
+
+            function move(p1, p2) {
+                document.getElementById('highlight').style.visibility = 'visible';
+                posLoc1 = getElementPos(document.getElementById('list' + p1));
+                posLoc2 = getElementPos(document.getElementById('list' + p2));
+
+                $('#highlight').css({left: posLoc1.x + "px"});
+                $("#highlight").animate({left: posLoc2.x}, slowAnimationSpeed, function () {
+                });
+            }
+
+            function movePattern(p1) {
+                pos = getElementPos(document.getElementById('list' + (p1 - 6)));
+                $("#pattern").animate({top: pos.y + 25, left: pos.x - 1}, slowAnimationSpeed, function () {
+                });
+
+                pos = getElementPos(document.getElementById('pattern0'));
+                document.getElementById('pLabel').style.top = pos.y - 3 + "px";
+                document.getElementById('pLabel').style.left = pos.x - 50.5 + "px";
+            }
+
+            function colorSorted(size) {
+                if (current < 1)
+                    return;
+                p3 = getElementPos(document.getElementById('list0'));
+                document.getElementById('sortedFly').style.top =
+                        p3.y - 6 + "px";
+                document.getElementById('sortedFly').style.left =
+                        p3.x + "px";
+                document.getElementById('sortedFly').style.width =
+                        (p3.w + 7.1) * size + "px";
+                document.getElementById('sortedFly').style.height =
+                        p3.h + 17 + "px";
+                document.getElementById('sortedFly').style.visibility = 'visible';
+            }
+
+            function setPointerPosition() {
+                document.getElementById('iPosition').style.visibility = 'visible';
+                document.getElementById('iValue').style.visibility = 'visible';
+
+                posLoc = getElementPos(document.getElementById('list' + current));
+                $("#iPosition").animate({top: posLoc.y - 40, left: posLoc.x + posLoc.w / 2 - 5}, slowAnimationSpeed, function () {
+                });
+//                document.getElementById('iPosition').style.top
+//                        = posLoc.y - 40 + "px";
+//                document.getElementById('iPosition').style.left
+//                        = posLoc.x + posLoc.w / 2 - 5 + "px";
+
+                $("#iValue").animate({top: posLoc.y - 53, left: posLoc.x + posLoc.w / 2 - 7}, slowAnimationSpeed, function () {
+                });
+//                document.getElementById('iValue').style.top
+//                        = posLoc.y - 53 + "px";
+//                document.getElementById('iValue').style.left
+//                        = posLoc.x + posLoc.w / 2 - 7 + "px";
+                document.getElementById('iValue').innerHTML = "i: " + current;
+            }
+
+            function findFirst() {
+                setPointerPosition();
+                colorSorted(current);
+                min = listValues[current];
+                minPosition = current;
+
+                for (var i = current + 1; i < SIZE; i++) {
+                    if (min > listValues[i]) {
+                        min = listValues[i];
+                        minPosition = i;
+                    }
+                }
+
+                setMinPosition();
+                setCurrentPosition();
+
+                document.getElementById('remark').innerHTML = 'The minimum value is ' + min + ' and the first value is ' + listValues[current] + ' in the unsorted sublist.';
+            }
+
+            function setCurrentPosition() {
+                posLoc = getElementPos(document.getElementById('list' + current));
+                document.getElementById('currentFly').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('currentFly').style.left =
+                        posLoc.x + "px";
+                document.getElementById('currentFly').style.width =
+                        posLoc.w + 6 + "px";
+                document.getElementById('currentFly').style.height =
+                        posLoc.h + 17 + "px";
+                document.getElementById('currentFly').innerHTML = listValues[current];
+                document.getElementById('currentFly').style.visibility = 'visible';
+            }
+
+            function setMinPosition() {
+                posLoc = getElementPos(document.getElementById('list' + minPosition));
+                document.getElementById('highlight').style.top =
+                        posLoc.y - 6 + "px";
+                document.getElementById('highlight').style.left =
+                        posLoc.x + "px";
+                document.getElementById('highlight').style.width =
+                        posLoc.w + "px";
+
+                document.getElementById('highlight').style.height =
+                        posLoc.h + 11 + "px";
+                document.getElementById('highlight').innerHTML = listValues[minPosition];
+                document.getElementById('highlight').style.visibility = 'visible';
+            }
+
+        </script>
+    </body>
+</html>

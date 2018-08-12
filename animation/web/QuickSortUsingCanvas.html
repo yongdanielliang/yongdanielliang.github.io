@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quicksort Partition Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+
+    <script>
+      var ARRAY_SIZE = 15;
+      var list = new Array();
+     
+      var pivot; // Choose the first element as the pivot
+      var pivotIndex = 0; // Choose the first element as the pivot
+      var low = 1; // Index for forward search
+      var high = ARRAY_SIZE - 1; // Index for backward search
+      var done = false;
+      
+      function reset() {
+        pivotIndex = 0; // Choose the first element as the pivot
+        low = 1; // Index for forward search
+        high = ARRAY_SIZE - 1; // Index for backward search
+        done = false;     
+        
+        for (var i = 0; i < ARRAY_SIZE; i++) {
+          list[i] = Math.floor(Math.random() * 90 + 10);
+        }
+        pivot = list[0];
+
+        draw();
+      }
+
+      function draw() {
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 140;        
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawList(context, list, 0, 20, "");
+
+        drawLineLow(context, low, "low");
+        drawLine(context, high, "high");
+        drawLinePivot(context, pivotIndex, "pivot");
+        
+        if (done) {
+          context.fillText("The list has been partitioned", canvas.width / 2 - 50, canvas.height - 20);
+        }
+        context.stroke();
+      }
+
+      function drawList(context, list, startX, startY, title) {
+        context.fillText(title, 30 * (0 + 1) + startX - 5, 60 + startY);
+        for (var i = 0; i < list.length; i++) {
+          if (list[i] != 0) {
+            context.fillText(list[i] + "", 30 * (i + 2) + 5 + startX, 60 + startY);
+          }
+          context.rect(30 * (i + 2) + startX, 40 + startY, 30, 30);
+        }
+      }
+
+      startX = 20;
+      startY = 20;
+      function drawLine(context, index, title) {
+        context.fillText(title, 30 * (index + 1) + startX + 10, startY);
+        var x = 30 * (index + 1) + startX + 25;
+        var y = startY + 5;
+        drawArrowLine(context, x, y, x, y + 35);
+      }
+
+      function drawLineLow(context, index, title) {
+        var x = 30 * (index + 1) + startX + 25;
+        var y = startY + 5 + 15;
+        context.fillText(title, 30 * (index + 1) + startX + 15, y);
+        drawArrowLine(context, x, y, x, y + 20);
+      }
+
+      function drawLinePivot(context, index, title) {
+        var x = 30 * (index + 1) + startX + 25;
+        var y = 100 + startY + 5;
+        context.fillText(title, 30 * (index + 1) + startX + 10, y + 12);
+        drawArrowLine(context, x, y, x, y - 35);
+      }
+
+      function drawArrowLine(context, x1, y1, x2, y2) {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+
+        // find slope of this line
+        var slope = (y1 - y2) / (x1 - x2);
+
+        var arctan = Math.atan(slope);
+
+        // This will flip the arrow 45 off of a
+        // perpendicular line at pt x2
+        var set45 = 1.57 / 2;
+
+        // arrows should always point towards i, not i+1
+        if (x1 < x2) {
+          // add 90 degrees to arrow lines
+          set45 = -1.57 * 1.5;
+        }
+
+        // set length of arrows
+        var arrlen = 15;
+
+        // draw arrows on line
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+                y2 + Math.sin(arctan + set45) * arrlen);
+
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+                y2 + Math.sin(arctan - set45) * arrlen);
+      }
+
+      function step() {
+        takeAStep();
+        draw();
+      }
+
+      function takeAStep() {
+        if (done) return true;
+
+        if (high > low) {
+          // Search forward from left
+          if (low <= high && list[low] <= pivot) {
+            low++;
+            return false;
+          }
+
+          // Search backward from right
+          if (low <= high && list[high] > pivot) {
+            high--;
+            return false;
+          }
+
+          // Swap two elements in the list
+          if (high > low) {
+            var temp = list[high];
+            list[high] = list[low];
+            list[low] = temp;
+          }
+        }
+
+        if (high > 0 && list[high] >= pivot) {
+          high--;
+          return false;
+        }
+
+        // Swap pivot with list[high]
+        if (pivot > list[high]) {
+          list[0] = list[high];
+          list[high] = pivot;
+          pivotIndex = high;
+          done = true;
+          return true;
+        }
+        else {
+          pivotIndex = 0;
+          done = true;
+          return true;
+        }
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="reset()" onresize="draw()" style="width: 600px; max-width: 600px;">   
+    <p> 
+Usage: Use a pivot to partition the list into two parts. Click the Step button to move low, high, or swap a small element at low with a large element at high. Click the Reset button to start over with a new random list.  
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right">
+      <canvas id="canvas" width="400" height="180"></canvas>
+    </div>
+    <div style="text-align: center; margin-top: 1em">
+      <button type="button" class = "button" onclick="step()">Step</button>
+      <button type="button" class = "button" onclick="reset()">Reset</button>
+    </div>
+  </body>
+</html>
