@@ -1,0 +1,404 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Figure 3.2 New</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <script type="text/javascript" src="jquery-latest.js"></script>
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+
+        <STYLE>
+            .button {
+                display:inline;
+                width: 55px;
+                height: 30px;
+                color:#fff;
+                font-size: 14px;
+                background: #3070a8;
+                border: none;
+            }
+
+            .highlight {
+                background-color:#37826C;
+                opacity: 0.10;
+                position:absolute;
+                width:18px;
+                height: 10px;
+                padding: 3px;
+                margin-top: 0px;
+                top: 89px;
+                left: 72px;
+            }
+
+            .arrow {
+                position:absolute;
+                width:100px;
+                font-size: 150%;
+            }
+
+            .hLine {
+                position:absolute;
+                border-top: 1px solid black;
+                width: 100px;          
+            }
+
+            .verticalLine {
+                position:absolute;
+                border-left: 2px solid black;
+                height: 123px;          
+            }
+
+            .text {
+                /*          position:absolute;*/
+                width: 133px;
+                height: 23px;
+                font-family: times;
+            }
+
+            .box {
+                /*          position:absolute;*/
+                width: 140px;
+                height: 114px;
+                /*          line-height: 30px;*/
+                left:20px;
+                top:3px;
+                padding-left: 8px; 
+                padding-right: 10px; 
+                background-color: white;
+                font-family: times;
+                color: black;
+                font-size: 125%;
+                /*          vertical-align: middle;*/
+            }
+
+            .text {
+                /*          position:absolute;*/
+                /*          text-align: center;*/
+                width: 33px;
+                height: 23px;
+                font-size: 100%;
+                font-family: times;
+            }
+        </STYLE>
+
+        <script>
+            function reset() {
+                document.getElementById('one').style.background = "#3070a8";
+                document.getElementById('two').style.background = "#3070a8";
+
+                document.getElementById('p0').style.visibility = "hidden";
+                document.getElementById('p1').style.visibility = "hidden";
+
+//                document.getElementById('check1').style.visibility = "hidden";
+//                document.getElementById('check2').style.visibility = "hidden";
+                document.getElementById('check1').style.display = "none";
+                document.getElementById('check2').style.display = "none";
+
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('explanation').style.visibility = 'hidden';
+
+//                posOne = getElementPos(document.getElementById('one'));
+//                document.getElementById('p0').style.left = posOne.x - 213 + "px";
+//                document.getElementById('p0').style.top = posOne.y + 60 + "px";
+
+                //  init1();
+            }
+
+            function one() {
+                reset();
+                document.getElementById('one').style.background = "purple";
+                document.getElementById('p0').style.visibility = "visible";
+                resetb();
+            }
+
+            function two() {
+                reset();
+                document.getElementById('two').style.background = "purple";
+                document.getElementById('p1').style.visibility = "visible";
+                document.getElementById('check1').style.display = "inline";
+                document.getElementById('check2').style.display = "inline";
+
+                document.getElementById('explanation').style.visibility = 'visible';
+                init1();
+            }
+
+            function three() {
+                reset();
+                document.getElementById('three').style.background = "purple";
+                document.getElementById('p2').style.visibility = "visible";
+            }
+
+            function four() {
+                reset();
+                document.getElementById('four').style.background = "purple";
+                document.getElementById('p3').style.visibility = "visible";
+            }
+
+            function init() {
+                reset();
+                document.getElementById('one').style.background = "purple";
+                one();
+            }
+
+            y = 20;
+            function init1() {
+//                posOne = getElementPos(document.getElementById('p0'));
+//                document.getElementById('p1').style.left = posOne.x - 10 + "px";
+//                document.getElementById('p1').style.top = posOne.y + 0 + "px";
+
+          document.getElementById('highlight').style.visibility = 'hidden';
+          document.getElementById('explanation').style.visibility = 'hidden';
+//          p3 = getElementPos(document.getElementById('loc1'));
+//          document.getElementById('radius').style.left = p3.x + 50 + "px";
+//          document.getElementById('radius').style.top = p3.y + 10 + "px";
+          pos = getElementPos(document.getElementById('rec1'));
+                    pos.x += document.body.scrollLeft;
+
+          step = 0;
+            }
+
+            step = 0;
+            function check1() {
+                document.getElementById('highlight').style.visibility = 'visible';
+                if (step == 0) {
+                    pos = getElementPos(document.getElementById('rec1'));
+                    pos.x += document.body.scrollLeft;
+
+                    y = pos.y - 60;
+                    $("#highlight").css("top", y + 20).css("left", pos.x + pos.w / 2 - 5)
+                            .css("width", 10).css("height", 10);
+                    $("#highlight").animate({top: pos.y}, 400, function () {
+                        $("#highlight").animate({top: pos.y + pos.h / 2 - 10, left: pos.x, width: pos.w, height: 20
+                        })
+
+                    });
+
+                    document.getElementById('highlight').style.visibility = 'visible';
+                    document.getElementById('explanation').style.visibility = 'visible';
+
+                    $("#explanation").animate({top: y + 0,
+                        left: pos.x + pos.w - 20, width: 187, height: 20
+                    });
+                    document.getElementById('check1').innerHTML = 'Next';
+
+                    tb1 = parseInt($('#tb1').val());
+                    if (tb1 >= 0) {
+                        document.getElementById('explanation').innerHTML = 'Test if (' + tb1 + ' >= 0). It is true in this case. The statements for the true case will be executed.';
+                        step++;
+                    } else {
+                        document.getElementById('explanation').innerHTML = 'Test if (' + tb1 + ' >= 0). It is false in this case. The statements for the false case will be executed.';
+                        step += 3;
+                    }
+                } else if (step == 1) {
+                    pos2 = getElementPos(document.getElementById('rec2'));
+                    pos2.x += document.body.scrollLeft;
+
+                    $("#highlight").css("left", pos.x).css("top", pos.y + pos.h / 2 - 5).css("width", 10).css("height", 10);
+                    $("#highlight").animate({left: pos2.x + pos2.w / 2 - 10}, 400, function () {
+                        $("#highlight").animate({top: pos2.y}, 400, function () {
+                            $("#highlight").animate({top: pos2.y, left: pos2.x, width: pos2.w, height: pos2.h
+                            })
+                        });
+                    });
+
+                    $("#explanation").animate({top: pos2.y - 70, left: pos2.x + 20, width: 197, height: 20
+                    });
+                    document.getElementById('explanation').innerHTML = ' The statements for the true case are executed.';
+                    step += 1;
+                } else if (step == 2) {
+                    pos2 = getElementPos(document.getElementById('rec2'));
+                    pos2.x += document.body.scrollLeft;
+
+                    $("#highlight").css("left", pos2.x + pos2.w / 2 - 5 - 1).
+                            css("top", pos2.y + pos2.h / 2 - 5).css("width", 10).css("height", 10);
+                    $("#highlight").animate({top: pos2.y + pos2.h + 15}, 400, function () {
+                        $("#highlight").animate({left: pos.x + pos.w / 2 - 5}, 400, function () {
+                            $("#highlight").animate({top: pos2.y + pos2.h + 50
+                            })
+                        });
+                    });
+
+                    $("#explanation").animate({top: pos2.y + pos2.h + 15, left: pos2.x + 45, width: 197, height: 20
+                    });
+                    document.getElementById('explanation').innerHTML = 'The next statement after the if statement is executed.';
+                    step += 3;
+                } else if (step == 3) {
+                    pos2 = getElementPos(document.getElementById('rec3'));
+                    pos2.x += document.body.scrollLeft;
+
+                    $("#highlight").css("left", pos.x + pos.w - 5).css("top", pos.y + pos.h / 2 - 5).css("width", 10).css("height", 10);
+                    $("#highlight").animate({left: pos2.x + pos2.w / 2 - 0}, 400, function () {
+                        $("#highlight").animate({top: pos2.y}, 400, function () {
+                            $("#highlight").animate({top: pos2.y, left: pos2.x, width: pos2.w, height: pos2.h
+                            })
+                        });
+                    });
+
+                    $("#explanation").animate({top: pos2.y - 85, left: pos2.x + 20, width: 197, height: 20
+                    });
+                    document.getElementById('explanation').innerHTML = ' The statements for the false case are executed.';
+                    step += 1;
+                } else if (step == 4) {
+                    $("#highlight").css("left", pos2.x + pos2.w / 2 - 5 - 0).
+                            css("top", pos2.y + pos2.h / 2 - 5).css("width", 10).css("height", 10);
+                    $("#highlight").animate({top: pos2.y + pos2.h + 15}, 400, function () {
+                        $("#highlight").animate({left: pos.x + pos.w / 2 - 5}, 400, function () {
+                            $("#highlight").animate({top: pos2.y + pos2.h + 50
+                            })
+                        });
+                    });
+
+                    $("#explanation").animate({top: pos2.y + pos2.h + 20, left: pos2.x - 40, width: 197, height: 20
+                    });
+                    document.getElementById('explanation').innerHTML = 'The next statement after the if statement is executed.';
+                    step += 3;
+                } else {
+                    document.getElementById('check1').innerHTML = 'Restart Animation';
+                    step = 0;
+                    document.getElementById('highlight').style.visibility = 'hidden';
+                    document.getElementById('explanation').style.visibility = 'hidden';
+                }
+            }
+
+            function resetb() {
+                document.getElementById('check1').innerHTML = 'Start Animation';
+                step = 0;
+                init1();
+            }
+
+            var id;
+            $(window).resize(function () {
+                clearTimeout(id);
+                id = setTimeout(doneResizing, 500);
+
+            });
+
+            function doneResizing() {
+                init1();
+            }
+
+        </script>
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+    <body onload="init()" onresize="one()" style="width: 100%; 
+          margin-left:auto;
+          margin-right:auto;
+          ">   
+        <div id = "program1" style="border: 1px solid #EB0D1B; width: 540px; height: 40px; font-family: times; 
+             font-size: 100.5%; margin: 0px auto; border: 1px; text-align: center;">
+            <span style="padding: 3px">
+                <button id ="one" class="button" type="button" onClick="one()">(a)</button>  
+                <button id = "two" class="button" type="button" onClick="two()">(b)</button>
+                <span id="check2">Enter radius: <input id="tb1" type="text" value="2" style="width:28px; color: #EB0D1B; text-align: center;"></span>
+                <button id = "check1" type="button" class="button" onclick="check1()" style='width: 125px;'>Start Animation</button>
+            </span>    
+        </div>
+
+        <div id="highlight"></div>
+        <div id="explanation"></div>
+
+        <div id = "program2" style="width: 540px; font-family: courier; font-size: 15px; margin: 0px auto;
+             ;">
+            <!--     Step 0-->
+            <div id ="p0" style="position: absolute;">
+                <svg width="540" height="230">
+                <defs>
+                <marker id="arrow1" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+                    <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:black;" />
+                </marker>
+                </defs>
+                <circle cx="270" cy="7" r="3" stroke="black" stroke-width="1" fill="none" />
+                <path d="M270,10 v26" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+
+                <path d="M270,40 l-60,40 60,40, 60,-40, -60,-40" class="flowchart" />
+                <text x="243" y="75" fill="black" style='font-family: times; font-weight: normal'>
+                <tspan >boolean-</tspan>
+                <tspan dx="-70" dy="15">expression</tspan></text>
+
+                <!-- rectangle -->
+                <path d="M270,187 v26" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+                <path d="M330,80 h106 v38" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+                <path d="M210,80 h-106 v38" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+                <path d="M104,150 v34 h158" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+                <path d="M436,150 v34 h-158" class='flowchartdline' style='marker-end: url(#arrow1);'/>
+                <circle cx="270" cy="184" r="3" stroke="black" stroke-width="1" fill="none" />
+                <circle cx="270" cy="220" r="3" stroke="black" stroke-width="1" fill="none" />
+
+                <text x="340" y="71" fill="#EB0D1B" style='font-family: monospace; font-weight: bold'>false</text>
+                <text x="170" y="71" fill="#EB0D1B" style='font-family: monospace; font-weight: bold'>true</text>
+
+                <path d="M10,124 h200 v25 h-200 v-25" class='flowchart'/>
+                <text x="15" y="142" fill="black" style='font-family: times; font-weight: normal'>
+                Statement(s) for the true case
+                </text>
+
+                <path d="M330,124 h200 v25 h-200 v-25" class='flowchart'/>
+                <text x="335" y="142" fill="black" style='font-family: times; font-weight: normal'>
+                Statement(s) for the false case
+                </text>
+
+                </svg>
+            </div>
+
+            <!--     Step 2-->
+            <div id ="p1" style="position: absolute;  font-family: monospace; font-size: 12px;">
+                <svg width="540" height="230">
+                <defs>
+                <marker id="arrow" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+                    <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:black;" />
+                </marker>
+                </defs>
+                <circle cx="270" cy="7" r="3" stroke="black" stroke-width="1" fill="none" />
+                <path d="M270,10 v26" class='flowchartdline' style='marker-end: url(#arrow);'/>
+
+                <path id='rec1' d="M270,40 l-60,40 60,40, 60,-40, -60,-40" class="flowchart" />
+                <text x="220" y="83" fill="#EB0D1B" style='font-family: monospace; font-weight: bold; '>
+                (radius >= 0)</text>
+
+                <!-- rectangle -->
+                <path d="M270,187 v26" class='flowchartdline' style='marker-end: url(#arrow);'/>
+                <path d="M330,80 h101 v15" class='flowchartdline' style='marker-end: url(#arrow);'/>
+                <path d="M210,80 h-101 v15" class='flowchartdline' style='marker-end: url(#arrow);'/>
+                <path d="M109,164 v20 h153" class='flowchartdline' style='marker-end: url(#arrow);'/>
+                <path d="M431,165 v19 h-153" class='flowchartdline' style='marker-end: url(#arrow);'/>
+                <circle cx="270" cy="184" r="3" stroke="black" stroke-width="1" fill="none" />
+                <circle cx="270" cy="220" r="3" stroke="black" stroke-width="1" fill="none" />
+
+                <text x="340" y="71" fill="#EB0D1B" style='font-family: monospace; font-weight: bold'>false</text>
+                <text x="170" y="71" fill="#EB0D1B" style='font-family: monospace; font-weight: bold'>true</text>
+
+                <path id='rec2' d="M10,99 h205 v65 h-205 v-65" class='flowchart'/>
+                <text x="15" y="112" fill="black" style='font-family: monospace; font-weight: bold; font-size: 11px;'>
+                <tspan x="15">area = radius * radius * PI;</tspan>
+                <tspan x="15" dy="15">System.out.println("The area"</tspan>
+                <tspan x="28" dy="15">+ " for the circle of radius "</tspan>
+                <tspan x="28" dy="15">  + radius + " is " + area);</tspan>
+                </text>
+
+                <path id='rec3' d="M325,99 h205 v65 h-205 v-65" class='flowchart'/>
+                <text x="330" y="112" fill="black" style='font-family: monospace; font-weight: bold; font-size: 11px;'>
+                <tspan x="330" dy="15">System.out.println("Negative"</tspan>
+                <tspan x="342" dy="15">+ " input");</tspan>
+                </text>
+                </svg>
+            </div>
+        </div>
+
+    </body>
+</html>

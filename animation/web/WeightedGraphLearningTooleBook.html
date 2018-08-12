@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,17 +8,17 @@
 
 <!--        <script type="text/javascript" src="jquery-1.8.3.min.js"></script>-->
         <script src="Graph.js"></script>
+        <script src="WeightedGraph.js"></script>
         <script src="Queue.js"></script>
-        <script src="Stack.js"></script>
         <script src="LinkedList.js"></script>
-        
-<!--<script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>-->
 
-<!--<script src="jqueryForJPrompt.js" type="text/javascript"></script>
-        <script src="jquery.alerts.js" type="text/javascript"></script>
-        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />-->
+<!--        <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+                  <script src="jqueryForJPrompt.js" type="text/javascript"></script>
+        <script src="jquery.alerts.js" type="text/javascript"></script>-->
+<!--        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />-->
 <script src="jquery-1.7.2.min.js"></script>
 <script src="jquery-ui.min.js"></script>
 <script src="jquery.ui.touch-punch.min.js"></script>
@@ -58,32 +59,37 @@
             startPoint = new Point(30, 40);
             currentPoint = new Point(45, 67);
 
-            var graph = new Graph();
+            var graph = new WeightedGraph();
             graph.addVertex(new Point(167, 20));
             graph.addVertex(new Point(120, 200));
             graph.addVertex(new Point(20, 70));
             graph.addVertex(new Point(320, 50));
-            graph.addVertex(new Point(300, 180));
+            graph.addVertex(new Point(290, 180));
+
+            var d1 = getDistance(new Point(167, 20), new Point(120, 200));
+            graph.addEdge(0, 1, d1);
+            graph.addEdge(1, 0, d1);
+
+            var d1 = getDistance(new Point(167, 20), new Point(20, 70));
+            graph.addEdge(0, 2, d1);
+            graph.addEdge(2, 0, d1);
+
+            var d1 = getDistance(new Point(167, 20), new Point(320, 50));
+            graph.addEdge(0, 3, d1);
+            graph.addEdge(3, 0, d1);
+
+            var d1 = getDistance(new Point(320, 50), new Point(360, 160));
+            graph.addEdge(4, 3, d1);
+            graph.addEdge(3, 4, d1);
+
+            var d1 = getDistance(new Point(120, 200), new Point(360, 160));
+            graph.addEdge(4, 1, d1);
+            graph.addEdge(1, 4, d1);
 
             radius = 10;
 
             var canvas;
             var context;
-
-            graph.addEdge(0, 1);
-            graph.addEdge(1, 0);
-
-            graph.addEdge(0, 2);
-            graph.addEdge(2, 0);
-
-            graph.addEdge(0, 3);
-            graph.addEdge(3, 0);
-
-            graph.addEdge(4, 3);
-            graph.addEdge(3, 4);
-
-            graph.addEdge(4, 1);
-            graph.addEdge(1, 4);
 
             function init() {
                 jAlert("Graph initialized");
@@ -105,7 +111,7 @@
                 //          draw();
                 //        }, false);
 
-                draw();
+                draw(); 
             }
 
             function getMousePos(canvas, evt) {
@@ -116,15 +122,14 @@
             function draw() {
                 // Reset size will clear the canvas, but not for IE9
                 canvas.width = window.innerWidth - 20;
-                canvas.height = 260; // window.innerHeight - 380;
+                canvas.height = 250; // window.innerHeight - 380;
+                context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
 
                 var isFirefox = typeof InstallTrigger !== 'undefined';
                 if (isFirefox) {
                     canvas.width = window.innerWidth - 20;
                     canvas.height = window.innerHeight - 400;
                 }
-
-                context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
 
                 context.font = "14px sans-serif";
                 context.strokeStyle = "#100"; // Set a pen color
@@ -151,32 +156,22 @@
                 context.lineTo(x21, y21);
             }
 
-            function dfs() {
+            function mst() {
+                var tree = graph.getMinimumSpanningTree();
+                drawTreeAndGraph(tree);
+            }
+
+            function spTree() {
                 var value = document.getElementById('value').value.trim();
-                                if (value < 0 || value >= graph.getSize()) {
+                                                if (value < 0 || value >= graph.getSize()) {
                     jAlert("Start vertext is not in the graph");
                     return;
                 }
                 
-        if (value == "") {
-                    jAlert("no vertex entered", "Alert");
-                } else {
-                    var tree = graph.dfs(parseInt(value));
-                    drawTreeAndGraph(tree);
-                }
-            }
-
-            function bfs() {
-                var value = document.getElementById('value').value.trim();
-                                if (value < 0 || value >= graph.getSize()) {
-                    jAlert("Start vertext is not in the graph");
-                    return;
-                }
-
                 if (value == "") {
-                    jAlert("no vertex entered");
+                    jAlert("Start vertex is not entered");
                 } else {
-                    var tree = graph.bfs(parseInt(value));
+                    var tree = graph.getShortestPath(parseInt(value));
                     drawTreeAndGraph(tree);
                 }
             }
@@ -193,13 +188,12 @@
                     jAlert("End vertext is not in the graph");
                     return;
                 }
-                
                 if (v1 == "") {
-                    jAlert("Start vertext not entered");
+                    jAlert("Start vertex is not entered");
                 } else if (v2 == "") {
-                    jAlert("End vertex not entered");
+                    jAlert("End vertex is not entered");
                 } else {
-                    var tree = graph.bfs(parseInt(v1));
+                    var tree = graph.getShortestPath(parseInt(v1));
                     drawPathAndGraph(tree, v2);
                 }
             }
@@ -237,17 +231,17 @@
                         drawArrowLine(context, x2, y2, x1, y1)
                     }
                 }
-    //        context.lineWidth = 10;
+                //        context.lineWidth = 10;
                 context.stroke();
-    //
-    //        context.lineWidth = 1;
-    //        context.strokeStyle = "#100"; // Set a pen color
+                //
+                //        context.lineWidth = 1;
+                //        context.strokeStyle = "#100"; // Set a pen color
             }
 
             function drawPathAndGraph(tree, v2) {
                 // Reset size will clear the canvas, but not for IE9
                 canvas.width = window.innerWidth - 20;
-                canvas.height = 250; // window.innerHeight - 280;
+                canvas.height = 250; // window.innerHeight - 40;
                 context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
 
                 context.font = "14px sans-serif";
@@ -261,7 +255,7 @@
             function drawTreeAndGraph(tree) {
                 // Reset size will clear the canvas, but not for IE9
                 canvas.width = window.innerWidth - 20;
-                canvas.height = 250; // window.innerHeight - 280;
+                canvas.height = 250; //window.innerHeight - 380;
                 context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
 
                 context.font = "14px sans-serif";
@@ -272,21 +266,11 @@
                 drawTree(context, tree);
             }
 
-            function drawHamiltonianCycle(path) {
-                // Reset size will clear the canvas, but not for IE9
-                canvas.width = window.innerWidth - 20;
-                canvas.height = 250; // window.innerHeight - 280;
-                context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
-
-                context.font = "14px sans-serif";
-                context.strokeStyle = "#100"; // Set a pen color
-
-                drawGraph(context);
-
-                drawCycle(context, path);
-            }
-
-            function drawGraph(context) { 
+            uu = 0;
+            function drawGraph(context) {
+                uu += 1;
+               // jAlert(uu);
+                
                 context.beginPath();
                 // Draw all points
                 for (var i = 0; i < graph.getSize(); i++) {
@@ -308,6 +292,8 @@
                         x2 = graph.getVertex(p2).x;
                         y2 = graph.getVertex(p2).y;
                         connectTwoCircles(context, x1, y1, x2, y2);
+                        var weight = parseInt(list1[i].weight);
+                        context.fillText(weight + "", (x1 + x2) / 2, (y1 + y2) / 2);
                     }
                 }
 
@@ -362,88 +348,28 @@
                         y2 + Math.sin(arctan - set45) * arrlen);
             }
 
-            function hamiltonianPath() {
-                var pathTree = graph.getOneHamiltonianPath();
-                if (pathTree == null) {
-                    jAlert("The graph does not have a Hamiltonian path.");
-                } else {
-    //          jAlert("The graph has a Hamiltonian path.");
-                    drawTreeAndGraph(pathTree);
-                }
-            }
-
-// A strange issue with jAlert and using toString(). Fixed. 10/21/2016
-            function connectedComponents() {
-                list = graph.getConnectedComponents();
-
-
-                if (list.length > 1) {
-//                    var result = toString(list);
-//                    
-                                    var result = [];
-                for (var i = 0; i < list.length; i++) {
-                    if (i == list.length - 1)
-                        result += '[' + list[i].toString() + ']';
-                    else
-                        result += '[' + list[i].toString() + '], ';
-                }
-                    t = list.length + " connected components are " + result;
-                    jAlert(t);
-                } else {
-                    t = "There is only one connected component: " + list;
-                    jAlert(t);
-                }
-            }
-
-// A strange issue with jAlert and using toString(). Fixed. 10/21/2016
-            function toString(list) {
-//                var result = [];
-//                for (var i = 0; i < list.length; i++) {
-//                    if (i == list.length - 1)
-//                        result += '[' + list[i].toString() + ']';
-//                    else
-//                        result += '[' + list[i].toString() + '], ';
-//                }
-//                return result;
-                
-                return list;
-            }
-
-            function findCycle() {
-                var list = graph.getACycle();
-
-                if (list != null)
-                    jAlert("A cycle is " + list.toString());
-                else
-                    jAlert("No cycle found");
-            }
-
-// A strange issue with jAlert and using toString(). Fixed. 10/21/2016
-            function bipartiteSets() {
-                var list = graph.getBipartite();
-
-                if (list != null) {
-                  //  var result = toString(list);
-var result = [];
-                for (var i = 0; i < list.length; i++) {
-                    if (i == list.length - 1)
-                        result += '[' + list[i].toString() + ']';
-                    else
-                        result += '[' + list[i].toString() + '], ';
-                }
-                    jAlert("The bipartite sets are " + result);
-                } else
-                    jAlert("The graph is not bipartite");
-            }
-
-            function hamiltonianCycle() {
-                var path = graph.getHamiltonianCycle(0);
-                if (path.length == 0) {
+            function shortestHamiltonianCycle() {
+                var path = graph.getWeightedHamiltonianCycle(0);
+                if (path.length == 0 || graph.totalWeightOfPath == Number.MAX_VALUE) {
                     jAlert("The graph does not have a Hamiltonian cycle.");
                 } else {
-                    // jAlert("The graph has a Hamiltonian cycle. " + path[0]);
                     drawHamiltonianCycle(path);
+                    jAlert("The total weight of the cycle is " + graph.totalWeightOfPath);
                 }
+            }
+
+            function drawHamiltonianCycle(path) {
+                // Reset size will clear the canvas, but not for IE9
+                canvas.width = window.innerWidth - 20;
+                canvas.height = 250; // window.innerHeight - 280;
+                context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+                context.font = "14px sans-serif";
+                context.strokeStyle = "#100"; // Set a pen color
+
+                drawGraph(context);
+
+                drawCycle(context, path);
             }
 
             function drawCycle(context, p) {
@@ -467,11 +393,11 @@ var result = [];
                 y2 = graph.getVertex(p2).y;
                 drawLineWithoutArrow(context, x2, y2, x1, y1)
 
-    //        context.lineWidth = 10;
+                //        context.lineWidth = 10;
                 context.stroke();
-    //
-    //        context.lineWidth = 1;
-    //        context.strokeStyle = "#100"; // Set a pen color
+                //
+                //        context.lineWidth = 1;
+                //        context.strokeStyle = "#100"; // Set a pen color
             }
 
             function drawLineWithoutArrow(context, x1, y1, x2, y2) {
@@ -509,13 +435,14 @@ var result = [];
                 var arrlen = 15;
 
                 // draw arrows on line
-    //        context.moveTo(x2, y2);
-    //        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
-    //                y2 + Math.sin(arctan + set45) * arrlen);
-    //
-    //        context.moveTo(x2, y2);
-    //        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
-    //                y2 + Math.sin(arctan - set45) * arrlen);
+                //        context.moveTo(x2, y2);
+                //        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+                //                y2 + Math.sin(arctan + set45) * arrlen);
+                //
+                //        context.moveTo(x2, y2);
+                //        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+                //                y2 + Math.sin(arctan - set45) * arrlen);
+                // onresize="draw()"
             }
         </script>
     
@@ -532,22 +459,20 @@ var result = [];
 </head>
 
 
-  <body onload="init()" onresize="draw()">   
-    <h3 style="text-align:center; font: bold">Graph Learning Tool <a href="https://yongdanielliang.github.io/animation/animation.html" >Animation</a> by 
-      <a href="https://yongdanielliang.github.io/" >Y. Daniel Liang</a></h3>
-    <div> 
+
+    <body onload="init()" onresize="draw()" style="max-width: 1000px; font-family: times new roman;">   
         <div> 
-            This tool is for demonstrating graph algorithms. You can 
+            This tool is for demonstrating weighted graph algorithms. You can 
             <ul>
                 <li>Add a vertex 
-                    by clicking the primary button in an open area and </li>
+                    by clicking the primary button in an open area. </li>
                 <li>
                     Remove a vertex by clicking 
                     at the vertex using the secondary button. </li>
                 <li>
                     Add an edge between 
                     two vertices by dragging from one vertex to 
-                    the other vertex. 
+                    the other vertex. The weight is the distance between the vertices.
                 </li>
                 <li>
                     Move a vertex by dragging the vertex while pressing
@@ -555,31 +480,48 @@ var result = [];
                 </li>
             </ul>
         </div>
-
-        <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 250px;">
+        <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right;
+             height: 250px;">
             <canvas id="canvas"></canvas>
         </div>
-
     <center>
         <div id="form">
             <table>
                 <tr>
                     <td>
                         <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Display DFS/BFS</legend>
+                            <legend style="color:blue;font-weight:bold;">Display MST</legend>
                             <table>
                                 <tr>
-                                    <td>Start Vertex:</td>
-                                    <td><input type="text" value="" id="value" style="width: 3em; text-align: right"></td>
-                                    <td><button type="button" class="button" onclick="dfs()">DFS</button></td>
-                                    <td><button type="button" class="button" onclick="bfs()">BFS</button></td>
+                                    <td><button type="button" class="button" onclick="mst()">MST</button></td>
                                 </tr>
                             </table>
                         </fieldset>
                     </td>
                     <td>
                         <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Find a Shortest Path</legend>
+                            <legend style="color:blue;font-weight:bold;">Display SP Tree</legend>
+                            <table>
+                                <tr>
+                                    <td>Start Vertex:</td>
+                                    <td><input type="text" value="" id="value" 
+                                               style="width: 3em; text-align: right"></td>
+                                    <td><button type="button" class="button" onclick="spTree()">Shortest Path Tree</button></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="form">
+            <table>
+                <tr>
+
+                    <td>
+                        <fieldset>
+                            <legend style="color:blue;font-weight:bold;">Find a shortest path</legend>
                             <table>
                                 <tr>
                                     <td>Start Vertex:</td>
@@ -598,50 +540,13 @@ var result = [];
         <div id="form">
             <table>
                 <tr>
-                    <td>
-                        <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Find Hamiltonian Path/Cycle</legend>
-                            <table>
-                                <tr>
-                                    <td><button type="button" class="button" onclick="hamiltonianPath()">Hamiltonian Path</button></td>
-                                    <td><button type="button" class="button" onclick="hamiltonianCycle()">Hamiltonian Cycle</button></td>
-                                </tr>
-                            </table>
-                        </fieldset>
-                    </td>
-                </tr>
-            </table>
-        </div>
 
-        <div id="form">
-            <table>
-                <tr>
                     <td>
                         <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Find Connected Components</legend>
+                            <legend style="color:blue;font-weight:bold;">Traveling Salesman Problem </legend>
                             <table>
                                 <tr>
-                                    <td><button type="button" class="button" onclick="connectedComponents()">Find Connected Components</button></td>
-                                </tr>
-                            </table>
-                        </fieldset>
-                    </td>
-                    <td>
-                        <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Find a Cycle</legend>
-                            <table>
-                                <tr>
-                                    <td><button type="button" class="button" onclick="findCycle()">Find a Cycle</button></td>
-                                </tr>
-                            </table>
-                        </fieldset>
-                    </td>
-                    <td>
-                        <fieldset>
-                            <legend style="color:blue;font-weight:bold;">Find Bipartite Sets</legend>
-                            <table>
-                                <tr>
-                                    <td><button type="button" class="button" onclick="bipartiteSets()">Find Bipartite Sets</button></td>
+                                    <td><button type="button" class="button" onclick="shortestHamiltonianCycle()">Solve it</button></td>
                                 </tr>
                             </table>
                         </fieldset>
@@ -658,7 +563,7 @@ var result = [];
                     case 1: // Primary button down
                         if (isContained(mousePos, 2 * radius)) {
                             if (evt.ctrlKey) {
-                                // console.log('Control Down');
+                                console.log('Control Down');
                             } else {
                                 startPoint = new Point(mousePos.x, mousePos.y);
                                 isLineOn = true; // Turn it on when pressed at a point
@@ -685,13 +590,30 @@ var result = [];
                 currentPoint = new Point(mousePos.x, mousePos.y);
 
                 if (evt.ctrlKey) {
-                    console.log('Control Down');
+                    // console.log('Control Down');
                     var index = getVertex(currentPoint);
                     graph.vertices[index].x = currentPoint.x;
                     graph.vertices[index].y = currentPoint.y;
+
+                    for (var i = 0; i < graph.neighbors[index].length; i++) {
+                        var v = graph.neighbors[index][i].v;
+                        var p = graph.getVertex(v);
+                        var d = getDistance(currentPoint, p);
+                        graph.neighbors[index][i].weight = d;
+
+                        for (var j = 0; j < graph.neighbors[v].length; j++) {
+                            var v1 = graph.neighbors[v][j].v;
+                            if (v1 == index) {
+                                graph.neighbors[v][j].weight = d;
+                                break;
+                            }
+                        }
+                    }
                 }
 
+                // if (isLineOn) {
                 draw();
+                // }
             });
 
             $("#canvas").mouseup(function (evt) {
@@ -702,8 +624,9 @@ var result = [];
 
                     var u = getVertex(startPoint);
                     var v = getVertex(currentPoint);
-                    graph.addEdge(u, v); // Add an undirected edge
-                    graph.addEdge(v, u);
+                    var d = getDistance(startPoint, currentPoint);
+                    graph.addEdge(u, v, d); // Add an undirected edge
+                    graph.addEdge(v, u, d);
                     draw();
                 }
             });
@@ -722,12 +645,9 @@ var result = [];
     <script type="text/javascript">
         $(window).resize(function () {
             var canvas = document.getElementById('canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight - 380;
-            draw();
+            canvas.width = window.innerWidth - 15;
+            canvas.height = 250; // window.innerHeight - 320;
         });
     </script>
 </body>
 </html>
-
-

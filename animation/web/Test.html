@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Insertion Sort Animation by Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">-->
+        <script src="jquery-latest.js"></script>
+        <!--    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>-->
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="jqueryForJPrompt.js" type="text/javascript"></script>
+        <script src="jquery.alerts.js" type="text/javascript"></script>
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+        <style>
+            #highlight1 {
+                background-color: #EB0D1B;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #currentFly {
+                background-color:orange;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 45px;
+                line-height: 29px;
+                text-align: middle;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #sortedFly {
+                background-color: #37826C;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                line-height: 25px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline { float:left; }
+            .clearBoth { clear:both; }
+
+            .button {
+                margin-bottom: 0px; margin-top: 0px; background-color: #37826C; color:white;
+                /*    width: 70px;
+                    height: 30px;*/
+                display:inline;
+                color:#fff;
+                font-size: 14px;
+                background: #3070a8;
+                border: none;
+            }
+
+        </style>
+
+
+
+        <!-- Global Site Tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            ;
+            gtag('js', new Date());
+            gtag('config', 'UA-89940905-27');
+        </script>
+
+        <script type="text/javascript" src="../logging.js"></script>
+    </head>
+
+
+
+    <body onload="init()" onresize="init()" style="font-family: times new roman;"> 
+<!--    <div id = "program1" style="border: 1px solid #EB0D1B; width: 100%; height: 60px; font-family: courier; font-size: 100.5%; margin: 0px auto; border: 1px; text-align: center;">
+      <span style="padding: 3px">
+        <button id = "buttonA" class="button" type="button" onClick="reset()">(a)</button>  
+        <button id = "buttonB" class="button" type="button" onClick="step()">(b)</button>
+        <button id = "buttonC" class="button" type="button" onClick="buttonC()">Code Animation</button>
+      </span>    
+    </div>-->
+
+        <div align="center" >
+            <button id = "reset" type="button" class="button" onclick="reset()">(a)</button></div>
+            <button id = "step" type="button" class="button" onclick="step()">(b)</button>
+            
+        <div style="height: 70px; font-size: 200%"></div>
+
+        <div id = "row" style="position: absolute;">
+            <div id = "row1" style="display: table; overflow: hidden; width: 90%; margin: 0 auto; ">
+                <script>
+                    SIZE = 12;
+                    for (var i = 0; i < SIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px #37826C solid; background: white;' +
+                                'width: 30px; height: 30px; min-width: 15px; max-width: 30px;  text-align: center;">' +
+                                '<div id="list' + i + '" style="color: black; weight: bold"></div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+
+            <div id = "row2" style="display: table; overflow: hidden; width: 90%; margin: 0 auto; ">
+                <script>
+                    for (var i = 0; i < SIZE; i++) {
+                        document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                                'border: 1px white solid; background: white;' +
+                                'width: 30px; height: 10px; min-width: 15px; max-width: 30px; text-align: center;">' +
+                                '<div id="check' + i + '" style="color: #EB0D1B; weight: bold">' + i + '</div>' +
+                                '</div>');
+                    }
+                </script>      
+            </div>
+        </div>
+
+        <div id ="iValue" style="position: absolute; height: 100px;">insert e here</div>
+        <div id ="iPosition" style="position: absolute; height: 100px; font-size: 200%">&#8595;</div>
+        <div id ="endValue" style="position: absolute; height: 100px;">data.length - 1</div>
+        <div id ="endPosition" style="position: absolute; height: 100px; font-size: 200%">&#8595;</div>
+
+        <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 30px; height: 45px; max-width: 30px; text-align: center;">
+            <div id="highlight1" style="opacity:1.0; "></div>
+            <div id="currentFly" style="opacity:1.0"></div>
+            <div id="sortedFly"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1em">
+            <span id = "remark" style = "background-color: white; color: #EB0D1B; alignment-adjust: central; text-align: center; max-wdith: 800px; margin-left: auto; margin-right: auto">
+                A list is filled with random numbers.
+            </span>
+        </div>
+
+        <script>
+            slowAnimationSpeed = 400;
+
+            $("#step").click(function () {
+                step2();
+            });
+
+            function init() {
+                pos0 = getElementPos(document.getElementById('reset'));
+                $("#row").animate({top: pos0.y + 40, left: pos0.x - 110, }, 'fast');
+                pos = getElementPos(document.getElementById('list4'));
+                document.getElementById('iPosition').style.top = pos.y - 90 + "px";
+                document.getElementById('iPosition').style.left = pos.x + 10 + "px";
+                document.getElementById('iValue').style.top = pos.y - 100 + "px";
+                document.getElementById('iValue').style.left = pos.x - 24 + "px";
+                pos1 = getElementPos(document.getElementById('list11'));
+                document.getElementById('endPosition').style.top = pos.y - 90 + "px";
+                document.getElementById('endPosition').style.left = pos1.x + 10 + "px";
+                document.getElementById('endValue').style.top = pos.y - 100 + "px";
+                document.getElementById('endValue').style.left = pos1.x - 40 + "px";
+
+                reset();
+            }
+
+            function reset() {
+                isFindFirst = true;
+                current = 0;
+                minPosition = 0;
+
+                i = 0;
+                document.getElementById('highlight1').style.visibility = 'hidden';
+                document.getElementById('currentFly').style.visibility = 'hidden';
+                document.getElementById('sortedFly').style.visibility = 'hidden';
+    //          document.getElementById('iPosition').style.visibility = 'hidden';
+    //          document.getElementById('iValue').style.visibility = 'hidden';
+                setRandomValue();
+                resetColor();
+                document.getElementById('remark').innerHTML = 'A new random list is created';
+                document.getElementById('value').disabled = false;
+
+                for (var j = 0; j < SIZE; j++) {
+                    id = 'check' + j;
+                    document.getElementById(id).innerHTML = "";
+                }
+            }
+
+            function resetColor() {
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).style.backgroundColor = "white";
+                    document.getElementById(id).style.color = "black";
+                }
+            }
+
+            function setRandomValue() {
+                listValues = [];
+                for (var i = 0; i < SIZE; i++) {
+                    listValues.push(" ");
+                }
+
+                listValues[0] = document.getElementById('list0').innerHTML = "e<sub>1</sub>";
+                listValues[1] = document.getElementById('list1').innerHTML = "e<sub>2</sub>";
+                listValues[2] = document.getElementById('list2').innerHTML = "...";
+                listValues[3] = document.getElementById('list3').innerHTML = "e<sub>i-1</sub>";
+                listValues[4] = document.getElementById('list4').innerHTML = "e<sub>i</sub>";
+                listValues[5] = document.getElementById('list5').innerHTML = "e<sub>i+1</sub>";
+                listValues[6] = document.getElementById('list6').innerHTML = "...";
+                listValues[7] = document.getElementById('list7').innerHTML = "e<sub>n-1</sub>";
+                listValues[8] = document.getElementById('list8').innerHTML = "e<sub>n</sub>";
+            }
+
+            function step2() {
+                shift(5, 8);
+            }
+
+            function shift(p1, p2) {
+                document.getElementById('highlight1').style.visibility = "visible";
+//document.getElementById('currentFly').style.visibility = "visible";
+                if (p2 == p1) {
+                                  p3 = getElementPos(document.getElementById('list' + p1));
+                document.getElementById('highlight1').style.left =
+                        p3.x + "px";
+                document.getElementById('highlight1').style.top =
+                        p3.y - 6 + "px";
+                document.getElementById('highlight1').style.height =
+                        p3.h + 11 + "px";
+                document.getElementById('highlight1').style.width = p3.w + "px";
+                document.getElementById('highlight1').innerHTML =
+                        document.getElementById('list' + p1).innerHTML;
+                document.getElementById('highlight1').style.visibility = "visible";
+  p1 += -1;
+                locp1 = getElementPos(document.getElementById('list' + p1));
+
+                    $("#highlight1").animate({left: p3.x}, 1000, function () {
+                        $("#highlight1").animate({left: locp1.x}, 1000, function () {
+                            document.getElementById('list' + (p1)).innerHTML = listValues[p1 + 1];
+    //                      document.getElementById('currentFly').innerHTML = '';
+
+                        });
+                    });
+
+                    return;
+                }
+
+                p3 = getElementPos(document.getElementById('list' + p1));
+                document.getElementById('highlight1').style.left =
+                        p3.x + "px";
+                document.getElementById('highlight1').style.top =
+                        p3.y - 6 + "px";
+                document.getElementById('highlight1').style.height =
+                        p3.h + 11 + "px";
+                document.getElementById('highlight1').style.width =
+                        p3.w + "px";
+
+                document.getElementById('highlight1').innerHTML =
+                        document.getElementById('list' + p1).innerHTML;
+                document.getElementById('highlight1').style.visibility = "visible";
+                
+                 p4 = p1 - 1;
+                locp1 = getElementPos(document.getElementById('list' + p4));
+                
+                    $("#highlight1").animate({left: p3.x}, 1000, function () {
+                        $("#highlight1").animate({left: locp1.x}, 1000, function () {
+                            document.getElementById('list' + (p1-1)).innerHTML = listValues[p1];
+                           // alert(listValues[p1 + 1]);
+    //                      document.getElementById('currentFly').innerHTML = '';
+shift(p1 + 1, p2);
+                        });
+                    });
+                    
+            }
+        </script>
+    </body>
+</html>

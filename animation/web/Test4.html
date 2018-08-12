@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Figure Section 7.2.1a</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+
+        <STYLE>
+            .button {
+                display:inline;
+                width: 55px;
+                height: 30px;
+                color:#fff;
+                font-size: 14px;
+                background: #3070a8;
+                border: none;
+            }
+
+            .highlight {
+                background-color:#37826C;
+                opacity: 0.10;
+                position:absolute;
+                width:318px;
+                height: 10px;
+                padding: 3px;
+                margin-top: 0px;
+                top: 89px;
+                left: 72px;
+            }
+
+            .arrow {
+                position:absolute;
+                width:100px;
+                font-size: 150%;
+            }
+
+            .hLine {
+                position:absolute;
+                border-top: 1px solid black;
+                width: 100px;          
+            }
+
+            .verticalLine {
+                position:absolute;
+                border-left: 2px solid black;
+                height: 123px;          
+            }
+
+            .text {
+                /*          position:absolute;*/
+                width: 133px;
+                height: 23px;
+                font-family: times;
+            }
+
+            .box {
+                /*          position:absolute;*/
+                width: 240px;
+                height: 114px;
+                /*          line-height: 30px;*/
+                left:20px;
+                top:3px;
+                padding-left: 8px; 
+                padding-right: 10px; 
+                background-color: white;
+                font-family: times;
+                color: black;
+                font-size: 125%;
+                /*          vertical-align: middle;*/
+            }
+
+            .text {
+                /*          position:absolute;*/
+                /*          text-align: center;*/
+                width: 333px;
+                height: 23px;
+                font-size: 100%;
+                font-family: times;
+            }
+        </STYLE>
+
+        <script>
+            function reset() {
+                document.getElementById('one').style.background = "#3070a8";
+                document.getElementById('two').style.background = "#3070a8";
+
+                document.getElementById('p0').style.visibility = "hidden";
+                document.getElementById('p1').style.visibility = "hidden";
+            }
+
+            function one() {
+                reset();
+                document.getElementById('one').style.background = "purple";
+                document.getElementById('p0').style.visibility = "visible";
+            }
+
+            function two() {
+                reset();
+                document.getElementById('two').style.background = "purple";
+                document.getElementById('p1').style.visibility = "visible";
+            }
+
+            function three() {
+                reset();
+                document.getElementById('three').style.background = "purple";
+                document.getElementById('p2').style.visibility = "visible";
+            }
+
+            function four() {
+                reset();
+                document.getElementById('four').style.background = "purple";
+                document.getElementById('p3').style.visibility = "visible";
+            }
+
+            function init() {
+                reset();
+                document.getElementById('one').style.background = "purple";
+                one();
+            }
+
+        </script>
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+    <body onload="init()" onresize="one()" style="width: 100%; 
+          margin-left:auto;
+          margin-right:auto;
+          ">   
+        <div id = "program1" style="border: 1px solid #EB0D1B; height: 40px; font-family: courier; 
+             font-size: 100.5%; margin: 0px auto; border: 1px; text-align: center;">
+            <span style="padding: 3px">
+                <button id ="one" class="button" type="button" onClick="one()">(a)</button>  
+                <button id = "two" class="button" type="button" onClick="two()">(b)</button>
+            </span>    
+        </div>
+
+        <div id = "program2" style="width: 340px; font-family: courier; font-size: 15px; margin: 0px auto;
+             ;">
+            <!--     Step 0-->
+            <div id ="p0" style="position: absolute;">
+<pre>
+elementType[] arrayRefVar;</pre>
+            </div>
+
+            <!--     Step 2-->
+            <div id ="p1" style="position: absolute;">
+<pre>
+<span class="comment">// This syntax is allowed, but not preferred</span> 
+<span class="none">elementType</span> myListdfdfdfdfdfdfd[];</pre>
+            </div>
+
+        </div>        
+    </body>
+</html>

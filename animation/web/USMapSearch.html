@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>USMapSearch by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="jquery-latest.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+    <link rel="stylesheet" type="text/css" href="codecolor.css" />
+
+    <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+    <script src="Graph.js"></script>
+    <script src="Queue.js"></script>
+    <script src="Stack.js"></script>
+    <script src="LinkedList.js"></script>
+
+    <script >
+      function Point(x, y) {
+        this.x = x;
+        this.y = y;
+      }
+
+      function contains(p1, p2, radius) {
+        var d = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+        return d <= radius * radius;
+      }
+
+      function isContained(mousePos, radius) {
+        for (var i = 0; i < graph.getSize(); i++) {
+          if (contains(graph.getVertex(i), mousePos, radius)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function indexOf(list, point) {
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].x == point.x && list[i].y == point.y) {
+            return i;
+          }
+
+          return -1;
+        }
+      }
+
+      isLineOn = false;
+      startPoint = new Point(30, 40);
+      currentPoint = new Point(45, 67);
+
+      var graph = new Graph();
+      graph.addVertex(new Point(167, 20));
+      graph.addVertex(new Point(120, 200));
+      graph.addVertex(new Point(20, 70));
+      graph.addVertex(new Point(320, 50));
+
+      radius = 10;
+
+      var canvas;
+      var context;
+
+      graph.addEdge(0, 1);
+      graph.addEdge(1, 0);
+
+      graph.addEdge(0, 2);
+      graph.addEdge(2, 0);
+
+      graph.addEdge(0, 3);
+      graph.addEdge(3, 0);
+
+      function init() {
+        canvas = document.getElementById('canvas');
+        context = canvas.getContext("2d");
+        //        canvas.addEventListener("click", function(evt) {
+        //          var mousePos = getMousePos(canvas, evt);
+        //          if (evt.button == 0) {
+        //            list.push(new Point(mousePos.x, mousePos.y));
+        //          }
+        //          else if (evt.button == 1) {
+        //            for (var i = 0; i < list.length; i++) {
+        //              if (contains(list[i], mousePos, radius)) {
+        //                list.splice(i, 1);
+        //                break;
+        //              }
+        //            }
+        //          }
+        //          draw();
+        //        }, false);
+
+        draw();
+      }
+
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return new Point(evt.clientX - rect.left, evt.clientY - rect.top);
+      }
+
+      function draw() {
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 250; // window.innerHeight - 330;
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawGraph(context);
+
+        context.stroke();
+        // context.fill();
+      }
+
+      function getDistance(p1, p2) {
+        return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+      }
+
+      // Connect two circles centered at (x1, y1) and (x2, y2) 
+      function connectTwoCircles(context, x1, y1, x2, y2) {
+        vGap = y2 - y1;
+        var d = Math.sqrt(vGap * vGap + (x2 - x1) * (x2 - x1));
+        var x11 = x1 - radius * (x1 - x2) / d;
+        var y11 = y1 - radius * (y1 - y2) / d;
+        var x21 = x2 + radius * (x1 - x2) / d;
+        var y21 = y2 + radius * (y1 - y2) / d;
+        context.moveTo(x11, y11);
+        context.lineTo(x21, y21);
+      }
+
+      function dfs() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          jAlert("no vertex entered");
+        }
+        else {
+          var tree = graph.dfs(parseInt(value));
+          drawTreeAndGraph(tree);
+        }
+      }
+
+      function bfs() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          jAlert("no vertex entered");
+        }
+        else {
+          var tree = graph.bfs(parseInt(value));
+          drawTreeAndGraph(tree);
+        }
+      }
+
+      function findShortestPath() {
+        var v1 = document.getElementById('v1').value.trim();
+        var v2 = document.getElementById('v2').value.trim();
+        if (v1 == "") {
+          jAlert("v1 not entered");
+        }
+        else if (v2 == "") {
+          jAlert("v2 not entered");
+        }
+        else {
+          var tree = graph.bfs(parseInt(v1));
+          drawPathAndGraph(tree, v2);
+        }
+      }
+
+      function drawPath(context, tree, v2) {
+        context.beginPath();
+        context.strokeStyle = "#EB0D1B"; // Set a pen color
+        while (v2 != -1) {
+          var p1 = v2;
+          var p2 = tree.getParent(p1);
+          if (p2 != -1) {
+            x1 = graph.getVertex(p1).x;
+            y1 = graph.getVertex(p1).y;
+            x2 = graph.getVertex(p2).x;
+            y2 = graph.getVertex(p2).y;
+            drawArrowLine(context, x2, y2, x1, y1)
+          }
+          v2 = p2;
+        }
+
+        context.stroke();
+      }
+
+      function drawTree(context, tree) {
+        context.beginPath();
+        context.strokeStyle = "#EB0D1B"; // Set a pen color
+        for (var i = 0; i < graph.getSize(); i++) {
+          var p1 = i;
+          var p2 = tree.getParent(i);
+          if (p2 != -1) {
+            x1 = graph.getVertex(p1).x;
+            y1 = graph.getVertex(p1).y;
+            x2 = graph.getVertex(p2).x;
+            y2 = graph.getVertex(p2).y;
+            drawArrowLine(context, x2, y2, x1, y1)
+          }
+        }
+//        context.lineWidth = 10;
+        context.stroke();
+//
+//        context.lineWidth = 1;
+//        context.strokeStyle = "#100"; // Set a pen color
+      }
+
+      function drawPathAndGraph(tree, v2) {
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 250; // window.innerHeight - 280;
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawGraph(context);
+
+        drawPath(context, tree, v2);
+      }
+
+      function drawTreeAndGraph(tree) {
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 250; // window.innerHeight - 280;
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawGraph(context);
+
+        drawTree(context, tree);
+      }
+
+      function drawHamiltonianCycle(path) {
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 250; // window.innerHeight - 280;
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawGraph(context);
+
+        drawCycle(context, path);
+      }
+
+      function drawGraph(context) {
+        context.beginPath();
+        // Draw all points
+        for (var i = 0; i < graph.getSize(); i++) {
+          var x = graph.getVertex(i).x;
+          var y = graph.getVertex(i).y;
+          context.fillText(i + "", x - 5, y + 5);
+          context.moveTo(x + radius, y);
+          context.arc(x, y, radius, 0, Math.PI * 2, false);
+        }
+
+        // Draw edges
+        for (var j = 0; j < graph.getSize(); j++) {
+          var list1 = graph.neighbors[j];
+          for (var i = 0; i < list1.length; i++) {
+            var p1 = list1[i].u;
+            var p2 = list1[i].v;
+            x1 = graph.getVertex(p1).x;
+            y1 = graph.getVertex(p1).y;
+            x2 = graph.getVertex(p2).x;
+            y2 = graph.getVertex(p2).y;
+            connectTwoCircles(context, x1, y1, x2, y2);
+          }
+        }
+
+        if (isLineOn) {
+          context.moveTo(startPoint.x, startPoint.y);
+          context.lineTo(currentPoint.x, currentPoint.y);
+        }
+        context.stroke();
+      }
+
+      function drawArrowLine(context, x1, y1, x2, y2) {
+        vGap = y2 - y1;
+        var d = Math.sqrt(vGap * vGap + (x2 - x1) * (x2 - x1));
+        var x11 = x1 - radius * (x1 - x2) / d;
+        var y11 = y1 - radius * (y1 - y2) / d;
+        var x21 = x2 + radius * (x1 - x2) / d;
+        var y21 = y2 + radius * (y1 - y2) / d;
+
+        x1 = x11;
+        y1 = y11;
+        x2 = x21;
+        y2 = y21;
+
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+
+        // find slope of this line
+        var slope = (y1 - y2) / (x1 - x2);
+
+        var arctan = Math.atan(slope);
+
+        // This will flip the arrow 45 off of a
+        // perpendicular line at pt x2
+        var set45 = 1.57 / 2;
+
+        // arrows should always point towards i, not i+1
+        if (x1 < x2) {
+          // add 90 degrees to arrow lines
+          set45 = -1.57 * 1.5;
+        }
+
+        // set length of arrows
+        var arrlen = 15;
+
+        // draw arrows on line
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+                y2 + Math.sin(arctan + set45) * arrlen);
+
+        context.moveTo(x2, y2);
+        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+                y2 + Math.sin(arctan - set45) * arrlen);
+      }
+
+      function hamiltonianPath() {
+        var pathTree = graph.getOneHamiltonianPath();
+        if (pathTree == null) {
+          jAlert("The graph does not have a Hamiltonian path.");
+        }
+        else {
+//          jAlert("The graph has a Hamiltonian path.");
+          drawTreeAndGraph(pathTree);
+        }
+      }
+
+      function connectedComponents() {
+        var list = graph.getConnectedComponents();
+
+        if (list.length >= 1) {
+          var result = toString(list);
+          jAlert("The connected component are " + result);
+        }
+        else
+          jAlert("The connected component is " + result);
+      }
+
+      function toString(list) {
+        var result = [];
+        for (var i = 0; i < list.length; i++) {
+          if (i == list.length - 1)
+            result += '[' + list[i].toString() + ']';
+          else
+            result += '[' + list[i].toString() + '], ';
+        }
+        return result;
+      }
+
+      function findCycle() {
+        var list = graph.getACycle();
+
+        if (list != null)
+          jAlert("A cycle is " + list.toString());
+        else
+          jAlert("No cycle found");
+      }
+
+      function bipartiteSets() {
+        var list = graph.getBipartite();
+
+        if (list != null) {
+          var result = toString(list);
+          jAlert("The bipartite sets are " + result);
+        }
+        else
+          jAlert("The graph is not bipartite");
+      }
+
+      function hamiltonianCycle() {
+        var path = graph.getHamiltonianCycle(0);
+        if (path.length == 0) {
+          jAlert("The graph does not have a Hamiltonian cycle.");
+        }
+        else {
+          // jAlert("The graph has a Hamiltonian cycle. " + path[0]);
+          drawHamiltonianCycle(path);
+        }
+      }
+
+      function drawCycle(context, p) {
+        context.beginPath();
+        context.strokeStyle = "#EB0D1B"; // Set a pen color
+        for (var i = 0; i < p.length - 1; i++) {
+          var p1 = p[i];
+          var p2 = p[i + 1];
+          x1 = graph.getVertex(p1).x;
+          y1 = graph.getVertex(p1).y;
+          x2 = graph.getVertex(p2).x;
+          y2 = graph.getVertex(p2).y;
+          drawLineWithoutArrow(context, x2, y2, x1, y1)
+        }
+
+        var p1 = p[p.length - 1];
+        var p2 = p[0];
+        x1 = graph.getVertex(p1).x;
+        y1 = graph.getVertex(p1).y;
+        x2 = graph.getVertex(p2).x;
+        y2 = graph.getVertex(p2).y;
+        drawLineWithoutArrow(context, x2, y2, x1, y1)
+
+//        context.lineWidth = 10;
+        context.stroke();
+//
+//        context.lineWidth = 1;
+//        context.strokeStyle = "#100"; // Set a pen color
+      }
+
+      function drawLineWithoutArrow(context, x1, y1, x2, y2) {
+        vGap = y2 - y1;
+        var d = Math.sqrt(vGap * vGap + (x2 - x1) * (x2 - x1));
+        var x11 = x1 - radius * (x1 - x2) / d;
+        var y11 = y1 - radius * (y1 - y2) / d;
+        var x21 = x2 + radius * (x1 - x2) / d;
+        var y21 = y2 + radius * (y1 - y2) / d;
+
+        x1 = x11;
+        y1 = y11;
+        x2 = x21;
+        y2 = y21;
+
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+
+        // find slope of this line
+        var slope = (y1 - y2) / (x1 - x2);
+
+        var arctan = Math.atan(slope);
+
+        // This will flip the arrow 45 off of a
+        // perpendicular line at pt x2
+        var set45 = 1.57 / 2;
+
+        // arrows should always point towards i, not i+1
+        if (x1 < x2) {
+          // add 90 degrees to arrow lines
+          set45 = -1.57 * 1.5;
+        }
+
+        // set length of arrows
+        var arrlen = 15;
+
+        // draw arrows on line
+//        context.moveTo(x2, y2);
+//        context.lineTo(x2 + Math.cos(arctan + set45) * arrlen,
+//                y2 + Math.sin(arctan + set45) * arrlen);
+//
+//        context.moveTo(x2, y2);
+//        context.lineTo(x2 + Math.cos(arctan - set45) * arrlen,
+//                y2 + Math.sin(arctan - set45) * arrlen);
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+
+  <body onload="init()" onresize="init()" style="width: 590px; margin: 5px auto; padding-left: 0px;">   
+        <div style="text-align: left; margin-top: 1em; margin-bottom: .5em;">
+      <span style="padding: 3px">
+        <button id ="startButton" type="button" onClick="start()">Start Animation</button>  
+        <button id = "startOverButton" type="button" onClick="reset()">Reset</button>
+        <button id = "nextButton" type="button" onClick="next()">Next</button>
+        <button id = "prevButton" type="button" onClick="prev()">Prev</button>
+      </span>    
+    </div>
+    <div id = "program" style="border: 1px solid #EB0D1B; width: 560px; height: 120px; font-family: courier; font-size: 100.5%; margin: 0px auto; border: 1px; text-align: left; margin-left: -40px;">
+
+      <div id ="p1" style="position:absolute;">
+        <svg width="640" height="410">
+        <defs>
+        <marker id="arrow" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+          <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+        </marker>
+        </defs>
+
+        <path id = "SeCh" d="M75,50 L400,100"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "SeDe" d="M75,50 L275,175"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "SeSa" d="M75,50 L50,210"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "SaLo" d="M50,210 L75,275"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "SaDe" d="M50,210 L275,175"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "LoDe" d="M75,275 L275,175"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "LoKa" d="M75,275 L350,245"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "LoDa" d="M75,275 L368,325"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "DeCh" d="M275,175 L400,100"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "DeKa" d="M275,175 L350,245"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "KaDa" d="M350,245 L368,325"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "KaDa" d="M350,245 L400,100"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "KaNe" d="M350,245 L610,120"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "KaAt" d="M350,245 L525,295"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "DaAt" d="M368,325 L525,295" 
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "DaHu" d="M368,325 L410,360"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "ChBo" d="M400,100 L620,80"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "ChNe" d="M400,100 L610,120"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "BoNe" d="M620,80 L610,120"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "AtNe" d="M525,295 L610,120"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "AtNe" d="M525,295 L410,360"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "AtMi" d="M525,295 L560,400"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+        <path id = "HuMi" d="M410,360 L560,400"
+              style="stroke:black; stroke-width: 1px; fill: none;"/>
+
+
+        <!--        Seattle-->
+        <circle cx="75" cy="50" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="48" y="35" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Seattle (0)</text>   
+
+        <!--       San Francisco-->
+        <circle cx="50" cy="210" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="40" y="195" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">San Francisco (1)</text>   
+
+        <!--       Los Angles-->
+        <circle cx="75" cy="275" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="40" y="260" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Los Angles (2)</text>  
+        
+        <!--       Boston-->
+        <circle cx="620" cy="80" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="560" y="65" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Boston (6)</text>  
+
+        <!--       Denver -->
+        <circle cx="275" cy="175" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="247" y="160" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Denver (3)</text>  
+
+        <!--       Kansas City -->
+        <circle cx="350" cy="245" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="310" y="230" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Kansas City (4)</text>  
+
+        <!--       Chicago -->
+        <circle cx="400" cy="100" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="380" y="85" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Chicago (5)</text>  
+        
+        <!--       Atlanta-->
+        <circle cx="525" cy="295" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="500" y="280" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Atlanta (8)</text>  
+
+        <!--       New York-->
+        <circle cx="610" cy="120" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="540" y="110" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">New York (7)</text>  
+
+        <!--       Dallas-->
+        <circle cx="368" cy="325" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="348" y="305" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Dallas (10)</text>  
+        
+        <!--       Huston-->
+        <circle cx="410" cy="360" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="398" y="345" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Houston (11)</text>  
+
+        <!--       Miami-->
+        <circle cx="560" cy="400" r="5" stroke="black" stroke-width="1" fill="black" />
+        <text x="540" y="380" fill="black" style="font-family: times; 
+              font-weight: normal; font-style: normal; font-size: 105%">Miami (9)</text>  
+     
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>

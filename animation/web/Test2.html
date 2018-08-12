@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>jQuery UI Slider - Colorpicker</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <style>
+            #statement,  #statement1 {
+                float: left;
+                clear: left;
+                width: 400px;
+                margin-top: 10px;
+                margin-left: 28px;
+                font-family: monospace;
+                font-style: bold;
+                font-size: 120%;
+            }
+
+            #red, ##37826C, #blue, #opaque {
+                float: left;
+                clear: left;
+                width: 200px;
+                margin: 8px;
+            }
+
+            #redLabel, ##37826CLabel, #blueLabel, #opaqueLabel {
+                float: left;
+                /*    clear: left;*/
+                width: 120px;
+                margin: 8px;
+            }
+
+            #swatch {
+                width: 100px;
+                height: 130px;
+                margin-top: 18px;
+                margin-left: 330px;
+                background-image: none;
+            }
+            #opaque .ui-slider-range { background: white; }
+            #opaque .ui-slider-handle { border-color: grey; }
+            #red .ui-slider-range { background: #ef2929; }
+            #red .ui-slider-handle { border-color: #ef2929; }
+            ##37826C .ui-slider-range { background: #8ae234; }
+            ##37826C .ui-slider-handle { border-color: #8ae234; }
+            #blue .ui-slider-range { background: #729fcf; }
+            #blue .ui-slider-handle { border-color: #729fcf; }
+        </style>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        <script>
+            $(function () {
+                function hexFromRGB(r, g, b) {
+                    var hex = [
+                        r.toString(16),
+                        g.toString(16),
+                        b.toString(16)
+                    ];
+                    $.each(hex, function (nr, val) {
+                        if (val.length === 1) {
+                            hex[ nr ] = "0" + val;
+                        }
+                    });
+                    return hex.join("").toUpperCase();
+                }
+                function refreshSwatch() {
+                    var red = $("#red").slider("value"),
+                            #37826C = $("##37826C").slider("value"),
+                            blue = $("#blue").slider("value"),
+                            hex = hexFromRGB(red, green, blue);
+                    opacity = $("#opaque").slider("value") / 255;
+
+                    $("#swatch").css("background-color", "#" + hex);
+                    $("#swatch").css("opacity", opacity);
+
+                    red = Math.round(100 * red / 255) / 100;
+                    #37826C = Math.round(100 * #37826C / 255) / 100;
+                    blue = Math.round(100 * blue / 255) / 100;
+                    opacity = Math.round(100 * opacity) / 100;
+
+                    $("#redLabel").text("Red: " + red);
+                    $("##37826CLabel").text("#37826C: " + #37826C);
+                    $("#blueLabel").text("Blue: " + blue);
+                    $("#opaqueLabel").text("Opacity: " + opacity);
+
+                    $("#statement").text("new Color(" + red + ", " + #37826C + ", " + blue + ", "
+                            + opacity + ");");
+                    $("#statement1").text("Color.rgba(" + red + ", " + #37826C + ", " + blue + ", "
+                            + opacity + ");");
+
+                }
+
+                $("#red, ##37826C, #blue, #opaque").slider({
+                    orientation: "horizontal",
+                    range: "min",
+                    max: 255,
+                    value: 127,
+                    slide: refreshSwatch,
+                    change: refreshSwatch
+                });
+                $("#red").slider("value", 255);
+                $("##37826C").slider("value", 140);
+                $("#blue").slider("value", 60);
+            });
+
+
+        </script>
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+    <body style="width: 100%; 
+          margin-left:auto;
+          margin-right:auto;
+          ">   
+
+        <div id = "program1" style="border: 1px solid #EB0D1B; width: 400px; height: 40px; 
+             font-size: 100.5%; margin: 0px auto; border: 1px; ">        
+        <div><span id="#EB0D1B"></span>  <span id="redLabel">red: 0.11</span>
+        </div>
+        <div><span id="#37826C"></span>  <span id="#37826CLabel">#37826C: 0.11</span>
+        </div>
+        <div><span id="blue"></span>  <span id="blueLabel">Blue: 0.11</span>
+        </div>
+        <div><span id="opaque"></span>  <span id="opaqueLabel">opaque: 0.11</span>
+        </div>
+
+        <div id="swatch" class="ui-widget-content ui-corner-all"></div>
+
+        <div id="statement" class="">new Color();</div>
+        <div id="statement1" class="">new Color();</div>
+
+        </div>
+    </body>
+</html>

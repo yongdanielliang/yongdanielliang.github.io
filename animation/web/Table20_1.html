@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Table 20.1</title>
+    <link rel="stylesheet" href="jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="codecolor.css" />
+    <script src="jquery-latest.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+
+    <style>
+      .button {
+          margin-bottom: 0px; margin-top: 0px; background-color: #37826C; color:white;
+          /*    width: 70px;
+              height: 30px;*/
+          display:inline;
+          color:#fff;
+          font-size: 14px;
+          background: #3070a8;
+          border: none;
+          cursor:pointer;
+      }
+    </style>
+    <script>
+      $(function () {
+          $(document).tooltip();
+      });
+    </script>
+
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="init()" style="max-width: 640px; margin-left: -70px;">   
+    <div id="operand1" style='color:black; font-weight: bold; position: absolute;'></div>
+    <div id="operand2" style='color:black; font-weight: bold; position: absolute;'></div>
+    <div id="operand3" style='color:black; font-weight: bold; position: absolute;'></div>
+    <div id="operator1" style='color:black; font-weight: bold; position: absolute;'></div>
+    <div id="operator2" style='color:black; font-weight: bold; position: absolute;'></div>
+
+    <div id="highlight" style='color:black'></div>
+    <div id="highlight1"></div>
+    <div id="explanation"></div>
+    <div id="explanation1" style='color:#37826C; opacity: 1;'></div>
+    <div id="explanation2" style='color:#37826C; opacity: 1;'></div>
+    <div id = "radius" style="border: 1px solid #EB0D1B; width: 580px; font-family: times; font-size: 100.5%; border: 1px solid white; padding-left: 0px; text-align: center;">
+
+      <button id = "check1" type="button" class="button" onclick="check1()" style='margin-left: 5px;'>Start Animation</button>
+<!--      <button id = "check2" class="button" onClick="prev()">Prev</button>-->
+      <button id = "check3" class="button" onClick="reset()">Reset</button>
+    </div>
+    <div style ='margin-top: 20px;'>
+
+      <div id = "program2" style="border: 1px solid #EB0D1B; width: 640px; height: 119px; font-family: courier; font-size: 100.5%; border: 1px; 
+           padding-right: 0px; text-align: center;">
+        <!--     Step 0-->
+        <div id ="p0" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow0" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:black;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+          </svg>
+        </div>
+
+        <!--    // Step 1-->
+        <div id ="p1" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow1" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M95,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow1);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 2-->
+        <div id ="p2" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow2" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M105,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow2);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 3-->
+        <div id ="p3" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow3" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M125,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow3);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 4-->
+        <div id ="p4" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow4" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M145,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow4);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 5-->
+        <div id ="p5" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow5" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M155,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow5);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 6-->
+        <div id ="p6" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow6" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M175,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow6);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 7-->
+        <div id ="p7" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow7" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M195,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow7);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 8-->
+        <div id ="p8" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow8" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M215,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow8);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 9-->
+        <div id ="p9" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow9" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          <path d="M235,38 v-14" style='stroke:#EB0D1B; stroke-width: 1px; fill: none; marker-end: url(#arrow9);'/>
+          </svg>
+        </div>
+
+        <!--    // Step 10-->
+        <div id ="p10" style="position:absolute">
+          <svg width="640" height="119">
+          <defs>
+          <marker id="arrow10" markerWidth="13" markerHeight="13" refx="5" refy="6" orient="auto">
+            <path d="M2,2 L5,6 L2,11 L10,6 L2,2" style="fill:#EB0D1B;" />
+          </marker>
+          </defs>
+          <text id = "t1" x="90" y="13" style="color: black; font-size: 16px; font-family: monospace;">(</text>
+          <text id = "t2" x="100" y="13" style="color: black; font-size: 16px; font-family: monospace;">1</text>
+          <text id = "t3" x="120" y="13" style="color: black; font-size: 16px; font-family: monospace;">+</text>
+          <text id = "t4" x="140" y="13" style="color: black; font-size: 16px; font-family: monospace;">2</text>
+          <text id = "t5" x="150" y="13" style="color: black; font-size: 16px; font-family: monospace;">)</text>
+          <text id = "t6" x="170" y="16" style="color: black; font-size: 16px; font-family: monospace;">*</text>
+          <text id = "t7" x="190" y="13" style="color: black; font-size: 16px; font-family: monospace;">4</text>
+          <text id = "t8" x="210" y="13" style="color: black; font-size: 16px; font-family: monospace;">-</text>
+          <text id = "t9" x="230" y="13" style="color: black; font-size: 16px; font-family: monospace;">3</text>
+
+          <text id = 'v2' x="440" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'v1' x="440" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M425,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="405" y="82" style="color: black; font-size: 16px; font-family: times;">operandStack</text>
+
+          <text id = 'u2' x="540" y="32" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <text id = 'u1' x="540" y="52" style="color: black; font-size: 16px; font-family: monospace;"></text>
+          <path d="M525,10 v50 h40 v-50" style='stroke:black; stroke-width: 1px; fill:none;'/>
+          <text x="505" y="82" style="color: black; font-size: 16px; font-family: times;">operatorStack</text>
+
+          </svg>
+        </div>
+
+      </div>
+    </div>
+    <script>
+      x = 0;
+      function init() {
+//          document.getElementById('check2').style.visibility = 'hidden';
+          document.getElementById('check3').style.visibility = 'hidden';
+          document.getElementById('highlight').style.visibility = 'hidden';
+          document.getElementById('highlight1').style.visibility = 'hidden';
+          s = "This animation demonstrates how the algorithm is applied to evaulate the expression.";
+          move('p0', 't1', s, 'null', '', '');
+          step = 1;
+      }
+
+      function move(p, text, explanation, rect, exp1, exp2) {
+//       move('p1', 't1', s, 'null', 'Scan: (', 'Action: Phase 1.4');
+
+          hide();
+          document.getElementById(p).style.visibility = 'visible';
+          pos = getElementPos(document.getElementById(text));
+
+          $("#exp1anation1").animate({left: pos.x, top: pos.y + 25, width: 300, height: pos.h
+          });
+          document.getElementById('explanation1').innerHTML = exp1;
+          $("#explanation1").animate({left: pos.x - 5, top: pos.y + 35, width: 300, height: pos.h});
+
+          $("#exp1anation2").animate({left: pos.x, top: pos.y + 25, width: 300, height: pos.h
+          });
+          document.getElementById('explanation2').innerHTML = exp2;
+          $("#explanation2").animate({left: pos.x - 5, top: pos.y + 50, width: 300, height: pos.h});
+
+          pos = getElementPos(document.getElementById('t1'));
+          $("#explanation").animate({left: pos.x, top: pos.y + 75, width: 300, height: pos.h
+          });
+          document.getElementById('explanation').innerHTML = explanation;
+
+          if (rect != 'null') {
+              pos = getElementPos(document.getElementById(rect));
+              $("#highlight1").animate({left: pos.x, top: pos.y, width: pos.w, height: pos.h
+              });
+          }
+          else {
+              $("#highlight1").css("top", pos.y).css("left", pos.x).css("width", 0).css("height", pos.h);
+          }
+      }
+
+      function hide() {
+          for (var i = 0; i < 11; i++) {
+              document.getElementById('p' + i).style.visibility = 'hidden';
+          }
+
+          document.getElementById('v1').innerHTML = '&nbsp';
+          document.getElementById('v2').innerHTML = '&nbsp';
+          document.getElementById('u1').innerHTML = '&nbsp';
+          document.getElementById('u2').innerHTML = '&nbsp';
+      }
+
+      function toStackNew(s, t, d, ch) {
+//        toStackNew('t1', 'u1', 'operator2', '(');
+
+          pos1 = getElementPos(document.getElementById(s));
+          document.getElementById(d).style.visibility = 'visible';
+          document.getElementById(d).innerHTML = ch;
+          $("#" + d).css('left', pos1.x).css('top', pos1.y)
+                  .css('width', 10).css('height', 10);
+          document.getElementById(t).innerHTML = '&nbsp';
+          pos2 = getElementPos(document.getElementById(t));
+          $("#" + d).animate({left: pos2.x, top: pos2.y, width: 10, height: 10
+          }, 1000);
+      }
+
+      function toStack(s, t) {
+          pos1 = getElementPos(document.getElementById(s));
+          document.getElementById('highlight').style.visibility = 'visible';
+          $("#highlight").css('left', pos1.x).css('top', pos1.y)
+                  .css('width', pos1.w).css('height', pos1.h);
+          pos2 = getElementPos(document.getElementById(t));
+          $("#highlight").animate({left: pos2.x, top: pos2.y, width: 7, height: 12
+          }, 1000);
+      }
+      step = 1;
+      function check1() {
+          if (step == 1) {
+              s = 'The ( symbol is pushed to the operator stack.'
+              move('p1', 't1', s, 'null', 'Scan: (', 'Action: Phase 1.4');
+              document.getElementById('check1').innerHTML = 'Next';
+//              document.getElementById('check2').style.visibility = 'visible';
+              document.getElementById('check3').style.visibility = 'visible';
+
+              toStackNew('t1', 'u1', 'operator2', '(');
+              toStack('t1', 'u1');
+              document.getElementById('operand2').innerHTML = ' ';
+              step++;
+          }
+          else if (step == 2) {
+              s = 'The operand 1 is pushed to the operand stack.'
+              toStackNew('t2', 'v1', 'operand2', '1');
+              toStack('t2', 'v1');
+              move('p2', 't2', s, 'null', 'Scan: 1', 'Action: Phase 1.1');
+              document.getElementById('operator1').innerHTML = ' ';
+              step++;
+          }
+          else if (step == 3) {
+              s = 'The operator + is pushed to the operator stack.'
+              toStackNew('t3', 'u2', 'operator1', '+');
+              toStack('t3', 'u2');
+              move('p3', 't3', s, 'null', 'Scan: +', 'Action: Phase 1.2');
+              document.getElementById('operand1').innerHTML = ' ';
+              step++;
+          }
+          else if (step == 4) {
+              s = 'The operand 2 is pushed to the operand stack.'
+              toStackNew('t4', 'v2', 'operand1', '2');
+              toStack('t4', 'v2');
+              move('p4', 't4', s, 'null', 'Scan: 2', 'Action: Phase 1.1');
+              document.getElementById('operand1').innerHTML = '2';
+              document.getElementById('operand2').innerHTML = '1';
+              document.getElementById('operator1').innerHTML = '+';
+              document.getElementById('operator2').innerHTML = '(';
+              document.getElementById('operand3').innerHTML = ' ';
+
+              pos1 = getElementPos(document.getElementById('v2'));
+              $("#operand1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('v1'));
+              $("#operand2").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('u2'));
+              $("#operator1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('u1'));
+              $("#operator2").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              step++;
+          }
+          else if (step == 5) {
+              s = 'Process the operator in the operator stack until seeing the ( symbok on the stack.'
+              move('p5', 't5', s, 'null', 'Scan: )', 'Action: Phase 1.5');
+
+              pos1 = getElementPos(document.getElementById('v1'));
+              document.getElementById('operand1').style.visibility = 'visible';
+              document.getElementById('operand1').innerHTML = '1';
+              $("#operand1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', pos1.w).css('height', pos1.h);
+
+              pos2 = getElementPos(document.getElementById('v2'));
+              document.getElementById('operand2').style.visibility = 'visible';
+              document.getElementById('operand2').innerHTML = '2';
+              $("#operand2").css('left', pos2.x).css('top', pos2.y)
+                      .css('width', pos2.w).css('height', pos2.h);
+
+              pos3 = getElementPos(document.getElementById('u2'));
+              document.getElementById('operator1').style.visibility = 'visible';
+              document.getElementById('operator1').innerHTML = '+';
+              $("#operator1").css('left', pos3.x).css('top', pos3.y)
+                      .css('width', pos3.w).css('height', pos3.h);
+
+              pos4 = getElementPos(document.getElementById('u1'));
+              document.getElementById('operator2').style.visibility = 'visible';
+              document.getElementById('operator2').innerHTML = ')';
+              $("#operator2").css('left', pos4.x).css('top', pos4.y)
+                      .css('width', pos4.w).css('height', pos4.h);
+
+              document.getElementById('highlight').style.visibility = 'hidden';
+              x = pos1.x + 80;
+              y = pos1.y - 60;
+
+              $("#operand2").animate({left: x, top: y, width: 20, height: 20
+              }, 1000, function () {
+                  $("#operator1").animate({left: x - 20, top: y, width: 20, height: 20
+                  }, 1000, function () {
+                      document.getElementById('operand3').innerHTML = '3';
+                      $("#operand1").animate({left: x - 40, top: y, width: 20, height: 20
+                      }, 1000, function () {
+                          $("#operand3").css('left', x + 2).css('top', y)
+                                  .css('width', 20).css('height', 20);
+                          document.getElementById('operand3').innerHTML = '3';
+                          $("#operand3").animate({left: pos1.x, top: pos1.y, width: 20, height: 20
+                          }, 1000, function () {
+                              $("#operator2").animate({left: pos4.x, top: y - 150, width: 20, height: 20
+                              }, 2000, function () {
+                                  document.getElementById('operator1').innerHTML = '';
+                                  document.getElementById('operator2').innerHTML = '';
+                                  document.getElementById('operand1').innerHTML = '';
+                                  document.getElementById('operand2').innerHTML = '';
+
+                              });
+                          });
+                      });
+                  });
+
+              });
+
+              step++;
+          }
+          else if (step == 6) {
+              s = 'The operator * is pushed to the operator stack.'
+              toStackNew('t6', 'u1', 'operator1', '*');
+              toStack('t6', 'u1');
+              move('p6', 't6', s, 'null', 'Scan: *', 'Action: Phase 1.3');
+ document.getElementById('operand2').innerHTML = '';
+ step++;
+          }
+          else if (step == 7) {
+              s = 'The operand 4 is pushed to the operand stack.'
+              toStackNew('t7', 'v2', 'operand2', '4');
+              toStack('t7', 'v2');
+              move('p7', 't7', s, 'null', 'Scan: 4', 'Action: Phase 1.1');
+              
+              document.getElementById('operand1').innerHTML = '3';
+              document.getElementById('operand2').innerHTML = '4';
+              document.getElementById('operator1').innerHTML = '*';
+              document.getElementById('operator2').innerHTML = '';
+              document.getElementById('operand3').innerHTML = ' ';
+
+              pos1 = getElementPos(document.getElementById('v1'));
+              $("#operand1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('v2'));
+              $("#operand2").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('u1'));
+              $("#operator1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              pos1 = getElementPos(document.getElementById('u2'));
+              $("#operator2").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', 10).css('height', 10);
+              
+              step++;
+          }
+          else if (step == 8) {
+              s = 'Process all operators and push operator - to the stack.'
+              move('p8', 't8', s, 'null', 'Scan: )', 'Action: Phase 1.2');
+
+              pos1 = getElementPos(document.getElementById('v1'));
+              document.getElementById('operand1').style.visibility = 'visible';
+              $("#operand1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', pos1.w).css('height', pos1.h);
+
+              pos2 = getElementPos(document.getElementById('v2'));
+              document.getElementById('operand2').style.visibility = 'visible';
+              $("#operand2").css('left', pos2.x).css('top', pos2.y)
+                      .css('width', pos2.w).css('height', pos2.h);
+
+              pos3 = getElementPos(document.getElementById('u2'));
+//              document.getElementById('operator1').style.visibility = 'visible';
+//              $("#operator1").css('left', pos3.x).css('top', pos3.y)
+//                      .css('width', pos3.w).css('height', pos3.h);
+//
+//              pos4 = getElementPos(document.getElementById('u1'));
+//              document.getElementById('operator2').style.visibility = 'visible';
+//              document.getElementById('operator2').innerHTML = ')';
+//              $("#operator2").css('left', pos4.x).css('top', pos4.y)
+//                      .css('width', pos4.w).css('height', pos4.h);
+//
+              document.getElementById('highlight').style.visibility = 'hidden';
+              x = pos1.x + 80;
+              y = pos1.y - 60;
+
+              $("#operand2").animate({left: x, top: y, width: 20, height: 20
+              }, 1000, function () {
+                  $("#operator1").animate({left: x - 20, top: y, width: 20, height: 20
+                  }, 1000, function () {
+                      document.getElementById('operand1').innerHTML = '3';
+                      $("#operand1").animate({left: x - 40, top: y, width: 20, height: 20
+                      }, 1000, function () {
+                          $("#operand3").css('left', x + 2).css('top', y)
+                                  .css('width', 20).css('height', 20);
+                          document.getElementById('operand3').innerHTML = '12';
+                          $("#operand3").animate({left: pos1.x, top: pos1.y, width: 20, height: 20
+                          }, 1000, function () {
+                              $("#operator2").animate({left: pos4.x, top: y - 50, width: 20, height: 20
+                              }, 1000, function () {
+                                  document.getElementById('operator1').innerHTML = '';
+                                  document.getElementById('operator2').innerHTML = '-';
+                                  document.getElementById('operand1').innerHTML = '';
+                                  document.getElementById('operand2').innerHTML = '';
+
+                                  pos2 = getElementPos(document.getElementById('t8'));
+                                  $("#operator2").css('left', pos2.x).css('top', pos2.y)
+                                          .css('width', pos2.w).css('height', pos2.h);
+                                  pos4 = getElementPos(document.getElementById('u1'));
+
+                                  $("#operator2").animate({left: pos4.x, top: pos4.y, width: 20, height: 20
+                                  }, 2000, function () {
+
+
+                                  });
+
+                              });
+                          });
+                      });
+                  });
+
+              });
+
+              step++;
+          }
+          else if (step == 9) {
+              s = 'The operand 3 is pushed to the operand stack.'
+              toStackNew('t9', 'v2', 'operand2', '3');
+              toStack('t9', 'v2');
+              move('p9', 't9', s, 'null', 'Scan: 3', 'Action: Phase 1.1');
+              step++;
+          }
+          else if (step == 10) {
+              s = 'Process all operators and push the result to the stack.'
+              move('p10', 't9', s, 'null', 'Scan: none', 'Action: Phase 2');
+
+              pos1 = getElementPos(document.getElementById('v1'));
+              document.getElementById('operand1').style.visibility = 'visible';
+              $("#operand1").css('left', pos1.x).css('top', pos1.y)
+                      .css('width', pos1.w).css('height', pos1.h);
+
+              pos2 = getElementPos(document.getElementById('v2'));
+              document.getElementById('operand2').style.visibility = 'visible';
+              $("#operand2").css('left', pos2.x).css('top', pos2.y)
+                      .css('width', pos2.w).css('height', pos2.h);
+
+              pos3 = getElementPos(document.getElementById('u2'));
+//              document.getElementById('operator1').style.visibility = 'visible';
+//              $("#operator1").css('left', pos3.x).css('top', pos3.y)
+//                      .css('width', pos3.w).css('height', pos3.h);
+//
+//              pos4 = getElementPos(document.getElementById('u1'));
+//              document.getElementById('operator2').style.visibility = 'visible';
+//              document.getElementById('operator2').innerHTML = ')';
+//              $("#operator2").css('left', pos4.x).css('top', pos4.y)
+//                      .css('width', pos4.w).css('height', pos4.h);
+//
+              document.getElementById('highlight').style.visibility = 'hidden';
+              x = pos1.x + 80;
+              y = pos1.y - 60;
+
+              $("#operand2").animate({left: x, top: y, width: 20, height: 20
+              }, 1000, function () {
+                  $("#operator2").animate({left: x - 20, top: y, width: 20, height: 20
+                  }, 1000, function () {
+                      document.getElementById('operand1').innerHTML = '12';
+                      $("#operand1").animate({left: x - 40, top: y, width: 20, height: 20
+                      }, 1000, function () {
+                          $("#operand3").css('left', x + 2).css('top', y)
+                                  .css('width', 20).css('height', 20);
+                          document.getElementById('operand3').innerHTML = '9';
+                          $("#operand3").animate({left: pos1.x, top: pos1.y, width: 20, height: 20
+                          }, 1000, function () {
+                              document.getElementById('operator1').innerHTML = '';
+                              document.getElementById('operator2').innerHTML = '';
+                              document.getElementById('operand1').innerHTML = '';
+                              document.getElementById('operand2').innerHTML = '';
+
+                          });
+                      });
+                  });
+
+              });
+
+              step++;
+          }
+          else {
+              document.getElementById('check1').innerHTML = 'Restart Animation';
+              document.getElementById('operator1').innerHTML = '';
+              document.getElementById('operator2').innerHTML = '';
+              document.getElementById('operand1').innerHTML = '';
+              document.getElementById('operand2').innerHTML = '';
+              step = 1;
+              document.getElementById('operand3').innerHTML = '';
+              init();
+          }
+      }
+
+      function prev() {
+          if (step > 1)
+              step -= 2;
+          check1();
+      }
+
+      function reset() {
+          document.getElementById('check1').innerHTML = 'Start Animation';
+          document.getElementById('operator1').innerHTML = '';
+          document.getElementById('operator2').innerHTML = '';
+          document.getElementById('operand1').innerHTML = '';
+          document.getElementById('operand2').innerHTML = '';
+          document.getElementById('operand3').innerHTML = '';
+          step = 1;
+          init();
+      }
+    </script>
+  </body>
+</html>

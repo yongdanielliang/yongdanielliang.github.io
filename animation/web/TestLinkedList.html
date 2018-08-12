@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script src="LinkedList.js"></script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+  <body>
+    <pre>
+      <script>
+      list = new LinkedList();
+      document.writeln(list.removeLast());
+      document.writeln(list.toString());
+      list.add(4);
+      document.writeln(list.removeLast());
+      document.writeln(list.toString());
+      list.add(5);
+      list.add(6);
+      list.insert(0, 7);
+      list.addFirst(8);
+      list.insert(12, 9);
+      document.writeln(list.toString());
+      document.writeln(list.remove(2));
+      document.writeln(list.toString());
+        
+      document.writeln(list.isEmpty());
+      document.writeln(list.get(0));
+      document.writeln(list.get(1));
+      document.writeln(list.get(2));
+      document.writeln(list.get(3));
+      document.writeln(list.get(4));
+        
+      list.clear();
+      document.writeln(list.toString());
+        
+      </script>
+    </pre>
+  </body>
+</html>
