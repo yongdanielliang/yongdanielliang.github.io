@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Double Hashing Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+<script src="jquery.alerts.js"></script> 
+<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+<script src="HashSetUsingDoubleHashing.js"></script>
+    <script >
+      hashSet = new MyHashSet();
+      vGap = 40;
+      radius = 20;
+
+      hashSet.add(44);
+      hashSet.add(4);
+      hashSet.add(16);
+      hashSet.add(28);
+      hashSet.add(21);
+
+      var startingX = 20;
+      var startingY = 20;
+      var boxWidth = 40;
+      var boxHeight = 20;
+
+      function drawHashTable(g, hashSet) {
+        g.fillText("Current table size: " + hashSet.capacity + ". Number of keys: "
+                + hashSet.size + ". Current load: " + 
+                Math.round(100 * hashSet.size / hashSet.capacity) / 100
+                + ". Load factor threshold: " + hashSet.loadFactorThreshold
+                + ".", startingX, startingY);
+
+        var x = startingX;
+        var y = startingY + 35;
+
+        for (var i = 0; i < hashSet.capacity; i++) {
+          g.fillText("[" + i + "]", x, y);
+          g.rect(startingX + 35, y - 15, boxWidth, boxHeight);
+          y += 20;
+        }
+
+        x += 50;
+        y = startingY + 35;
+        for (var i = 0; i < hashSet.capacity; i++) {
+          if (hashSet.table[i] != null)
+            g.fillText(hashSet.table[i] + "", x, y);
+
+          y += 20;
+        }
+      }
+
+      function draw() {
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = hashSet.capacity * boxHeight + 60;
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        drawHashTable(context, hashSet);
+        context.stroke();
+      }
+
+      function remove1() {
+        if (hashSet.isEmpty()) {
+          jAlert("The hash set is empty");
+        }
+        else {
+          var value = document.getElementById('value').value.trim();
+          if (value == "") {
+            jAlert("no key entered");
+          }
+          else if (hashSet.contains(parseInt(value))) {
+            hashSet.remove(parseInt(value));
+            draw();
+          }
+          else {
+            jAlert("key " + value + " is not in the hash set");
+          }
+        }
+      }
+
+      function insert() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          jAlert("no key entered");
+        }
+        else if (hashSet.contains(parseInt(value))) {
+          jAlert("key " + value + " is already in the hash set");
+        }
+        else {
+          hashSet.add(parseInt(value));
+          draw();
+        }
+      }
+
+      function search() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          jAlert("no key entered");
+        }
+        else {
+          if (hashSet.contains(parseInt(value))) {
+            jAlert(value + " is in the hash set");
+          }
+          else {
+            jAlert(value + " is not in the hash set");
+          }
+        }
+      }
+
+      function tableSizeChanged() {
+        var value = document.getElementById('tableSize').value.trim();
+        if (value == "") {
+          jAlert("no size entered");
+        }
+        else {
+          hashSet.setCapacity(value);
+          draw();
+        }
+      }
+
+      function loadFactorThresholdChanged() {
+        var value = document.getElementById('loadFactorThreshold').value.trim();
+        if (value == "") {
+          jAlert("no load factor threshold entered");
+        }
+        else {
+          hashSet.setLoadFactorThreashold(value);
+          draw();
+        }
+      }
+
+      function removeAll() {
+        hashSet.clear();
+        draw();
+      }
+      function init() {
+        document.getElementById('loadFactorThreshold').value = hashSet.loadFactorThreshold;
+        document.getElementById('tableSize').value = hashSet.capacity;
+        draw();
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="draw()"> 
+    <p> 
+      Usage: Enter the table size and press the Enter key to set the hash table size.
+      Enter the load factor threshold and press the Enter key to set a 
+      new load factor threshold. 
+      Enter an integer key and click the Search button to search the key in the hash set. 
+      Click the Insert button to insert the key into the hash set.
+      Click the Remove button to remove the key from the hash set. Click the Remove All button
+      to remove all entries in the hash set. For the best display, 
+      use integers between 0 and 99. The secondary hashing function used here is 
+      h'(k) = 7 - k % 7.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 280px;">
+      <canvas id="canvas" width="200" height="300"></canvas>
+    </div>
+
+    <div style="text-align: center; margin-top: 1em">
+      Enter Initial Table Size: <input id="tableSize" type='text' value='11' onchange='tableSizeChanged();' style="width: 2em; text-align: right">&nbsp;&nbsp; Enter a Load Factor Threshold: <input id="loadFactorThreshold" type='text' value='0.75' onchange='loadFactorThresholdChanged();' style="width: 2em; text-align: right">
+    </div>
+    <div style="text-align: center; margin-top: 1em">
+      <span style="border: 1px solid #37826c; padding: 3px">
+        Enter a key: <input type="text" value="" id="value" style="width: 2em; text-align: right">
+        <button type="button" class="button" onclick="search()">Search</button>
+        <button type="button" class="button" onclick="insert()">Insert</button>
+        <button type="button" class="button" onclick="remove1()">Remove</button>
+      </span>   
+      <span style=" padding: 3px">
+        <button type="button" class="button" onclick="removeAll()">Remove All</button>
+      </span>    
+    </div>
+
+  </body>
+</html>

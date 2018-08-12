@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Test by Y. Daniel Liang</title>
+    <script type="text/javascript">
+      var deck = [];
+      
+      for (var i = 0; i < 52; i++) {
+        deck[i] = i + 1;
+      };
+        
+      function getImageTag() {
+        var randomIndex = Math.floor(Math.random() * deck.length);
+        var img = '<img src="';
+        img += 'http://www.cs.armstrong.edu/liang/intro9e/book/image/card/';
+        img += deck[randomIndex];
+        img += ".png";
+        img += '" alt="Some alt text"/>';
+        return img;
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+  <body>
+    <script type="text/javascript">
+      document.write(getImageTag());
+      document.write(getImageTag());
+      document.write(getImageTag());
+      document.write(getImageTag());
+    </script>
+  </body>
+</html>
