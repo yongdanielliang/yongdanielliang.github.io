@@ -1,0 +1,177 @@
+/* Prevent font scaling in iPhone */
+html {
+    -webkit-text-size-adjust: 100%; 
+}
+
+pre {
+    -webkit-text-size-adjust: 100%; 
+}
+
+
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000fd6 !important; font-weight: bold;}
+.comment {color: #005500 !important; }
+/*      .comment {color: darkred !important; background: #d1e0f0;}*/
+.literal {color: #007d9f !important;}
+.constant {color: #007d9f !important;}
+
+/*.keyword {color: green !important;}
+.comment {color: darkred !important; }
+      .comment {color: darkred !important; background: #d1e0f0;}
+.literal {color: darkblue !important;}
+.constant {color: teal !important;}*/
+.code {font-family: Consolas, Menlo, Monaco, 
+   Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, 
+                           Courier New, monospace, serif, monospace; color: black;}
+
+#highlight1 {
+    background-color:#37826C;
+    opacity: 0.25;
+    position:absolute;
+    width:318px;
+    height: 10px;
+    padding: 3px;
+    margin-top: 0px;
+    top: 89px;
+    left: 72px;
+}
+
+#highlight {
+    background-color:#37826C;
+    opacity: 0.25;
+    position:absolute;
+    width:318px;
+    height: 10px;
+    padding: 3px;
+    margin-top: 0px;
+    top: 89px;
+    left: 72px;
+}
+
+#explanation {
+    color: purple;
+    position:absolute;
+    width: 158px;
+    height: 40px;
+    padding: 3px;
+    margin-top:5px;
+    top: 75px;
+    left: 448px;
+    font-size: 90%;
+    font-family: Times New Roman;
+}
+
+#explanation1 {
+    color: purple;
+    position:absolute;
+    width: 158px;
+    height: 40px;
+    padding: 3px;
+    margin-top:5px;
+    top: 75px;
+    left: 448px;
+    font-size: 90%;
+    font-family: Times New Roman;
+}
+
+#explanation2 {
+    color: purple;
+    position:absolute;
+    width: 158px;
+    height: 40px;
+    padding: 3px;
+    margin-top:5px;
+    top: 75px;
+    left: 448px;
+    font-size: 90%;
+    font-family: Times New Roman;
+}
+
+#commandPrompt {
+    font-family: times;  border: 1px solid gray; text-align: left;  
+    position:absolute;         
+    width: 217.5px;
+    height: 10px;
+    top: 90px;
+    left: 600px;
+    font-size: 80%;
+}
+
+#commandPromptHeader {
+    background-color: navy; color: white; font-size: 90%;
+    border-bottom: 2px solid gray; border-right: 2px solid gray;
+    text-align: center;
+}
+
+#commandPromptContent {
+    background-color: white;
+    color: black;
+    width: 212px;
+    height: 40px;
+    font-family: courier; 
+    font-size: 80%;
+    font-weight: bold;
+}
+
+#startButton {
+    display:inline; 
+    width: 150px;
+    height: 30px;
+    color:#fff;
+    font-size: 14px;
+    background: #6193CB;
+    border: none;
+}
+
+#nextButton {
+    display:inline;
+    width: 60px;
+    height: 30px;
+    color:#fff;
+    font-size: 14px;
+    background: #6193CB;
+    border: none;
+}
+
+#prevButton {
+    display:inline;
+    width: 60px;
+    height: 30px;
+    color:#fff;
+    font-size: 14px;
+    background: #6193CB;
+    border: none;
+}
+
+#startOverButton {
+    display:inline;
+    width: 70px;
+    height: 30px;
+    color:#fff;
+    font-size: 14px;
+    background: #6193CB;
+    border: none;
+}
+
+.stringindex {
+    display:inline;
+    font-family: courier; text-align: center;  
+    width: 20px; height: 20px;
+    position:absolute;  font-size: 100%;
+}
+
+.stringelement {
+    display:inline;
+    font-family: courier; text-align: center;  
+    border: 1px solid green; width: 20px; height: 20px;
+    position:absolute;  font-size: 100%;
+}
+
+.flowchart {
+    fill:rgba(240,230,140, .2);stroke:rgba(240,230,140, .9);
+    stroke:black;
+    stroke-width:1}
+
+.flowchartdline {
+    stroke:black; stroke-width: 1px; fill: none;
+    marker-end: url(#arrow);}

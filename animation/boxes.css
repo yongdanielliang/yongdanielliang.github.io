@@ -1,0 +1,78 @@
+.source
+{ 
+    width:70%;height:40px;padding:1px;border:1px solid #aaaaaa; 
+    text-align: center; vertical-align: middle;display: table-cell;
+}
+
+#maincontentstyle {
+    padding-right: 0.2em; padding-left: 0.2em; background: white repeat-x; 
+    padding-bottom: em; width: auto; padding-top: 1em;
+    color: #edc100; text-align: center; margin: 5px;
+}
+
+#boxstyle {
+    border-right: 1px solid; background: white; padding-bottom: 15px; 
+    border-left: 1px solid; border-bottom: 1px solid; width: auto; 
+    width: 100%; border-color: #edc100; text-align: left;
+}
+
+#h3style {color: white; font-family: Helvetica, sans-serif; background: #edc100; 
+          border-color: #edc100; text-align: center;
+          margin-bottom: 0.5em; background-color: navy;text-align: center
+}
+
+#tablestyle {
+    color: black; margin:10px; border: 1px solid; border-color: green;
+    border-collapse:collapse;
+}
+
+table td {
+    border:1px solid lightgrey;
+}
+
+#row1 {
+    padding-right: 1em; padding-left: 1.5em; background: white repeat-x; 
+    padding-bottom: em; width: auto; padding-top: 1em;
+    color: #edc100; text-align: center; margin: 5px;
+}
+
+.foo {
+    counter-reset: foo;
+}
+.foo li {
+    list-style-type: none;
+}
+.foo li::before {
+    counter-increment: foo;
+    content: "2." counter(foo) " ";
+}
+
+.columnHeader {
+    color: black; 
+}
+.columnHeader1 {
+    color: black; 
+}
+.columnHeader2 {
+    color: black; 
+}
+.columnHeader3 {
+    color: black; 
+}
+
+.button {
+    margin-bottom: 0px; margin-top: 0px; background-color: #37826c; color:white;
+    /*    width: 70px;
+        height: 30px;*/
+    display:inline;
+    color:#fff;
+    font-size: 14px;
+    background: #3070a8;
+    border: none;
+    cursor:pointer;
+}
+
+.button:hover {    
+    background-color: #1c5282 !important;    
+    color: white !important;
+}  
