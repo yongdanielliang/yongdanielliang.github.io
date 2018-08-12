@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Closest Pair Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+    <script >
+      function Point(x, y) {
+          this.x = x;
+          this.y = y;
+      }
+
+      function contains(p1, p2, radius) {
+          var d = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+          return d <= radius * radius;
+      }
+
+      function isContained(mousePos, radius) {
+          for (var i = 0; i < list.length; i++) {
+              if (contains(list[i], mousePos, radius)) {
+                  return true;
+              }
+          }
+          return false;
+      }
+
+
+      function indexOf(list, point) {
+          for (var i = 0; i < list.length; i++) {
+              if (list[i].x == point.x && list[i].y == point.y) {
+                  return i;
+              }
+
+              return -1;
+          }
+      }
+
+      list = [];
+      list.push(new Point(167, 20));
+      list.push(new Point(120, 200));
+      list.push(new Point(20, 70));
+      list.push(new Point(30, 50));
+      list.push(new Point(130, 53));
+      list.push(new Point(230, 150));
+      list.push(new Point(130, 34));
+      list.push(new Point(220, 100));
+      list.push(new Point(230, 20));
+
+      radius = 5;
+
+      var canvas;
+      var context;
+
+      function init() {
+          canvas = document.getElementById('canvas');
+          context = canvas.getContext("2d");
+          //        canvas.addEventListener("click", function(evt) {
+          //          var mousePos = getMousePos(canvas, evt);
+          //          if (evt.button == 0) {
+          //            list.push(new Point(mousePos.x, mousePos.y));
+          //          }
+          //          else if (evt.button == 1) {
+          //            for (var i = 0; i < list.length; i++) {
+          //              if (contains(list[i], mousePos, radius)) {
+          //                list.splice(i, 1);
+          //                break;
+          //              }
+          //            }
+          //          }
+          //          draw();
+          //        }, false);
+
+          draw();
+      }
+
+      function getMousePos(canvas, evt) {
+          var rect = canvas.getBoundingClientRect();
+          return new Point(evt.clientX - rect.left, evt.clientY - rect.top);
+      }
+
+      function draw() {
+          // Reset size will clear the canvas, but not for IE9
+          canvas.width = window.innerWidth - 20;
+          canvas.height = 300; // window.innerHeight - 120;
+          //       canvas.height = 290; // window.innerHeight - 180;        
+          context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+          context.font = "14px sans-serif";
+          context.strokeStyle = "#100"; // Set a pen color
+
+          // Draw all points
+          for (var i = 0; i < list.length; i++) {
+              var x = list[i].x;
+              var y = list[i].y;
+              context.moveTo(x + radius, y);
+              context.arc(x, y, radius, 0, Math.PI * 2, false);
+          }
+
+          // Draw convex hull
+          if (list.length >= 3) {
+              convexHull = findConvexHull(list);
+              for (var i = 0; i < convexHull.length - 1; i++) {
+                  context.moveTo(convexHull[i].x, convexHull[i].y);
+                  context.lineTo(convexHull[i + 1].x, convexHull[i + 1].y);
+              }
+              context.moveTo(convexHull[convexHull.length - 1].x, convexHull[convexHull.length - 1].y);
+              context.lineTo(convexHull[0].x, convexHull[0].y);
+          }
+
+          context.stroke();
+          context.fill();
+      }
+
+      function getDistance(p1, p2) {
+          return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+      }
+
+      function findConvexHull(myPoints) {
+          // Step 1
+          h0 = getRightmostLowestPoint(myPoints);
+          H = [];
+          H.push(h0);
+
+          t0 = h0;
+
+          // Step 2 and Step 3
+          while (true) {
+              // Step 2
+              t1 = myPoints[0]; // Let t1 be s0
+              for (var i = 1; i < myPoints.length; i++) {
+                  status = whichSide(t0.x, t0.y, t1.x, t1.y, myPoints[i].x, myPoints[i].y);
+
+                  if (status > 0)  // Right side of the line. Please note we are using the Java coordinate system. y increases downward
+                      t1 = myPoints[i];
+                  else if (status == 0) {
+                      if (distance(myPoints[i].x, myPoints[i].y, t0.x, t0.y) > distance(t1.x, t1.y, t0.x, t0.y))
+                          t1 = myPoints[i];
+                  }
+              }
+
+              // Step 3
+              if (t1.x == h0.x && t1.y == h0.y)
+                  break; // A convex hull is found
+              else {
+                  H.push(t1);
+                  t0 = t1;
+              }
+          }
+
+          return H;
+      }
+
+      /** Return the rightmost lowest point in S */
+      function getRightmostLowestPoint(p) {
+          rightMostIndex = 0;
+          rightMostX = p[0].x;
+          rightMostY = p[0].y;
+
+          for (var i = 1; i < p.length; i++) {
+              if (rightMostY < p[i].y) {
+                  rightMostY = p[i].y;
+                  rightMostX = p[i].x;
+                  rightMostIndex = i;
+              }
+              else if (rightMostY == p[i].y && rightMostX < p[i].x) {
+                  rightMostX = p[i].x;
+                  rightMostIndex = i;
+              }
+          }
+
+          return p[rightMostIndex];
+      }
+
+      function distance(x1, y1, x2, y2) {
+          return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+      }
+
+      function whichSide(x0, y0, x1, y1, x2, y2) {
+          return (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="draw()">   
+    <p> 
+      Usage: This animation draws a convex hull for the points.
+      Click the left mouse button to add a point at the mouse point
+      and the right button to remove on a point at the mouse point.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 300px;">
+      <canvas id="canvas" width="200" height="300"></canvas>
+    </div>
+
+    <script>$(document).ready(function () {
+          $("#canvas").mousedown(function (evt) {
+              var mousePos = getMousePos(canvas, evt);
+              switch (evt.which) {
+                  case 1:
+                      if (!isContained(mousePos, 2 * radius))
+                          list.push(new Point(mousePos.x, mousePos.y));
+                      break;
+                  case 3:
+                      for (var i = 0; i < list.length; i++) {
+                          if (contains(list[i], mousePos, radius)) {
+                              list.splice(i, 1);
+                              break;
+                          }
+                      }
+                      break;
+              }
+
+              draw();
+          });
+      });
+    </script>
+    <script type="text/javascript">
+      $(window).resize(function () {
+          var canvas = document.getElementById('canvas');
+          canvas.width = window.innerWidth;
+          canvas.height = 250; // window.innerHeight;
+          draw();
+      });
+    </script>
+  </body>
+</html>

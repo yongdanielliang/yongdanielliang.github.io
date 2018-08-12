@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ArrayList Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+<!--          <script src="jqueryForJPrompt.js" type="text/javascript"></script>
+        <script src="jquery.alerts.js" type="text/javascript"></script>
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />-->
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+<script src="jquery.alerts.js"></script> 
+<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="LinkedList.js"></script>
+    <script >
+      list = new LinkedList();
+//      list.add(31); list.add(4); list.add(51);   
+      var capacity = 4;
+      
+      function draw() {
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 100; // window.innerHeight - 180;        
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+        
+        if (list.isEmpty()) {
+          context.fillText("array list is empty   size = " 
+            + list.getSize() + " and capacity is " + capacity, 10, 15);  
+        }
+        else {
+                  context.fillText("array list is not empty   size = " 
+          + list.getSize() + " and capacity is " + capacity, 10, 15);  
+        }
+    
+        x = 20;
+        y = 60;
+        rectWidth = 40;
+        rectHeight = 20;
+
+        var i;
+        for (i = 0; i < list.getSize(); i++) {
+          value = list.get(i);
+          context.fillText(list.get(i) + "", x + 15, y + 15); 
+          context.rect(x, y, rectWidth, rectHeight);
+          x += rectWidth;
+        } 
+          
+        for (; i < capacity; i++) {
+          context.rect(x, y, rectWidth, rectHeight);
+          context.moveTo(x, y + rectHeight);
+          context.lineTo(x + rectWidth, y);
+          x += rectWidth;
+        } 
+          
+        context.stroke();
+      }
+      
+      function search() {
+        var value = document.getElementById('value').value.trim();
+        if (list.contains(value)) {
+          jAlert("The value " + value + " is at index " + list.indexOf(value) 
+            + " in the list");
+        }
+        else {
+          jAlert("The value " + value + " is not in the list");
+        }
+      }
+      
+      function insert() {
+        var value = document.getElementById('value').value.trim();
+        if (value == "") {
+          jAlert("no value entered");
+          return;
+        }
+        
+        var index = document.getElementById('index').value.trim();
+        if (index == "") {
+          list.add(value);
+        }
+        else {
+          list.insert(index, value);
+        }
+        
+        if (capacity < list.getSize()) {
+          capacity = 2 * (list.getSize() - 1) + 1;
+        }
+        
+        draw();
+      }
+      
+      function remove1() {
+        var value = document.getElementById('value').value.trim();
+        if (value != "") {
+          if (list.contains(value)) {
+            list.remove(value); 
+            draw();
+            return true;
+          }
+          else {
+            jAlert(value + " is not in the list");          
+            return false
+          }
+        }
+        else {
+          var index = document.getElementById('index').value.trim();
+          if (index != "") {
+            if (index >= 0 && index < list.getSize()) {
+              list.removeAt(index);
+              draw();
+              return true;
+            }
+            else {
+              jAlert(index + " is out of range");
+            }
+          }
+        };
+        
+        jAlert("No value or index entered");
+        return false;
+      }
+      
+      function trim() {
+        capacity = list.getSize();
+        draw();
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="draw()" onresize="draw()">   
+    <p> 
+      This is the animation for ArrayList implementation.
+      Enter a value and click the Search, Insert, and Delete button to search, insert, or delete the value from the list. 
+      Enter a value and an index and then click the Insert button to insert the value in the specified index. 
+      Enter an index and then click the Delete button to delete the value in the specified index.
+      Click the TrimToSize button to make the capacity the same as the size.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 100px;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div style="text-align: center; margin-top: 1em;">
+      Enter a value: <input type="text" value="" id="value" style="width: 3em; text-align: right">
+      Enter an index: <input type="text" value="" id="index" style="width: 2em; text-align: right">
+      <button type="button" class="button" onclick="search()" style="font-size: 12.97px;">Search</button>
+      <button type="button" class="button" onclick="insert()" style="font-size: 12.97px;">Insert</button>
+      <button type="button" class="button" onclick="remove1()" style="font-size: 12.97px;">Delete</button>
+      <button type="button" class="button" onclick="trim()" style="font-size: 12.97px;">TrimToSize</button>
+        <button id = "buttonD" class="button" type="button" onClick="buttonD()" style="font-size: 12.7px;">
+   <a href="https://liveexample.pearsoncmg.com/dsanimation/ArrayListAnimationForTwo.html" target="_blank" 
+     style="text-decoration: none; color: white;">Code Animation</a></button>
+          </div>
+  </body>
+</html>

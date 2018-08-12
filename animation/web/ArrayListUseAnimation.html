@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ArrayList Use Animation by Y. Daniel Liang</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="jquery-latest.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="GetElementPosition.js"></script>
+    <link rel="stylesheet" type="text/css" href="codecolor.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      #highlight {
+          background-color: #EB0D1B;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:30px;
+          height: 30px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+          max-height: 25px;
+          min-height: 25px;
+          max-width: 27px;
+          min-width: 27px;
+      }
+
+      #currentFly {
+          background-color:orange;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 45px;
+          line-height: 29px;
+          text-align: middle;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #sortedFly {
+          background-color: #37826c;
+          opacity: 0.20;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 25px;
+          line-height: 25px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      #explanation1 {
+          background-color:lightcoral;
+          opacity: 1.0;
+          color: black;
+          weight: bold;
+          position:absolute;
+          width:315px;
+          height: 35px;
+          /*          padding: 3px;
+                    margin-top:0px;*/
+          top: 79px;
+          left: 62px;
+      }
+
+      .cell {
+          position:absolute;
+          width:40px;
+          height: 40px;
+          left:20px;
+          top:40px;
+          border-width: 2px;
+          border: 1px black solid;
+          background-color: white;
+          text-align: center;
+          display:inline;
+      }
+
+      .cell1 {
+          display:inline;
+      }
+
+      div.inline { float:left; }
+      .clearBoth { clear:both; }
+
+      .button {
+          margin-bottom: 0px; margin-top: 0px; background-color: #37826c; color:white;
+          /*    width: 70px;
+              height: 30px;*/
+          display:inline;
+          color:#fff;
+          font-size: 14px;
+          background: #3070a8;
+          border: none;
+      }
+
+      .text {
+          position:absolute;
+          text-align: center;
+          width: 133px;
+          height: 23px;
+          font-family: times;
+      }
+    </style>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="" style="font-family: times new roman;"> 
+    <div style="height: 0px; font-size: 200%"></div>
+    <div id ="iValue" style="position: absolute; height: 100px;">i: 1</div>
+    <div id ="iPosition" style="position: absolute; height: 100px; font-size: 200%">&#8595;</div>
+    <p style = "width: 580px; max-width: 580px;"> 
+      Usage: This animation demonstrates how the methods in the ArrayList work. Assume list is an ArrayList&lt;Integer> with initial values [12, 8, 21, 95, 27, 32, 21, 5, 67, 18, 19, 34]. For convenience, the maximum size for the list in this animation cannot exceed 17.
+    </p>    
+
+    <div style="padding-left: 70px;  display: table; overflow: hidden;">
+      <script>
+        SIZE = 17;
+        for (var i = 0; i < SIZE; i++) {
+            document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                    'border: 1px white solid; background: white;' +
+                    'width: 25px; height: 25px; min-width: 25px; max-width: 25px;  text-align: center;">' +
+                    '<div id="check' + i + '" style="color: black; weight: bold">45</div>' +
+                    '</div>');
+        }
+      </script>      
+    </div>
+
+    <div style=" padding-left: 70px;  display: table; overflow: hidden;">
+      <script>
+        for (var i = 0; i < SIZE; i++) {
+            document.writeln('<div id="list' + i + '" style="display: table-cell; vertical-align: middle;' +
+                    'border: 1px blue solid; background: white;' +
+                    'width: 25px; height: 25px; min-width: 25px; max-width: 25px;  text-align: center;">' +
+                    '<div id="listEE' + i + '" style="color: black; weight: bold">45</div>' +
+                    '</div>');
+        }
+      </script>      
+    </div>
+
+    <div id ="message" class="text">list</div>
+    <div id ="arrow" class="text">&#8594;</div>
+
+    <div id="question1" style="position: absolute">
+      Invoke list.add(<input id="tb1" type="text" value="2" style="width:18px; color: #EB0D1B">)
+      <button id = "execute1" type="button" class="button" onclick="execute1()">Execute</button>
+      <span id="answer1" style="color: #37826c"></span>
+    </div>
+
+    <div id="question2" style="position: absolute">
+      Invoke list.add(<input id="tb2" type="text" value="2" style="width:18px; color: #EB0D1B">, <input id="tb3" type="text" value="82" style="width:18px; color: #EB0D1B">)?
+      <button id = "execute2" type="button" class="button" onclick="execute2()">Execute</button>
+      <span id="answer2" style="color: #37826c"></span>
+    </div>
+
+    <div id="question3" style="position: absolute">
+      Invoke list.clear()
+      <button id = "execute3" type="button" class="button" onclick="execute3()">Execute</button>
+      <span id="answer3" style="color: #37826c"></span>
+    </div>
+
+    <div id="question4" style="position: absolute">
+      What is list.contains(<input id="tb4" type="text" value="21" style="width:18px; color: #EB0D1B">)?
+      <button id = "check4" type="button" class="button" onclick="checkContains()">Execute</button>
+      <span id="answer4" style="color: #37826c"></span>
+    </div>
+
+    <div id="question5" style="position: absolute">
+      What is list.get(<input id="tb5" type="text" value="3" style="width:18px; color: #EB0D1B">)?
+      <button id = "checkGet" type="button" class="button" onclick="checkGet()">Execute</button>
+      <span id="answer5" style="color: #37826c"></span>
+    </div>
+
+    <div id="question6" style="position: absolute">
+      What is list.indexOf(<input id="tb6" type="text" value="3" style="width:18px; color: #EB0D1B">)?
+      <button id = "checkIndexOf" type="button" class="button" onclick="checkIndexOf()">Execute</button>
+      <span id="answer6" style="color: #37826c"></span>
+    </div>
+
+    <div id="question7" style="position: absolute">
+      What is list.isEmpty()?
+      <button id = "checkIsEmpty" type="button" class="button" onclick="checkIsEmpty()">Execute</button>
+      <span id="answer7" style="color: #37826c"></span>
+    </div>
+
+    <div id="question8" style="position: absolute">
+      What is list.lastIndexOf(<input id="tb7" type="text" value="3" style="width:18px; color: #EB0D1B">)?
+      <button id = "checklastIndexOf" type="button" class="button" onclick="checkLastIndexOf()">Execute</button>
+      <span id="answer8" style="color: #37826c"></span>
+    </div>
+
+    <div id="question9" style="position: absolute">
+      What is list.remove(new Integer(<input id="tb8" type="text" value="3" style="width:18px; color: #EB0D1B">))?
+      <button id = "executeRemoveObject" type="button" class="button" onclick="executeRemoveObject()">Execute</button>
+      <span id="answer9" style="color: #37826c"></span>
+    </div>
+
+    <div id="question10" style="position: absolute">
+      What is list.size()?
+      <button id = "checkGetSize" type="button" class="button" onclick="checkGetSize()">Execute</button>
+      <span id="answer10" style="color: #37826c"></span>
+    </div>
+
+    <div id="question11" style="position: absolute">
+      What is list.remove(<input id="tb9" type="text" value="3" style="width:18px; color: #EB0D1B">)?
+      <button id = "executeRemove" type="button" class="button" onclick="executeRemove()">Execute</button>
+      <span id="answer11" style="color: #37826c"></span>
+    </div>
+
+    <div id="question12" style="position: absolute">
+      What is list.set(<input id="tb10" type="text" value="3" style="width:18px; color: #EB0D1B">, <input id="tb11" type="text" value="43" style="width:18px; color: #EB0D1B">)?
+      <button id = "executeSet" type="button" class="button" onclick="executeSet()">Execute</button>
+      <span id="answer12" style="color: #37826c"></span>
+    </div>
+
+    <div style="display: table-cell; vertical-align: middle;
+         background: white;
+         width: 30px; height: 30px; max-width: 30px; text-align: center;">
+      <div id="currentFly" style="opacity:1.0"></div>
+      <div id="highlight" style="opacity:1.0; "></div>
+      <div id="sortedFly"></div>
+    </div>
+
+    <script type="text/javascript">
+      list = [12, 8, 21, 95, 27, 32, 21, 5, 67, 18, 19, 34];
+      slowAnimationSpeed = 400;
+      function init() {
+          reset();
+          for (var i = 0; i < SIZE; i++) {
+              id = 'list' + i;
+              document.getElementById(id).style.backgroundColor = "white";
+              document.getElementById(id).style.color = "black";
+              document.getElementById('check' + i).innerHTML = i;
+              document.getElementById('check' + i).style.visibility = "visible";
+          }
+
+          p3 = getElementPos(document.getElementById('list0'));
+          document.getElementById('message').style.top = p3.y + "px";
+          document.getElementById('arrow').style.top = p3.y + "px";
+          document.getElementById('message').style.left = p3.x - 100 + "px";
+          document.getElementById('arrow').style.left = p3.x - 80 + "px";
+          for (var i = 1; i <= 12; i++) {
+              document.getElementById('question' + i).style.top = p3.y + 50 + 25 * (i - 1) + "px";
+              document.getElementById('question' + i).style.left = p3.x - 45 + "px";
+          }
+//          document.getElementById('question2').style.top = p3.y + 75 + "px";
+//          document.getElementById('question2').style.left = p3.x + "px";
+//          document.getElementById('question3').style.top = p3.y + 75 + 25 + "px";
+//          document.getElementById('question3').style.left = p3.x + "px";
+//          document.getElementById('question4').style.top = p3.y + 75 + 50 + "px";
+//          document.getElementById('question4').style.left = p3.x + "px";
+//          document.getElementById('question5').style.top = p3.y + 75 + 75 + "px";
+//          document.getElementById('question5').style.left = p3.x + "px";
+//          document.getElementById('question6').style.top = p3.y + 75 + 100 + "px";
+//          document.getElementById('question6').style.left = p3.x + "px";
+//          document.getElementById('question7').style.top = p3.y + 75 + 125 + "px";
+//          document.getElementById('question7').style.left = p3.x + "px";
+//          document.getElementById('question8').style.top = p3.y + 75 + 150 + "px";
+//          document.getElementById('question8').style.left = p3.x + "px";
+//          document.getElementById('question9').style.top = p3.y + 75 + 175 + "px";
+//          document.getElementById('question9').style.left = p3.x + "px";
+//          document.getElementById('question10').style.top = p3.y + 75 + 200 + "px";
+//          document.getElementById('question10').style.left = p3.x + "px";
+//          document.getElementById('question11').style.top = p3.y + 75 + 220 + "px";
+//          document.getElementById('question11').style.left = p3.x + "px";
+//          document.getElementById('question12').style.top = p3.y + 75 + 250 + "px";
+//          document.getElementById('question12').style.left = p3.x + "px";
+
+          for (var i = 0; i < list.length; i++) {
+              document.getElementById('list' + i).innerHTML = list[i];
+              document.getElementById('list' + i).style.visibility = "visible";
+          }
+
+          for (var i = list.length; i < SIZE; i++) {
+              document.getElementById('list' + i).style.visibility = "hidden";
+//              document.getElementById('list' + i).style.border = "hidden";
+              document.getElementById('check' + i).style.visibility = "hidden";
+          }
+      }
+
+
+      s = "Welcome to Java";
+      function clearAnswer() {
+          for (var i = 1; i <= 12; i++) {
+              document.getElementById('answer' + i).innerHTML = "";
+          }
+      }
+
+      function execute1() {
+          clearAnswer();
+          tb1 = parseInt($('#tb1').val());
+          if (list.length == SIZE) {
+              document.getElementById('answer1').innerHTML = "&nbsp;&nbsp;Reached maximum size 17 and cannot add more.";
+          }
+          else {
+              list.push(tb1);
+              init();
+          }
+      }
+
+      function execute2() {
+          clearAnswer();
+          tb2 = parseInt($('#tb2').val());
+          tb3 = parseInt($('#tb3').val());
+          if (list.length == SIZE) {
+              document.getElementById('answer2').innerHTML = "&nbsp;&nbsp;Reached maximum size 17. Cannot add more.";
+          }
+          else {
+              list.splice(tb2, 0, tb3);
+              init();
+          }
+      }
+
+      function execute3() {
+          clearAnswer();
+          list = [];
+          init();
+          document.getElementById('answer3').innerHTML = "&nbsp;&nbsp;List is empty.";
+      }
+
+      function checkContains() {
+          clearAnswer();
+          tb4 = parseInt($('#tb4').val());
+          init();
+          document.getElementById('answer4').innerHTML = "&nbsp;&nbsp;" +
+                  (list.indexOf(tb4) > -1);
+      }
+
+      function checkGet() {
+          clearAnswer();
+          index = parseInt($('#tb5').val());
+          init();
+
+          if (index < list.length && index > -1)
+              document.getElementById('answer5').innerHTML = "&nbsp;&nbsp;" +
+                      list[index];
+          else
+              document.getElementById('answer5').innerHTML = "&nbsp;&nbsp;Index out of range";
+      }
+
+      function checkIndexOf() {
+           clearAnswer();
+         tb6 = parseInt($('#tb6').val());
+          init();
+          document.getElementById('answer6').innerHTML = "&nbsp;&nbsp;" +
+                  list.indexOf(tb6);
+      }
+
+      function checkIsEmpty() {
+          clearAnswer();
+          init();
+          document.getElementById('answer7').innerHTML = "&nbsp;&nbsp;" +
+                  (list.length == 0);
+      }
+
+      function checkLastIndexOf() {
+          clearAnswer();
+          tb7 = parseInt($('#tb7').val());
+          init();
+          document.getElementById('answer8').innerHTML = "&nbsp;&nbsp;" +
+                  list.lastIndexOf(tb7);
+      }
+
+      function executeRemoveObject() {
+           clearAnswer();
+         tb8 = parseInt($('#tb8').val());
+          index = list.indexOf(tb8);
+          if (index >= 0) {
+              list.splice(index, 1);
+              document.getElementById('answer9').innerHTML = "&nbsp;&nbsp;Successul. Return true.";
+          }
+          else {
+              document.getElementById('answer9').innerHTML = "&nbsp;&nbsp;Unsuccessul. Return false.";
+          }
+          init();
+      }
+
+      function checkGetSize() {
+           clearAnswer();
+         init();
+          document.getElementById('answer10').innerHTML = "&nbsp;&nbsp;" +
+                  list.length;
+      }
+
+      function executeRemove() {
+          index = parseInt($('#tb9').val());
+          if (index >= 0 && index < list.length) {
+              list.splice(index, 1);
+              document.getElementById('answer11').innerHTML = "&nbsp;&nbsp;Remove successful. Return true.";
+          }
+          else {
+              document.getElementById('answer11').innerHTML = "&nbsp;&nbsp;Index is out of range. Return false.";
+          }
+          init();
+      }
+
+      function executeSet() {
+          clearAnswer();
+          index = parseInt($('#tb10').val());
+          e = parseInt($('#tb11').val());
+          if (index >= 0 && index < list.length) {
+              temp = list[index];
+              list[index] = e;
+              document.getElementById('answer12').innerHTML = "&nbsp;&nbsp;New value is set. Old value " + temp + " is returned.";
+          }
+          else {
+              document.getElementById('answer12').innerHTML = "&nbsp;&nbsp;Index is out of range";
+          }
+          init();
+      }
+
+      function check1() {
+          reset();
+          tb1 = parseInt($('#tb1').val());
+          tb2 = parseInt($('#tb2').val());
+          if (tb1 < 0 || tb1 > SIZE - 1 || tb2 < 0 || tb2 > SIZE || tb2 < tb1) {
+              document.getElementById('answer').innerHTML = "&nbsp;&nbsp;Index Out of Range";
+          }
+          else if (tb1 == tb2) {
+              document.getElementById('answer').innerHTML = "&nbsp;&nbsp;It returns an empty string";
+          }
+          else {
+              document.getElementById('answer').innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;" + s.substring(tb1, tb2);
+              p3 = getElementPos(document.getElementById('list' + tb1));
+              document.getElementById('sortedFly').style.visibility = 'visible';
+              document.getElementById('sortedFly').style.top = p3.y - 3 + "px";
+              document.getElementById('sortedFly').style.left = p3.x + "px";
+              if (tb2 < SIZE) {
+                  p4 = getElementPos(document.getElementById('list' + tb2));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + "px";
+              }
+              else {
+                  p4 = getElementPos(document.getElementById('list' + (tb2 - 1)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + 28 + "px";
+              }
+          }
+      }
+
+      function check2() {
+          reset();
+          tb3 = $('#tb3').val();
+          index = s.indexOf(tb3);
+          document.getElementById('answer2').innerHTML = "&nbsp;&nbsp;"
+                  + index;
+          if (index >= 0) {
+              p3 = getElementPos(document.getElementById('list' + index));
+              length = tb3.length;
+              document.getElementById('sortedFly').style.visibility = 'visible';
+              document.getElementById('sortedFly').style.top = p3.y - 3 + "px";
+              document.getElementById('sortedFly').style.left = p3.x + "px";
+              if (index + length < SIZE) {
+                  p4 = getElementPos(document.getElementById('list' + (index + length)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + "px";
+              }
+              else {
+                  p4 = getElementPos(document.getElementById('list' + (index + length - 1)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + 28 + "px";
+              }
+
+          }
+      }
+
+      function check3() {
+          reset();
+          tb4 = $('#tb4').val();
+          index = s.lastIndexOf(tb4);
+          document.getElementById('answer3').innerHTML = "&nbsp;&nbsp;"
+                  + index;
+          if (index >= 0) {
+              p3 = getElementPos(document.getElementById('list' + index));
+              length = tb4.length;
+              document.getElementById('sortedFly').style.visibility = 'visible';
+              document.getElementById('sortedFly').style.top = p3.y - 3 + "px";
+              document.getElementById('sortedFly').style.left = p3.x + "px";
+              if (index + length < SIZE) {
+                  p4 = getElementPos(document.getElementById('list' + (index + length)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + "px";
+              }
+              else {
+                  p4 = getElementPos(document.getElementById('list' + (index + length - 1)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + 28 + "px";
+              }
+          }
+      }
+
+      function check4() {
+          reset();
+          tb5 = $('#tb5').val();
+          tb6 = $('#tb6').val();
+          index = s.indexOf(tb5, tb6);
+          document.getElementById('answer4').innerHTML = "&nbsp;&nbsp;"
+                  + index;
+          if (index >= 0) {
+              p3 = getElementPos(document.getElementById('list' + index));
+              length = tb5.length;
+              document.getElementById('sortedFly').style.visibility = 'visible';
+              document.getElementById('sortedFly').style.top = p3.y - 3 + "px";
+              document.getElementById('sortedFly').style.left = p3.x + "px";
+              if (index + length < SIZE) {
+                  p4 = getElementPos(document.getElementById('list' + (index + length)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + "px";
+              }
+              else {
+                  p4 = getElementPos(document.getElementById('list' + (index + length - 1)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + 28 + "px";
+              }
+          }
+      }
+
+      function check5() {
+          reset();
+          tb7 = $('#tb7').val();
+          tb8 = $('#tb8').val();
+          index = s.lastIndexOf(tb7, tb8);
+          document.getElementById('answer5').innerHTML = "&nbsp;&nbsp;"
+                  + index;
+          if (index >= 0) {
+              p3 = getElementPos(document.getElementById('list' + index));
+              length = tb7.length;
+              document.getElementById('sortedFly').style.visibility = 'visible';
+              document.getElementById('sortedFly').style.top = p3.y - 3 + "px";
+              document.getElementById('sortedFly').style.left = p3.x + "px";
+              if (index + length < SIZE) {
+                  p4 = getElementPos(document.getElementById('list' + (index + length)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + "px";
+              }
+              else {
+                  p4 = getElementPos(document.getElementById('list' + (index + length - 1)));
+                  document.getElementById('sortedFly').style.width = p4.x - p3.x + 28 + "px";
+              }
+          }
+      }
+
+      function reset() {
+          needNextPass = true;
+          isFindFirst = true;
+          k = 1;
+          current = -1;
+          minPosition = 0;
+          i = 0;
+          document.getElementById('highlight').style.visibility = 'hidden';
+          document.getElementById('currentFly').style.visibility = 'hidden';
+          document.getElementById('sortedFly').style.visibility = 'hidden';
+          document.getElementById('iPosition').style.visibility = 'hidden';
+          document.getElementById('iValue').style.visibility = 'hidden';
+      }
+    </script>
+  </body>
+</html>

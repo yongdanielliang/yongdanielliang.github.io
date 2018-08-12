@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Closest Pair Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+    <script>
+      function Point(x, y) {
+        this.x = x;
+        this.y = y;
+      }
+
+      function contains(p1, p2, radius) {
+        var d = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+        return d <= radius * radius;
+      }
+
+      function isContained(mousePos, radius) {
+        for (var i = 0; i < list.length; i++) {
+          if (contains(list[i], mousePos, radius)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+
+      function indexOf(list, point) {
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].x == point.x && list[i].y == point.y) {
+            return i;
+          }
+
+          return -1;
+        }
+      }
+
+      list = [];
+      list.push(new Point(167, 20));
+      list.push(new Point(120, 120));
+      list.push(new Point(120, 70));
+      list.push(new Point(30, 50));
+      list.push(new Point(120, 150));
+      list.push(new Point(170, 110));
+      list.push(new Point(230, 123));
+      list.push(new Point(250, 20));
+
+      radius = 5;
+
+      var canvas;
+      var context;
+
+      function init() {
+        canvas = document.getElementById('canvas');
+        context = canvas.getContext("2d");
+        //        canvas.addEventListener("click", function(evt) {
+        //          var mousePos = getMousePos(canvas, evt);
+        //          if (evt.button == 0) {
+        //            list.push(new Point(mousePos.x, mousePos.y));
+        //          }
+        //          else if (evt.button == 1) {
+        //            for (var i = 0; i < list.length; i++) {
+        //              if (contains(list[i], mousePos, radius)) {
+        //                list.splice(i, 1);
+        //                break;
+        //              }
+        //            }
+        //          }
+        //          draw();
+        //        }, false);
+
+        draw();
+      }
+
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return new Point(evt.clientX - rect.left, evt.clientY - rect.top);
+      }
+
+      function draw() {
+        // Reset size will clear the canvas, but not for IE9
+        canvas.width = window.innerWidth - 20;
+        canvas.height = 280; // window.innerHeight - 120;        
+        context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
+
+        context.font = "14px sans-serif";
+        context.strokeStyle = "#100"; // Set a pen color
+
+        // Draw all points
+        for (var i = 0; i < list.length; i++) {
+          var x = list[i].x;
+          var y = list[i].y;
+          context.moveTo(x + radius, y);
+          context.arc(x, y, radius, 0, Math.PI * 2, false);
+        }
+
+        // Draw a line
+        if (list.length > 1) {
+          pair = findNearestPoints(list);
+          var p1 = list[pair[0]], p2 = list[pair[1]];
+          context.moveTo(p1.x, p1.y);
+          context.lineTo(p2.x, p2.y);
+        }
+
+        context.stroke();
+        context.fill();
+      }
+
+      function getDistance(p1, p2) {
+        return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+      }
+
+      function findNearestPoints(list) {
+        // p1 and p2 are the indices in the points array
+        var t1 = 0;
+        var t2 = 1; // Initial two points
+        var shortestDistance = getDistance(list[t1], list[t2]); // Initialize shortestDistance
+
+        // Compute distance for every two points
+        for (var i = 0; i < list.length; i++) {
+          for (var j = i + 1; j < list.length; j++) {
+            var distance = getDistance(list[i], list[j]); // Find distance
+
+            if (shortestDistance > distance) {
+              t1 = i; // Update p1
+              t2 = j; // Update p2
+              shortestDistance = distance; // Update shortestDistance 
+            }
+          }
+        }
+
+        return [t1, t2];
+      }
+
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+  <body onload="init()" onresize="draw()">   
+    <p> 
+      Usage: The animation draws a line that connects two nearest points.
+      Click the left mouse button to add a point at the mouse point
+      and the right button to remove a point at the mouse point.
+    </p>
+
+    <div style="margin: 0px auto; border: 1px solid #EB0D1B; text-align: right; height: 280px;">
+      <canvas id="canvas" width="200" height="140"></canvas>
+    </div>
+
+    <script>$(document).ready(function()
+      {
+        $("#canvas").mousedown(function(evt) {
+          var mousePos = getMousePos(canvas, evt);
+          switch (evt.which) {
+            case 1:
+              if (!isContained(mousePos, 2 * radius))
+                list.push(new Point(mousePos.x, mousePos.y));
+              break;
+            case 3:
+              for (var i = 0; i < list.length; i++) {
+                if (contains(list[i], mousePos, radius)) {
+                  list.splice(i, 1);
+                  break;
+                }
+              }
+              break;
+          }
+
+          draw();
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      $(window).resize(function() {
+        var canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw();
+      });
+    </script>
+  </body>
+</html>

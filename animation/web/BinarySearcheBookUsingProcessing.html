@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>Binary Search Animation by Y. Daniel Liang</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="boxes.css" />
+    <script type="text/javascript" src="processing-1.4.1.js"></script>
+    <script language="JavaScript" type="text/javascript">
+      function step(id) {
+        var pjs = Processing.getInstanceById(id);
+        var key = document.getElementById('key').value.trim();
+        
+        var index = pjs.step(key);
+        if (index == -2) {
+          jAlert("Key " + pjs.getKey() + " is not in the list\nClick Reset to start over" );        
+        }
+        else if (index >= 0) {
+          jAlert("Key " + pjs.getKey() + " is at index " + index + "\nClick Reset to start over");        
+        }; 
+      }
+      
+      function reset(id) {
+        var pjs = Processing.getInstanceById(id);
+        var key = document.getElementById('key').value.trim();
+        pjs.reset();
+        pjs.draw();
+      }
+    </script>
+  
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+  <body>   
+    <div> 
+Usage: Enter a key as a double value. Click the Step button to perform one comparison. Click the Reset button to start over with a new random list 
+of 20 distinct integers from 1 to 20. You may enter a new key for a new search.
+</div>
+    <br></br>
+    <div align="center">
+    <canvas id="BinarySearch" data-processing-sources="BinarySearch.pde" style="border-style:solid"></canvas></div>
+    <p></p> 
+    <div align="center" >
+      Key (in double): <input type="text" value="8" id="key" style="text-align: right"></input>
+    <button type="button" class = "button" onclick="step('BinarySearch')">Step</button>
+    <button type="button" class = "button" onclick="reset('BinarySearch')">Reset</button></div>
+  </body>
+</html>

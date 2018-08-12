@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Binary Search Animation by Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--          <script src="jqueryForJPrompt.js" type="text/javascript"></script>-->
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.ui.touch-punch.min.js"></script>
+        <script src="jquery.alerts.js" type="text/javascript"></script>
+        <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+        <style>
+            #highlight {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline { float:left; }
+            .clearBoth { clear:both; }
+
+        </style>
+
+        <script>
+            function init() {
+                reset();
+            }
+
+            function reset() {
+                isFoundFinished = false;
+                notFoundFinished = false;
+
+                low = 0;
+                high = SIZE - 1;
+                i = 0;
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('lowPosition').style.visibility = 'hidden';
+                document.getElementById('lowValue').style.visibility = 'hidden';
+                document.getElementById('midPosition').style.visibility = 'hidden';
+                document.getElementById('midValue').style.visibility = 'hidden';
+                document.getElementById('highPosition').style.visibility = 'hidden';
+                document.getElementById('highValue').style.visibility = 'hidden';
+                setRandomValue();
+                resetColor();
+                document.getElementById('remark').innerHTML = 'A new random list is created';
+                document.getElementById('value').disabled = false;
+                for (var j = 0; j < SIZE; j++) {
+                    id = 'check' + j;
+                    document.getElementById(id).innerHTML = "";
+                }
+            }
+
+            function resetColor() {
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).style.backgroundColor = "white";
+                    document.getElementById(id).style.color = "#37826c";
+                }
+            }
+
+            function sortNumber(a, b) {
+                return a - b;
+            }
+
+            function setRandomValue() {
+                listValues = [];
+                for (var i = 0; i < SIZE; i++) {
+                    listValues.push(Math.floor(Math.random() * 100));
+                }
+                listValues.sort(sortNumber);
+                for (var i = 0; i < SIZE; i++) {
+                    id = 'list' + i;
+                    document.getElementById(id).innerHTML =
+                            listValues[i];
+                }
+            }
+
+            function draw() {
+                var count = 0;
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 20; j++) {
+                        id = 'cell' + j;
+                        // document.write(id.toString());
+                        document.getElementById(id).style.top = (i + 1) * 40 + 30 + "px";
+                        document.getElementById(id).style.left = (j + 1) * 40 + "px";
+                        //                  if (count++ % 2 == 0)
+                        //                      document.getElementById(id).style.backgroundColor = "#37826c";
+                        //                  else
+                        //                      document.getElementById(id).style.backgroundColor = "lightGray";
+
+                        document.getElementById(id).innerHTML = "2";
+                    }
+                    count++;
+                }
+            }
+
+            isFoundFinished = false;
+            notFoundFinished = false;
+
+            function step() {
+                if (isFoundFinished) {
+                    jAlert("Search is finished. Click Reset to start over.");
+                    return;
+                } else if (notFoundFinished) {
+                    jAlert("Search is finished. Click Reset to start over.");
+                    return;
+                }
+
+                document.getElementById('lowPosition').style.visibility = 'visible';
+                document.getElementById('lowValue').style.visibility = 'visible';
+                document.getElementById('highPosition').style.visibility = 'visible';
+                document.getElementById('highValue').style.visibility = 'visible';
+
+                if (low == SIZE) {
+                    var idLow = 'list' + (SIZE - 1);
+                    posLow = getElementPos(document.getElementById(idLow));
+                    posLow.x += posLow.w;
+                } else {
+                    var idLow = 'list' + low;
+                    posLow = getElementPos(document.getElementById(idLow));
+                }
+
+                document.getElementById('lowPosition').style.top
+                        = posLow.y - 30 + "px";
+                document.getElementById('lowPosition').style.left
+                        = posLow.x + posLow.w / 2 - 5 + "px";
+                document.getElementById('lowValue').style.top
+                        = posLow.y - 43 + "px";
+                document.getElementById('lowValue').style.left
+                        = posLow.x + posLow.w / 2 - 18 + "px";
+                document.getElementById('lowValue').innerHTML = "low: " + low;
+
+                if (high < 0) {
+                    var idHigh = 'list' + 0;
+                    posHigh = getElementPos(document.getElementById(idHigh));
+                    posHigh.x -= posHigh.w;
+                } else {
+                    var idHigh = 'list' + high;
+                    posHigh = getElementPos(document.getElementById(idHigh));
+                }
+
+                if (high != low) {
+                    document.getElementById('highPosition').style.top
+                            = posHigh.y - 48 + "px";
+                    document.getElementById('highPosition').style.left
+                            = posHigh.x + posHigh.w / 2 - 5 + "px";
+                } else {
+                    document.getElementById('highPosition').style.visibility = 'hidden';
+                }
+
+                document.getElementById('highValue').style.top
+                        = posHigh.y - 63 + "px";
+                document.getElementById('highValue').style.left
+                        = posHigh.x + posHigh.w / 2 - 18 + "px";
+                document.getElementById('highValue').innerHTML = "high: " + high;
+
+
+                if (high < low) {
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML =
+                            'No match and the search is exhausted. ' + (-1 - low) + ' is returned. '
+                    ;
+            notFoundFinished = true;
+
+        //    jAlert("No match. Search is finished. The method will return " + (-1 - low) + ".");
+
+                    return;
+                }
+
+                document.getElementById('midPosition').style.visibility = 'visible';
+                document.getElementById('midValue').style.visibility = 'visible';
+
+                mid = Math.floor((low + high) / 2);
+
+                document.getElementById('value').disabled = true;
+                var key = document.getElementById('value').value;
+                i = mid;
+                var id = 'list' + i;
+                posLoc = getElementPos(document.getElementById(id));
+
+                if (mid == low || mid == high) {
+                    document.getElementById('midPosition').style.visibility = 'hidden';
+                } else {
+                    document.getElementById('midPosition').style.top
+                            = posLoc.y - 40 + "px";
+                    document.getElementById('midPosition').style.left
+                            = posLoc.x + posLoc.w / 2 - 5 + "px";
+                }
+
+                document.getElementById('midValue').style.top
+                        = posLoc.y - 53 + "px";
+                document.getElementById('midValue').style.left
+                        = posLoc.x + posLoc.w / 2 - 18 + "px";
+                document.getElementById('midValue').innerHTML = "mid: " + i;
+
+                document.getElementById('highlight').style.top =
+                        posLoc.y + posLoc.h + 30 + "px";
+                document.getElementById('highlight').style.left =
+                        posLoc.x + "px";
+                document.getElementById('highlight').style.width =
+                        posLoc.w + "px";
+                document.getElementById('highlight').style.height =
+                        posLoc.h + 10 + "px";
+                document.getElementById('highlight').innerHTML = key;
+                document.getElementById('highlight').style.visibility = 'visible';
+                resetColor();
+                document.getElementById(id).style.backgroundColor =
+                        "lightCoral";
+                document.getElementById(id).style.color = "black";
+                if (key == document.getElementById(id).innerHTML) {
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2713;";
+                    document.getElementById('remark').innerHTML =
+                            'A key is found with the index ' + i + '.';
+                    isFoundFinished = true;
+              //      jAlert("A key is found with the index " + i);
+                    return;
+                } else if (key < listValues[mid]) {
+                    high = mid - 1;
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML = 'Since ' +
+                            key + ' is less than ' + document.getElementById(id).innerHTML + ', ' +
+                            'continue to search left.';
+                } else {
+                    low = mid + 1;
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML = 'Since ' +
+                            key + ' is greater than ' + document.getElementById(id).innerHTML + ', ' +
+                            'continue to search right.';
+                }
+            }
+
+            function init1() {
+                posLoc = getElementPos(document.getElementById('program'));
+                x = posLoc.x;
+                y = posLoc.y;
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 20; j++) {
+                        var id = 'cell' + j;
+                        //                document.getElementById(id).style.visibility = "hidden";
+                        document.getElementById(id).style.top = y + i * 40 + "px";
+                        document.getElementById(id).style.left = x + j * 40 + "px";
+                        //                  $(id).css("top", y + 90 + j * 40)
+                        //                          .css("left", x + 115 - 3 / 2 + i * 40);
+                    }
+                }
+            }
+
+        </script>
+    
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-89940905-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-89940905-27');
+</script>
+
+<script type="text/javascript" src="../logging.js"></script>
+</head>
+
+
+
+    <body onload="init()" onresize="" style="font-family: times new roman;"> 
+        <div> 
+            Usage: Enter a key as a number. Click the Next button to perform one comparison. Click the Reset button to start over with a new random list of integers. You may enter a new key for a new search.
+        </div>
+        <div style="height: 70px; font-size: 200%"></div>
+        <div id ="lowValue" style="position: absolute; font-size: 70%;">low: 0</div>
+        <div id ="lowPosition" style="position: absolute; font-size: 140%">&#8595;</div>
+
+        <div id ="midValue" style="position: absolute; font-size: 70%;">mid: 1</div>
+        <div id ="midPosition" style="position: absolute; font-size: 200%">&#8595;</div>
+
+        <div id ="highValue" style="position: absolute; font-size: 70%;">high: 1</div>
+        <div id ="highPosition" style="position: absolute; font-size: 230%">&#8595;</div>
+
+        <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+            <script>
+                SIZE = 16;
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px #37826c solid; background: white;' +
+                            'width: 30px; height: 30px; max-width: 30px; min-width: 15px; text-align: center;">' +
+                            '<div id="list' + i + '" style="color: #37826c; weight: bold">45</div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+        <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+            <script>
+                SIZE = 16;
+                for (var i = 0; i < SIZE; i++) {
+                    document.writeln('<div style="display: table-cell; vertical-align: middle;' +
+                            'border: 1px white solid; background: white;' +
+                            'width: 30px; height: 10px; max-width: 30px; min-width: 15px; text-align: center;">' +
+                            '<div id="check' + i + '" style="color: #EB0D1B; weight: bold"></div>' +
+                            '</div>');
+                }
+            </script>      
+        </div>
+
+        <div style="display: table-cell; vertical-align: middle;
+             background: white;
+             width: 30px; height: 45px; max-width: 30px; min-width: 15px; text-align: center;">
+            <div id="highlight"></div>
+        </div>
+
+        <div align="center" >
+            Key: <input type="text" size="5" value="24" id="value" style="text-align: right"></input>
+            <button type="button" class="button" onclick="step()">Next</button>
+            <button type="button" class="button" onclick="reset()">Reset</button></div>
+
+        <div style="text-align: center; margin-top: 1em">
+            <span id = "remark" style = "background-color: white; color: #EB0D1B; alignment-adjust: central; text-align: center; max-wdith: 800px; margin-left: auto; margin-right: auto">
+                A list is filled with random numbers.
+            </span>
+        </div>
+    </body>
+</html>
