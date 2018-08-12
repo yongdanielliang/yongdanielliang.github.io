@@ -1,0 +1,141 @@
+div.ui-tooltip {
+    max-width: 500px;
+    font-size: 15px;
+}
+
+.interfaceHeader {
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    background: rgba(55, 130, 108, .4);
+    border-right: rgba(55, 130, 108, 1) 2px solid;
+    border-bottom: rgba(55, 130, 108, 1) 2px solid;
+    /*    background: rgba(240,230,140, .7);
+        border-bottom: rgba(240,230,140, 1) 3px solid;
+        border-right: rgba(240,230,140, 1) 3px solid;*/
+}
+
+.abstractClassHeader {
+    text-decoration: none;
+    text-align: center;
+    padding: 5px;
+    background: rgba(55, 130, 108, .4);
+    border-right: rgba(55, 130, 108, 1) 2px solid;
+    border-bottom: rgba(55, 130, 108, 1) 2px solid;
+    font-weight: bold;
+    font-style: italic;
+    /*    background: rgba(240,230,140, .7);
+        border-bottom: rgba(240,230,140, 1) 3px solid;
+        border-right: rgba(240,230,140, 1) 3px solid;*/
+}
+
+.classHeader {
+    text-decoration: none;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+    background: rgba(55, 130, 108, .4);
+    border-right: rgba(55, 130, 108, 1) 2px solid;
+    border-bottom: rgba(55, 130, 108, 1) 2px solid;
+    /*    background: rgba(240,230,140, .7);
+        border-bottom: rgba(240,230,140, 1) 3px solid;
+        border-right: rgba(240,230,140, 1) 3px solid;*/
+}
+
+.objectHeader {
+    text-decoration: none;
+    text-align: center;
+    background: rgba(55, 130, 108, .8);
+    padding: 5px;
+    border-bottom: rgba(55, 130, 108, .8) 1px solid;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.abstractMethod {
+    text-decoration: none;
+    padding-left: 5px;
+    padding: 5px;
+    border-bottom: 5px;
+    font-style: italic;
+    padding-left: 27px ;
+    text-indent: -22px ;
+}
+
+.method {
+    text-decoration: none;
+    padding-left: 5px;
+    padding: 5px;
+    border-bottom: 5px;
+    font-style: normal;
+    /*    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono;*/
+    padding-left: 27px ;
+    text-indent: -22px ;
+}
+
+.staticMethod {
+    text-decoration: none;
+    padding-left: 5px;
+    padding: 5px;
+    border-bottom: 5px;
+    font-style: normal;
+    padding-left: 27px ;
+    text-indent: -22px ;
+    text-decoration: underline;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.uml {
+    font-family: monospace;
+    font-size: 125%; margin: 0px auto; border: 1px solid white;  
+    text-align: left; 
+    background: rgba(240,230,140, .2);
+    border-bottom: rgba(240,230,140, .8) 1px solid;
+    border-right: rgba(240,230,140, .8) 2px solid;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    /*    background: rgba(218,165,32, 0.2);*/
+}
+
+.triangle {
+    font-family: monospace;
+    font-size: 240%; margin: 0px auto; border: 1px solid white;  
+    text-align: center;     
+    position:absolute;
+    border:none;
+}
+
+.hLine {
+    margin: 0px auto; border: 1px solid white;  
+    height: 1px;
+    background: black;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.vLine {
+    margin: 0px auto; border: 1px solid white;  
+    height: 19px;
+    width: 2px;
+    background: black;
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
+.vDashLine {
+    margin: 0px auto; border: 1px solid white;  
+    border-left: 2px solid black;
+    border-left-style: dashed;
+    height: 19px;
+    width: 0px;
+    margin-top: 15px;
+}
+
+.forGetterSetter {
+    color: purple; position: absolute; width: 130px; height: 10px; text-align: left;
+}
