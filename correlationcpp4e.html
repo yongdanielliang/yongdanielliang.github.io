@@ -1,0 +1,470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head profile="http://gmpg.org/xfn/11">
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>Introduction to Java Programming, Ninth Edition</title>
+<meta content="WordPress 3.0.1" name="generator" />
+<!-- leave this for stats -->
+<link href="style.css" rel="stylesheet" type="text/css" />
+<link href="intro6e.css" rel="stylesheet" type="text/css" />
+<meta content="WordPress 3.0.1" name="generator" />
+</head>
+
+<body>
+<div id="maincontentstyle" style="color: #edc100; padding-left: 1em">
+<div style="margin: 60px; color: black; margin-bottom: 10px; margin-top: 10px;">
+<div style="font-size: 125%; text-align: center; font-weight: bold;">
+
+Introduction to C++ Programming and Data Structures Fourth Edition
+
+</div>
+	<p>Introduction to C++ Programming and Data Structures Fourth Edition by Y. Daniel Liang is an interactive ebook, 
+	called Revel for Liang C++, which is the fourth edition improved upon the third edition. 
+	The Revel book has the built-in interactives for CodeAnimation, 
+	LiveExample, and AlgorithmAnimation. Instructors can assign auto-graded small 
+	exercises and projects. </p>
+	
+	<p style="font-weight: bold">How to Access Revel?</p>
+<p>The Revel version can be accessed from <a href="https://revel.pearson.com">revel.pearson.com</a>. Use your Pearson username to login. If you don't have a Pearson account,
+request it from your Pearson Representative. </p>
+
+
+	<p style="font-weight: bold">Key New Features: </p>
+	<ol>
+	<li>
+Since C++11 compilers are widely available now, this edition incorporates the following C++11 features to develop better programs throughout the book.
+</li><li>
+The long long int and unsigned long long types for declaring a signed and unsigned long integer of 64 bits are covered in Chapter 2.
+
+</li><li>Chapter 7 introduces traversing array elements using a foreach loop. The foreach loop can also be used to traverse elements in a container such as vector, list, and set. Chapter 7 also introduces converting numbers to strings using the to_string function.
+
+</li><li>Chapter 10 introduces member initializers for initializing data fields in an object.
+
+</li><li>The string class's back() and front() functions are introduced in Chapter 10.
+
+</li><li>You can use the nullptr keyword to represent a null pointer in Chapter 11, which is better than using NULL or 0.
+
+</li><li>Chapter 12 introduces vector initializers to simplify coding for initializing vectors. The smart pointer class unique_ptr is also introduced in this chapter for performing automatic object destruction.
+
+</li><li>Chapter 13 shows that you can pass a file name as a string or C-String, whichever is convenient.
+
+</li><li>Chapter 15 introduces to use the override keyword to prevent errors for overriding functions, and the final keyword to prevent a virtual function from being further overridden.
+
+</li><li>Chapter 22 introduces the auto keyword for type inference. This is useful to simplify coding for variables of complex data types that can be automatically discovered by the compiler in the context. The auto keyword should only be used for complex types, not simple types for improving the readability of the code. We introduce this new feature later in the book to avoid misusing or abusing it.
+
+</li><li>Chapter 23 introduces lambda functions and new STL algorithms.
+
+</li><li>Appendix H discusses regular expressions.</li>
+	</ol>
+	<p>
+	The following table shows the correlation of the changes to the previous edition.
+	</p>
+</div>
+
+				<center>
+				<div id="boxstyle" ;="" style="width: 95%; text-align: left; border-color: #edc100;">
+					<h3 id="h3style">Correlation to the Previous Edition</h3>
+					<table align="center" border="2" style="color: black" width="98%">
+						<tr>
+							<th align="center" width="23%">This Book (4E)</th>
+							<th align="center" width="61%">What&#39;s New</th>
+							<th align="center" width="14%">Previous Book (3E)</th>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Global Changes</td>
+							<td>
+							<p>The following new C++11 features are covered in this 
+							edition:</p>
+							<ul>
+								<li>The long long int and unsigned long long types 
+								for declaring a signed and unsigned long integer 
+								of 64 bits are covered Chapter 2.</li>
+								<li>Chapter 7 introduces traversing array elements 
+								using a foreach loop. The foreach loop can also be used 
+								to traverse elements in a container such as vector, 
+								list, and set. Chapter 7 also introduces converting 
+								numbers to strings using the to_string function.</li>
+								<li>Chapter 9 introduces member initializers for 
+								initializing data fields in an object.</li>
+								<li>The string class's back() and front() functions 
+								are introduced in Chapter 10.</li>
+								<li>You can use the nullptr keyword to represent 
+								a null pointer in Chapter 11, which is better than 
+								using NULL or 0.</li>
+								<li>Chapter 12 introduces vector initializers to 
+								simplify coding for initializing vectors. Smart 
+								pointer class unique_ptr is also introduced in this 
+								chapter for performing automatic object destruction.</li>
+								<li>Chapter 13 shows that you can pass a file name 
+								as a string or C-String whichever is convenient.</li>
+								<li>Chapter 15 introduces to use the override keyword 
+								to prevent errors for overriding functions and the 
+								final keyword to prevent a virtual function from 
+								being further overridden.</li>
+								<li>Chapter 22 introduces the auto keyword for type 
+								inference. This is useful to simplify coding for 
+								variables of complex data types that can be automatically 
+								discovered by the compiler thorugh the context. 
+								The auto keyword should only be used for complex 
+								types, not simple types for improving the readability 
+								of the code. We introduce this new feature later 
+								in the book to avoid misusing or abusing it.</li>
+								<li>Chapter 23 introduces lambda functions and new 
+								STL algorithms.</li>
+								<li>Appendix H discusses regular expressions.</li>
+							</ul>
+							<p>Additional new features:</p>
+							<ul>
+								<li>This edition provides many new examples and 
+								exercises to motivate and stimulate student interest 
+								in programming. (This is the hallmark for every 
+								new edition of the Liang book.) </li>
+								<li>A new Chapter 24 on implementing hashing.</li>
+								<li>A tutorial of Visual C++ 2015 is provided in 
+								the supplement.</li>
+								<li>Extra exercises for instructors.</li>
+								<li>New checkpoint questions.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 1 Introduction 
+							to Computers, Programs, and Java</td>
+							<td>
+							<ul>
+								<li>The introduction to computers and programming 
+								languages has been updated.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 1</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 2 Elementary 
+							Programming</td>
+							<td>
+							<ul>
+								<li>Cover C++11 long long int and unsigned long 
+								long ints</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 2</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 3 Selections</td>
+							<td>
+							<ul>
+								<li>Add a new section on Common Errors and Pitfalls</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 3</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 4 Mathematical 
+							Functions, Characters, and Strings</td>
+							<td>
+							<ul>
+								<li>A new syntax for breaking a long string literal 
+								into multiple lines is introduced.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 4</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 5 Loops</td>
+							<td>
+							<ul>
+							<li>The long section 5.2 is split into new Sections 5.2, 5.3, 5.4, and 5.5.</li>
+
+								<li>Move the case study on approximating pi to supplement 
+								on the companion Website.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 5</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 6 Functions</td>
+							<td>
+							<ul>
+								<li>Revise several diagrams.</li>
+								<li>New examples using strings.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapters 6</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 7 Single-Dimensional 
+							Arrays and C-Strings</td>
+							<td>
+							<ul>
+								<li>Move AnalyzseNumbers example from Section 7.1 
+								to Section 7.3 and move the Lotto example from Section 
+								7.3 to the supplement.</li>
+								<li>Use foreach loop to traverse elements in an 
+								array.</li>
+								<li>To convert numbers to a string using the to_string 
+								function.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 7</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 8 Multidimensional 
+							Arrays</td>
+							<td>
+							<ul>
+								<li>New problem-driven introduction.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 8</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 9 Objects and 
+							Classes</td>
+							<td>
+							<ul>
+								<li>Initialize data fields in the class declaration.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 9 </td>
+						</tr>
+						<tr>
+							<td height="140" style="padding-left: 0.5em">Chapter 
+							10 Object-Oriented Thinking</td>
+							<td height="140">
+							<ul>
+								<li>New section on discovering class relationships.</li>
+								<li>New string functions back() and front().</li>
+								<li>New programming exercise 10.18.</li>
+							</ul>
+							</td>
+							<td height="140" style="padding-left: 0.5em">Chapter 
+							10</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 11 Pointers 
+							and Dynamic Memory Management</td>
+							<td>
+							<ul>
+								<li>Revise the code in Section 11.15.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 11</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 12 Templates, 
+							Vectors, Stacks, and Smart Pointers</td>
+							<td>
+							<ul>
+								<li>The vector's insert and erase functions are 
+								introduced.</li>
+								<li>Use the functions min_element, max_element, 
+								sort, random_shuffle for vectors.</li>
+								<li>Initialize vector using C+11 vector initializers.</li>
+								<li>Use smar pointer uniqeu_ptr for automatical 
+								memory destruction.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 12</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 13 File Input 
+							and Output</td>
+							<td>
+							<ul>
+								<li>Simplify coding using C++11 string argument 
+								for filename.</li>
+								<li>Add new examples to demonstrate reinterprete 
+								cast.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 13</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 14 Operator 
+							Overloading</td>
+							<td>
+							<ul>
+								<li>Simplify coding using C++11 features.</li>
+								<li>Revise Section 14.13.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 14</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 15 Inheritance 
+							and Polymorphism</td>
+							<td>
+							<ul>
+								<li>Override virtual functions using the override 
+								keyword.</li>
+								<li>Use the final keyword to prevent further overriding.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 15</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 16 Exception 
+							Handling</td>
+							<td>
+							<ul>
+								<li>Revised Section 16.2.</li>
+								<li>New section on multiple catches.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 16</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 17 Recursion</td>
+							<td>
+							<ul>
+								<li>Use string to replace C-Strings in the examples.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Chapter 17</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 18 Developing 
+							Efficient Programs </td>
+							<td>
+							<ul>
+								<li>Introduce common algorithm development techniques 
+								using dynamic programming, divide-and-conquer, and 
+								backtracking.</li>
+								<li>New example on backtracking algorithms.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 18</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 19 Sorting</td>
+							<td>
+							<ul>
+								<li>Insertion sort is moved from Chapter 6 here.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 19 </td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">20 Linked 
+							Lists, Stacks, and Queues</td>
+							<td>
+							<ul>
+								<li>The use of NULL is replaced by nullptr. </li>
+								<li>Expand the coverage on iterators for LinkedList 
+								iterator.</li>
+								<li>Use foreach loop for LinkedList.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 20</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em; height: 51px;">Chapter 21 Binary 
+							Search Trees</td>
+							<td style="height: 51px">
+							<ul>
+								<li>The use of NULL is replaced by nullptr. </li>
+								<li>Consistently use the const reference parameters 
+								and constant member functions.</li>
+								<li>New exercises 21.8-21.11.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em; height: 51px;">Bonus Chapter 21</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 22 STL 
+							Containers</td>
+							<td>
+							<ul>
+									<li>C++11 auto type inference</li>
+									<li>Two new programming exercises.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 22</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 23 STL 
+							Algorithms</td>
+							<td>
+							<ul>
+								<li>Passing functions as parameters.</li>
+								<li>C++11 lambda functions.</li>
+								<li>C++11 new STL algorithms.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 23</td>
+						</tr>
+						
+<tr>
+							<td style="padding-left: 0.5em">Chapter 24 Hashing</td>
+							<td>
+							<ul>
+								<li>Brand new</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">&nbsp;</td>
+						</tr>
+
+
+						<tr>
+							<td style="padding-left: 0.5em">&nbsp;Chapter 25 AVL 
+							Trees </td>
+							<td>
+							<ul>
+								<li>Consistently use the const reference parameters 
+								and constant member functions.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Bonus Chapter 26</td>
+						</tr>
+
+						
+						<tr>
+							<td style="padding-left: 0.5em">&nbsp;Chapter 26 Graph 
+							Applications</td>
+							<td>
+							<ul>
+								<li>Consistently use the const reference parameters 
+								and constant member functions.</li>
+								<li>Use adjacency edge lists to store edges Instead 
+								of using the adjacency vertex lists. This provides 
+								great flexibility in designing resusable code. The 
+								weighted edges in the next chapter can be stored 
+								using the same adjacency lists.</li>
+								<li>The new methods for adding vertices and adding 
+								edges.</li>
+								<li>New exercises 26.8–26.14.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 24</td>
+						</tr>
+						<tr>
+							<td style="padding-left: 0.5em">Chapter 27 Weighted 
+							Graph Applications</td>
+							<td>
+							<ul>
+								<li>Consistently use the const reference parameters 
+								and constant member functions.</li>
+								<li>Use adjacency edge list to store edges rather 
+								than using priority queues to simplify implementations 
+								of the MST and SP algorithms.</li>
+								<li>A simple O(|V|<sup>2</sup>) implementation for 
+								MST is provided. The O(|E|log|V|) implementation 
+								using the priority-queues is now an exercise.
+								</li>
+								<li>A simple O(|V|<sup>2</sup>) implementation for 
+								SP is provided. The O(|E|log|V|) implementation 
+								using the priority-queues is now an exercise.
+								</li>
+								<li>New exercises 27.9–27.13.</li>
+							</ul>
+							</td>
+							<td style="padding-left: 0.5em">Bonus Chapter 25</td>
+						</tr>
+					</table>
+				</div>
+				</center></div>
+</body>
+
+</html>
