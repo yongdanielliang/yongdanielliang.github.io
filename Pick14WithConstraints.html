@@ -1,0 +1,1026 @@
+﻿<!--Pick 11 from 14 with fixed columns, 2018_074-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Y. Daniel Liang</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="boxes.css" />
+        <script type="text/javascript" src="GetElementPosition.js"></script>
+        <link rel="stylesheet" type="text/css" href="codecolor.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #highlight {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            #explanation1 {
+                background-color:lightcoral;
+                opacity: 1.0;
+                color: black;
+                weight: bold;
+                position:absolute;
+                width:315px;
+                height: 35px;
+                /*          padding: 3px;
+                          margin-top:0px;*/
+                top: 79px;
+                left: 62px;
+            }
+
+            .cell {
+                position:absolute;
+                width:40px;
+                height: 40px;
+                left:20px;
+                top:40px;
+                border-width: 2px;
+                border: 1px black solid;
+                background-color: white;
+                text-align: center;
+                display:inline;
+            }
+
+            .cell1 {
+                display:inline;
+            }
+
+            div.inline {
+                float:left;
+            }
+            .clearBoth {
+                clear:both;
+            }
+
+            .button {
+                margin-bottom: 0px;
+                margin-top: 0px;
+                background-color: green;
+                color:white;
+                /*    width: 70px;
+                    height: 30px;*/
+                display:inline;
+                color:#fff;
+                font-size: 14px;
+                background: #6193CB;
+                border: none;
+            }
+
+        </style>
+
+        <script>
+            function init() {
+            }
+
+            function reset() {
+                low = 0;
+                high = SIZE - 1;
+                i = 0;
+                document.getElementById('highlight').style.visibility = 'hidden';
+                document.getElementById('lowPosition').style.visibility = 'hidden';
+                document.getElementById('lowValue').style.visibility = 'hidden';
+                document.getElementById('midPosition').style.visibility = 'hidden';
+                document.getElementById('midValue').style.visibility = 'hidden';
+                document.getElementById('highPosition').style.visibility = 'hidden';
+                document.getElementById('highValue').style.visibility = 'hidden';
+                setRandomValue();
+                resetColor();
+                document.getElementById('remark').innerHTML = 'A new random list is created';
+                document.getElementById('value').disabled = false;
+                for (var j = 0; j < SIZE; j++) {
+                    id = 'check' + j;
+                    document.getElementById(id).innerHTML = "";
+                }
+            }
+
+            function step() {
+                document.getElementById('lowPosition').style.visibility = 'visible';
+                document.getElementById('lowValue').style.visibility = 'visible';
+                document.getElementById('highPosition').style.visibility = 'visible';
+                document.getElementById('highValue').style.visibility = 'visible';
+
+                if (low == SIZE) {
+                    var idLow = 'list' + (SIZE - 1);
+                    posLow = getElementPos(document.getElementById(idLow));
+                    posLow.x += posLow.w;
+                } else {
+                    var idLow = 'list' + low;
+                    posLow = getElementPos(document.getElementById(idLow));
+                }
+
+                document.getElementById('lowPosition').style.top
+                        = posLow.y - 30 + "px";
+                document.getElementById('lowPosition').style.left
+                        = posLow.x + posLow.w / 2 - 5 + "px";
+                document.getElementById('lowValue').style.top
+                        = posLow.y - 43 + "px";
+                document.getElementById('lowValue').style.left
+                        = posLow.x + posLow.w / 2 - 18 + "px";
+                document.getElementById('lowValue').innerHTML = "low: " + low;
+
+                if (high < 0) {
+                    var idHigh = 'list' + 0;
+                    posHigh = getElementPos(document.getElementById(idHigh));
+                    posHigh.x -= posHigh.w;
+                } else {
+                    var idHigh = 'list' + high;
+                    posHigh = getElementPos(document.getElementById(idHigh));
+                }
+
+                if (high != low) {
+                    document.getElementById('highPosition').style.top
+                            = posHigh.y - 48 + "px";
+                    document.getElementById('highPosition').style.left
+                            = posHigh.x + posHigh.w / 2 - 5 + "px";
+                } else {
+                    document.getElementById('highPosition').style.visibility = 'hidden';
+                }
+
+                document.getElementById('highValue').style.top
+                        = posHigh.y - 63 + "px";
+                document.getElementById('highValue').style.left
+                        = posHigh.x + posHigh.w / 2 - 18 + "px";
+                document.getElementById('highValue').innerHTML = "high: " + high;
+
+
+                if (high < low) {
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML =
+                            'No match and the search is exhausted.';
+                    jAlert("No match. Search is finished. The method will return " + (-1 - low) + ".");
+
+                    return;
+                }
+
+                document.getElementById('midPosition').style.visibility = 'visible';
+                document.getElementById('midValue').style.visibility = 'visible';
+
+                mid = Math.floor((low + high) / 2);
+
+                document.getElementById('value').disabled = true;
+                var key = document.getElementById('value').value;
+                i = mid;
+                var id = 'list' + i;
+                posLoc = getElementPos(document.getElementById(id));
+
+                if (mid == low || mid == high) {
+                    document.getElementById('midPosition').style.visibility = 'hidden';
+                } else {
+                    document.getElementById('midPosition').style.top
+                            = posLoc.y - 40 + "px";
+                    document.getElementById('midPosition').style.left
+                            = posLoc.x + posLoc.w / 2 - 5 + "px";
+                }
+
+                document.getElementById('midValue').style.top
+                        = posLoc.y - 53 + "px";
+                document.getElementById('midValue').style.left
+                        = posLoc.x + posLoc.w / 2 - 18 + "px";
+                document.getElementById('midValue').innerHTML = "mid: " + i;
+
+                document.getElementById('highlight').style.top =
+                        posLoc.y + posLoc.h + 30 + "px";
+                document.getElementById('highlight').style.left =
+                        posLoc.x + "px";
+                document.getElementById('highlight').style.width =
+                        posLoc.w + "px";
+                document.getElementById('highlight').style.height =
+                        posLoc.h + 10 + "px";
+                document.getElementById('highlight').innerHTML = key;
+                document.getElementById('highlight').style.visibility = 'visible';
+                resetColor();
+                document.getElementById(id).style.backgroundColor =
+                        "lightCoral";
+                document.getElementById(id).style.color = "black";
+                if (key == document.getElementById(id).innerHTML) {
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2713;";
+                    document.getElementById('remark').innerHTML =
+                            'A key is found';
+                    jAlert("A key is found with the index " + i);
+                    return;
+                } else if (key < listValues[mid]) {
+                    high = mid - 1;
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML = 'Since ' +
+                            key + ' is less than ' + document.getElementById(id).innerHTML + ', ' +
+                            'continue to search left.';
+                } else {
+                    low = mid + 1;
+                    var id1 = 'check' + i;
+                    document.getElementById(id1).innerHTML = "&#x2717;";
+                    document.getElementById('remark').innerHTML = 'Since ' +
+                            key + ' is greater than ' + document.getElementById(id).innerHTML + ', ' +
+                            'continue to search right.';
+                }
+            }
+
+            function result() {
+                for (var i = 0; i < 14; i++) {
+                    checkboxWin[i] = document.getElementById("checkboxWin" + i).checked;
+                    checkboxDraw[i] = document.getElementById("checkboxDraw" + i).checked;
+                    checkboxLose[i] = document.getElementById("checkboxLose" + i).checked;
+                }
+
+                numberOfFixed = 0;
+                for (var i = 0; i < 14; i++)
+                    if (checkboxWin[i])
+                        numberOfFixed++;
+                if (checkboxDraw[i])
+                    numberOfFixed++;
+                if (checkboxLose[i])
+                    numberOfFixed++;
+
+                document.getElementById('result').innerHTML = getResult();
+            }
+
+//            win = ["3", "", "3", "", "", "3", "3", "", "3", "3", "", "", "", ""]; // new String[14];
+//            draw = ["", "1", "", "1", "1", "", "", "", "", "", "1", "1", "", ""]; //new String[14];
+//            lose = ["", "", "", "", "", "", "", "0", "", "", "", "", "0", "0"]; //new String[14];
+
+            checkboxWin = [true, false, true, false, false, true, false, true, false, false, true, false, true, false]; // new String[14];
+            checkboxDraw = [false, false, true, false, false, true, false, false, false, false, false, false, true, false]; // new String[14];
+            checkboxLose = [true, false, true, true, false, false, false, false, true, false, false, false, false, false]; // new String[14];
+            checkboxValue = [true, false, false, true, true, false, false, false, true, true, false, false, false, true]; // new String[14];
+            win = ["3", "3", "3", " ", "3", "3", "3", "3", " ", "3", "3", "3", "3", " "]; // new String[14];
+            draw = ["", "1", "1", " ", "1", "1", " ", " ", " ", "1", "", "", "1", "1"]; //new String[14];
+            lose = ["0", " ", "0", "0", "0", " ", "0", " ", "0", "0", " ", "0", " ", "0"]; //new String[14];
+            threeLow = 1, threeUp = 3;
+            oneLow = 1, oneUp = 3;
+            zeroLow = 1, zeroUp = 3;
+            limit3 = 14, limit1 = 14, limit0 = 14;
+
+            function display(m) {
+                s = "<p><table border style = 'border: 1px solid;'>";
+                s += "<p><tr>";
+                for (var i = 1; i <= 9; i++) {
+                    s += "<p><th style = 'width: 50px;'>0" + i + "</th>";
+                }
+                for (var i = 10; i <= 14; i++) {
+                    s += "<p><th style = 'width: 50px;'>" + i + "</th>";
+                }
+                s += "<p></tr>";
+                s += "<p><tr>";
+                for (var i = 0; i <= 13; i++) {
+                    s += "<p style = 'text-align:center;'><th style = 'width: 50px;'>"
+                            + "<div style = 'text-align:center;'><input value= '" + (m[i] == 2 ? 3 : m[i]) + "' "
+                            + "size = '3' align= 'right'  name = 'win'"
+                            + i + "/></div></th>";
+                }
+                s += "<p></tr>";
+                s += "<p></table>";
+                return s;
+            }
+
+            count = 1;
+            function display1(m) {
+                s = "&#160;";
+                for (var i = 0; i <= 13; i++) {
+                    s += (m[i] == 2 ? 3 : m[i]) + "&#160;&#160;";
+                }
+
+                if (count++ % 2 == 0)
+                    s += "<br>";
+                else
+                    s += "&#160;&#160;";
+                ;
+
+                return s;
+            }
+
+            function display2(m) {
+                s = "-----------------------------------------</br>";
+                for (var i = 0; i < m.length; i++) {
+                    for (var j = 0; j < m[i].length; j++)
+                        s += m[i][j] + (m[i][j] === "" ? "&#160;&#160;&#160;" : "&#160;&#160;");
+                    s += "</br>";
+                }
+                return s;
+            }
+
+            function display3(m) {
+                s = ""; // -----------------------------------------</br>";
+                for (var i = 0; i < m.length; i++) {
+                        s += m[i];
+                    s += "</br>";
+                }
+                return s;
+            }
+
+
+            function input() {
+                document.writeln("<p>输入</p>");
+
+                // Set hidden values
+
+                document.writeln("<p><table border style = 'border: 1px solid;'>");
+                document.writeln("<p><tr>");
+                for (var i = 1; i <= 9; i++) {
+                    document.writeln("<p><th style = 'width: 50px;'>0" + i + "</th>");
+                }
+                for (var i = 10; i <= 14; i++) {
+                    document.writeln("<p><th style = 'width: 50px;'>" + i + "</th>");
+                }
+                document.writeln("<p></tr>");
+
+                document.writeln("<p><tr>");
+                for (var i = 0; i <= 13; i++) {
+                    document.writeln("<th style = 'width: 50px;'>"
+                            + "<input value= '" + win[i] + "' "
+                            + "size = '1' style = 'width: 15px; " 
+                    + (checkboxWin[i] ? "'" : "color: red' " )
+            + "' align= 'left' id = '" 
+            + "win" + i + "'"
+                            + "/>"
+                            + "<input type = 'checkbox' "
+                            + (checkboxWin[i] ? " checked " : "")
+                    
+                            + "size = '1' align= 'left' id = '" + "checkboxWin" + i + "'"
+                            + "/></th>");
+                }
+                document.writeln("<p></tr>");
+                document.writeln("<p><tr>");
+                for (var i = 0; i <= 13; i++) {
+                    document.writeln("<th style = 'width: 50px;'>"
+                            + "<input value= '" + draw[i] + "' "
+                            + "size = '1' style = 'width: 15px; " + (checkboxDraw[i] ? "'" : "color: red' " )
+                    + " align= 'left' id = '" + "draw" + i + "'"
+                            + "/>"
+                            + "<input type = 'checkbox' "
+                            + (checkboxDraw[i] ? " checked " : "")
+                            + "size = '1' align= 'left' id = '" + "checkboxDraw" + i + "'"
+                            + "/></th>");
+                }
+                document.writeln("<p></tr>");
+
+                // Set fixed columns
+                document.writeln("<p><tr>");
+                for (var i = 0; i <= 13; i++) {
+                    document.writeln("<th style = 'width: 50px;'>"
+                            + "<input value= '" + lose[i] + "' "
+                            + "size = '1' style = 'width: 15px; " 
+                            + (checkboxLose[i] ? "" : "color: red " ) + "' align= 'left' id = '" + "lose" + i + "'"
+                            + "/>"
+                            + "<input type = 'checkbox' "
+                            + (checkboxLose[i] ? " checked " : "")
+                            + "size = '1' align= 'left' id = '" + "checkboxLose" + i + "'"
+                            + "/></th>");
+                }
+                document.writeln("<p></tr>");
+
+                document.writeln("<p></table>");
+
+                document.writeln("<p>过滤要求</p>");
+                document.writeln("<p>\"3\" 在 <input value= '" + threeLow + "' size = '2' align= 'center' "
+                        + "id = 'threeLow'/>" + "到" + "<input value= '" + threeUp + "' size = '2' align= 'center' "
+                        + "id = 'threeUp'/>之间");
+                document.writeln("<p>\"1\" 在 <input value= '" + oneLow + "' size = '2' align= 'center' "
+                        + "id = 'oneLow'/>" + "到" + "<input value= '" + oneUp + "' size = '2' align= 'center' "
+                        + "id = 'oneUp'/>之间");
+                document.writeln("<p>\"0\" 在 <input value= '" + zeroLow + "' size = '2' align= 'center' "
+                        + "id = 'zeroLow'/>" + "到" + "<input value= '" + zeroUp + "' size = '2' align= 'center' "
+                        + "id = 'zeroUp'/>之间");
+
+                document.writeln("<p> <button type=\"button\" class=\"button\" onclick=\"result()\">显示结果</button>");
+            }
+
+            function obtainWinDrawLose() {
+                for (var i = 0; i < win.length; i++) {
+                    win[i] = document.getElementById('win' + i).value;
+                    draw[i] = document.getElementById('draw' + i).value;
+                    lose[i] = document.getElementById('lose' + i).value;
+                }
+
+                threeLow = parseInt(document.getElementById('threeLow').value);
+                threeUp = parseInt(document.getElementById('threeUp').value);
+                oneLow = parseInt(document.getElementById('oneLow').value);
+                oneUp = parseInt(document.getElementById('oneUp').value);
+                zeroLow = parseInt(document.getElementById('zeroLow').value);
+                zeroUp = parseInt(document.getElementById('zeroUp').value);
+//                limit3 = parseInt(document.getElementById('limit3').value);
+//                limit1 = parseInt(document.getElementById('limit1').value);
+//                limit0 = parseInt(document.getElementById('limit0').value);
+            }
+
+            set = [];
+            function createSet(win, draw, lose) {
+                set = [];
+                for (var i = 0; i < win.length; i++) {
+                    set.push(new Array());
+                    if (win[i].trim().length > 0) {
+                        set[i].push(2);
+                    }
+                    if (draw[i].trim().length > 0) {
+                        set[i].push(1);
+                    }
+                    if (lose[i].trim().length > 0) {
+                        set[i].push(0);
+                    }
+                }
+            }
+
+            function containsObject(obj, list) {
+                var i;
+                for (i = 0; i < list.length; i++) {
+                    if (list[i] === obj) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function check(m, threeLow, threeUp, oneLow, oneUp, zeroLow, zeroUp,
+                    limit3, limit1, limit0) {
+                // Check set
+                for (var i = 0; i < m.length; i++)
+                    if (!containsObject(m[i], set[i]))
+                        return false;
+
+                // Count "3"
+                var count3 = 0, count1 = 0, count0 = 0;
+                for (var i = 0; i < m.length; i++) {
+                    if (m[i] == 2)
+                        count3++;
+                    if (m[i] == 1)
+                        count1++;
+                    if (m[i] == 0)
+                        count0++;
+                }
+
+                return !isConsecutive(m, limit3, 2) && !isConsecutive(m, limit1, 1) &&
+                        !isConsecutive(m, limit0, 0) &&
+                        threeLow <= count3 && count3 <= threeUp &&
+                        oneLow <= count1 && count1 <= oneUp &&
+                        zeroLow <= count0 && count0 <= zeroUp;
+            }
+
+            function isConsecutive(m, limit, value) {
+                for (var i = 0; i < m.length - limit; i++) {
+                    isConsecutive3 = true;
+                    for (var k = i; k < i + limit; k++)
+                        if (value != m[k]) {
+                            isConsecutive3 = false;
+                            break;
+                        }
+                    if (isConsecutive3)
+                        return true;
+                }
+
+                return false;
+            }
+
+            function getResult() {
+                input = [];    // input array
+                input2 = [];
+
+                flexibleWin = [];
+                fixedWin = [];
+                flexibleDraw = [];
+                fixedDraw = [];
+                flexibleLose = [];
+                fixedLose = [];
+                fixed = [];
+                unfixed = [];
+
+                fixedList = [];
+                unfixedList = [];
+                unfixedWin = [];
+                unfixedDraw = [];
+                unfixedLose = [];
+
+                obtainWinDrawLose();
+
+                for (var i = 0; i < win.length; i++) {
+                    win[i] = document.getElementById('win' + i).value;
+                    draw[i] = document.getElementById('draw' + i).value;
+                    lose[i] = document.getElementById('lose' + i).value;
+
+
+                    if (win[i].trim() !== "")
+                        if (checkboxWin[i])
+                            fixed.push(win[i].trim());
+                        else if (win[i].trim() === "3") {
+                            unfixedWin.push(i);
+                            unfixed.push(3);
+                        }
+
+                    if (draw[i].trim() !== "")
+                        if (checkboxDraw[i])
+                            fixed.push(draw[i].trim());
+                        else if (draw[i].trim() === "1") {
+                            unfixedDraw.push(i);
+                            unfixed.push(1);
+                        }
+
+                    if (lose[i].trim() !== "")
+                        if (checkboxLose[i])
+                            fixed.push(lose[i].trim());
+                        else if (lose[i].trim() === "0") {
+                            unfixedLose.push(i);
+                            unfixed.push(0);
+                        }
+
+                    fixedList.push(fixed);
+//                    unfixed.push('E');
+                    unfixedList.push(unfixed);
+                    fixed = [];
+                    unfixed = [];
+                }
+
+                wholeList = [];
+                unfixedColumn = [];
+                j = 0;
+                for (var i = 0; i < fixedList.length; i++)
+                    if (fixedList[i].length > 0)
+                        wholeList.push(fixedList[i]);
+                    else {
+                        wholeList.push(unfixedList[i]);
+                        unfixedColumn.push(i);
+                    }
+
+
+
+                m = [];
+                size = 1;
+                for (var i = 0; i < wholeList.length; i++) 
+                    size *= wholeList[i].length;
+
+
+                
+                numberOf3 = 0;
+                numberOf1 = 0;
+                numberOf0 = 0;
+                
+                for (var i = 0; i < wholeList[0].length; i++) {
+                    if (unfixedColumn.includes(0)) {
+                        if (wholeList[0][i] == 3) numberOf3 = numberOf3 + 1;
+                        if (wholeList[0][i] == 1) numberOf1 = numberOf1 + 1;
+                        if (wholeList[0][i] == 0) numberOf0 = numberOf0 + 1;
+                        s1 = "&#160;" + "<span style = 'color:red'>" + wholeList[0][i] + "</span>";
+                    }
+                    else
+                        s1 = "&#160;" + wholeList[0][i];
+                    
+                    for (var i1 = 0; i1 < wholeList[1].length; i1++) {
+                        if (unfixedColumn.includes(1)) {
+                            if (wholeList[1][i1] == 3) numberOf3 = numberOf3 + 1;
+                            if (wholeList[1][i1] == 1) numberOf1 = numberOf1 + 1;
+                            if (wholeList[1][i1] == 0) numberOf0 = numberOf0 + 1;
+                            s2 = s1 + "&#160;&#160;" + "<span style = 'color:red'>" + wholeList[1][i1] + "</span>";
+                        }
+                        else
+                            s2 = s1 + "&#160;&#160;" + wholeList[1][i1];
+                        
+                        for (var i2 = 0; i2 < wholeList[2].length; i2++) {
+                            if (unfixedColumn.includes(2)) {
+                                if (wholeList[2][i2] == 3) numberOf3 = numberOf3 + 1;
+                                if (wholeList[2][i2] == 1) numberOf1 = numberOf1 + 1;
+                                if (wholeList[2][i2] == 0) numberOf0 = numberOf0 + 1;
+                                s3 = s2 + "&#160; " + "<span style = 'color:red'>" + wholeList[2][i2] + "</span>";
+                            }
+                            else
+                                s3 = s2 + "&#160; " + wholeList[2][i2];
+                            
+                            for (var i3 = 0; i3 < wholeList[3].length; i3++) {
+                                if (unfixedColumn.includes(3)) {
+                                    if (wholeList[3][i3] == 3) numberOf3 = numberOf3 + 1;
+                                    if (wholeList[3][i3] == 1) numberOf1 = numberOf1 + 1;
+                                    if (wholeList[3][i3] == 0) numberOf0 = numberOf0 + 1;
+                                    s4 = s3 + "&#160; " + "<span style = 'color:red'>" + wholeList[3][i3] + "</span>";
+                                }
+                                else
+                                    s4 = s3 + "&#160; " + wholeList[3][i3];
+                                
+                                for (var i4 = 0; i4 < wholeList[4].length; i4++) {
+                                    if (unfixedColumn.includes(4)) {
+                                        if (wholeList[4][i4] == 3) numberOf3 = numberOf3 + 1;
+                                        if (wholeList[4][i4] == 1) numberOf1 = numberOf1 + 1;
+                                        if (wholeList[4][i4] == 0) numberOf0 = numberOf0 + 1;
+                                        s5 = s4 + "&#160; " + "<span style = 'color:red'>" + wholeList[4][i4] + "</span>";
+                                    }
+                                    else
+                                        s5 = s4 + "&#160; " + wholeList[4][i4];
+                                    
+                                    for (var i5 = 0; i5 < wholeList[5].length; i5++) {
+                                        if (unfixedColumn.includes(5)) {
+                                            if (wholeList[5][i5] == 3) numberOf3 = numberOf3 + 1;
+                                            if (wholeList[5][i5] == 1) numberOf1 = numberOf1 + 1;
+                                            if (wholeList[5][i5] == 0) numberOf0 = numberOf0 + 1;
+                                            s6 = s5 + "&#160; " + "<span style = 'color:red'>" + wholeList[5][i5] + "</span>";
+                                        }
+                                        else
+                                            s6 = s5 + "&#160; " + wholeList[5][i5];
+                                        
+                                        for (var i6 = 0; i6 < wholeList[6].length; i6++) {
+                                            if (unfixedColumn.includes(6)) {
+                                                if (wholeList[6][i6] == 3) numberOf3 = numberOf3 + 1;
+                                                if (wholeList[6][i6] == 1) numberOf1 = numberOf1 + 1;
+                                                if (wholeList[6][i6] == 0) numberOf0 = numberOf0 + 1;
+                                                s7 = s6 + "&#160; " + "<span style = 'color:red'>" + wholeList[6][i6] + "</span>";
+                                            }
+                                            else
+                                                s7 = s6 + "&#160; " + wholeList[6][i6];
+                                            
+                                            for (var i7 = 0; i7 < wholeList[7].length; i7++) {
+                                                if (unfixedColumn.includes(7)) {
+                                                    if (wholeList[7][i7] == 3) numberOf3 = numberOf3 + 1;
+                                                    if (wholeList[7][i7] == 1) numberOf1 = numberOf1 + 1;
+                                                    if (wholeList[7][i7] == 0) numberOf0 = numberOf0 + 1;
+                                                    s8 = s7 + "&#160; " + "<span style = 'color:red'>" + wholeList[7][i7] + "</span>";
+                                                }
+                                                else
+                                                    s8 = s7 + "&#160; " + wholeList[7][i7];
+                                                
+                                                for (var i8 = 0; i8 < wholeList[8].length; i8++) {
+                                                    if (unfixedColumn.includes(8)) {
+                                                        if (wholeList[8][i8] == 3) numberOf3 = numberOf3 + 1;
+                                                        if (wholeList[8][i8] == 1) numberOf1 = numberOf1 + 1;
+                                                        if (wholeList[8][i8] == 0) numberOf0 = numberOf0 + 1;
+                                                        s9 = s8 + "&#160; " + "<span style = 'color:red'>" + wholeList[8][i8] + "</span>";
+                                                    }
+                                                    else
+                                                        s9 = s8 + "&#160; " + wholeList[8][i8];
+                                                    
+                                                    for (var i9 = 0; i9 < wholeList[9].length; i9++) {
+                                                        if (unfixedColumn.includes(9)) {
+                                                            if (wholeList[9][i9] == 3) numberOf3 = numberOf3 + 1;
+                                                            if (wholeList[9][i9] == 1) numberOf1 = numberOf1 + 1;
+                                                            if (wholeList[9][i9] == 0) numberOf0 = numberOf0 + 1;
+                                                            s10 = s9 + "&#160; " + "<span style = 'color:red'>" + wholeList[9][i9] + "</span>";
+                                                        }
+                                                        else
+                                                            s10 = s9 + "&#160; " + wholeList[9][i9];
+                                                        
+                                                        for (var i10 = 0; i10 < wholeList[10].length; i10++) {
+                                                            if (unfixedColumn.includes(10)) {
+                                                                if (wholeList[10][i10] == 3) numberOf3 = numberOf3 + 1;
+                                                                if (wholeList[10][i10] == 1) numberOf1 = numberOf1 + 1;
+                                                                if (wholeList[10][i10] == 0) numberOf0 = numberOf0 + 1;
+                                                                s11 = s10 + "&#160; " + "<span style = 'color:red'>" + wholeList[10][i10] + "</span>";
+                                                            }
+                                                            else
+                                                                s11 = s10 + "&#160; " + wholeList[10][i10];
+                                                            
+                                                            for (var i11 = 0; i11 < wholeList[11].length; i11++) {
+                                                                if (unfixedColumn.includes(11)) {
+                                                                    if (wholeList[11][i11] == 3) numberOf3 = numberOf3 + 1;
+                                                                    if (wholeList[11][i11] == 1) numberOf1 = numberOf1 + 1;
+                                                                    if (wholeList[11][i11] == 0) numberOf0 = numberOf0 + 1;
+                                                                    s12 = s11 + "&#160; " + "<span style = 'color:red'>" + wholeList[11][i11] + "</span>";
+                                                                }
+                                                                else
+                                                                    s12 = s11 + "&#160; " + wholeList[11][i11];
+                                                                
+                                                                for (var i12 = 0; i12 < wholeList[12].length; i12++) {
+                                                                    if (unfixedColumn.includes(12)) {
+                                                                        if (wholeList[12][i12] == 3) numberOf3 = numberOf3 + 1;
+                                                                        if (wholeList[12][i12] == 1) numberOf1 = numberOf1 + 1;
+                                                                        if (wholeList[12][i12] == 0) numberOf0 = numberOf0 + 1;
+                                                                        s13 = s12 + "&#160; " + "<span style = 'color:red'>" + wholeList[12][i12] + "</span>";
+                                                                    }
+                                                                    else
+                                                                        s13 = s12 + "&#160; " + wholeList[12][i12];
+                                                                    
+                                                                    for (var i13 = 0; i13 < wholeList[13].length; i13++) {
+                                                                        if (unfixedColumn.includes(13)) {
+                                                                            if (wholeList[13][i13] == 3) numberOf3 = numberOf3 + 1;
+                                                                            if (wholeList[13][i13] == 1) numberOf1 = numberOf1 + 1;
+                                                                            if (wholeList[13][i13] == 0) numberOf0 = numberOf0 + 1;
+                                                                            s14 = s13 + "&#160; " + "<span style = 'color:red'>" + wholeList[13][i13] + "</span>";
+                                                                        }
+                                                                        else
+                                                                            s14 = s13 + "&#160; " + wholeList[13][i13];
+//                                                                        alert("threeUp: " + threeUp + "threeLow: " + threeLow + 
+//                                                                              "oneUp: " + oneUp + "oneLow: " + oneLow + 
+//                                                                                "zeroUp: " + zeroUp + "zeroLow: " + zeroLow +
+//                                                                                "s14: " + s14 + " numberOf3: " + numberOf3 + 
+//                                                                                " numberOf1: " + numberOf1 + " numberOf0: " + numberOf0);
+                                                                        
+                                                                        if (numberOf3 <= threeUp && numberOf3 >= threeLow &&
+                                                                                numberOf1 <= oneUp && numberOf1 >= oneLow &&
+                                                                                numberOf0 <= zeroUp && numberOf0 >= zeroLow) {
+                                                                            m.push(s14);
+//                                                                            alert("s14: " + s14 + " numberOf3: " + numberOf3);
+//                                                                            alert(" numberOf1: " + numberOf1 + " numberOf0: " + numberOf0);
+                                                                        }
+
+                                                                        if (unfixedColumn.includes(13)) {
+                                                                            if (wholeList[13][i13] == 3) numberOf3 = numberOf3 - 1;
+                                                                            if (wholeList[13][i13] == 1) numberOf1 = numberOf1 - 1;
+                                                                            if (wholeList[13][i13] == 0) numberOf0 = numberOf0 - 1;
+                                                                        }
+                                                                    }
+
+                                                                    if (unfixedColumn.includes(12)) {
+                                                                        if (wholeList[12][i12] == 3) numberOf3 = numberOf3 - 1;
+                                                                        if (wholeList[12][i12] == 1) numberOf1 = numberOf1 - 1;
+                                                                        if (wholeList[12][i12] == 0) numberOf0 = numberOf0 - 1;
+                                                                    }
+                                                                }
+
+                                                                if (unfixedColumn.includes(11)) {
+                                                                    if (wholeList[11][i11] == 3) numberOf3 = numberOf3 - 1;
+                                                                    if (wholeList[11][i11] == 1) numberOf1 = numberOf1 - 1;
+                                                                    if (wholeList[11][i11] == 0) numberOf0 = numberOf0 - 1;
+                                                                }
+                                                            }
+
+                                                            if (unfixedColumn.includes(10)) {
+                                                                if (wholeList[10][i10] == 3) numberOf3 = numberOf3 - 1;
+                                                                if (wholeList[10][i10] == 1) numberOf1 = numberOf1 - 1;
+                                                                if (wholeList[10][i10] == 0) numberOf0 = numberOf0 - 1;
+                                                            }
+                                                        }
+
+                                                        if (unfixedColumn.includes(9)) {
+                                                            if (wholeList[9][i9] == 3) numberOf3 = numberOf3 - 1;
+                                                            if (wholeList[9][i9] == 1) numberOf1 = numberOf1 - 1;
+                                                            if (wholeList[9][i9] == 0) numberOf0 = numberOf0 - 1;
+                                                        }
+                                                    }
+
+                                                    if (unfixedColumn.includes(8)) {
+                                                        if (wholeList[8][i8] == 3) numberOf3 = numberOf3 - 1;
+                                                        if (wholeList[8][i8] == 1) numberOf1 = numberOf1 - 1;
+                                                        if (wholeList[8][i8] == 0) numberOf0 = numberOf0 - 1;
+                                                    }
+                                                }
+
+                                                if (unfixedColumn.includes(7)) {
+                                                    if (wholeList[7][i7] == 3) numberOf3 = numberOf3 - 1;
+                                                    if (wholeList[7][i7] == 1) numberOf1 = numberOf1 - 1;
+                                                    if (wholeList[7][i7] == 0) numberOf0 = numberOf0 - 1;
+                                                }
+                                            }
+
+                                            if (unfixedColumn.includes(6)) {
+                                                if (wholeList[6][i6] == 3) numberOf3 = numberOf3 - 1;
+                                                if (wholeList[6][i6] == 1) numberOf1 = numberOf1 - 1;
+                                                if (wholeList[6][i6] == 0) numberOf0 = numberOf0 - 1;
+                                            }
+                                        }
+                                        
+                                        if (unfixedColumn.includes(5)) {
+                                            if (wholeList[5][i5] == 3) numberOf3 = numberOf3 - 1;
+                                            if (wholeList[5][i5] == 1) numberOf1 = numberOf1 - 1;
+                                            if (wholeList[5][i5] == 0) numberOf0 = numberOf0 - 1;
+                                        }
+                                    }
+
+                                    if (unfixedColumn.includes(4)) {
+                                        if (wholeList[4][i4] == 3) numberOf3 = numberOf3 - 1;
+                                        if (wholeList[4][i4] == 1) numberOf1 = numberOf1 - 1;
+                                        if (wholeList[4][i4] == 0) numberOf0 = numberOf0 - 1;
+                                    }
+                                }
+
+                                if (unfixedColumn.includes(3)) {
+                                    if (wholeList[3][i3] == 3) numberOf3 = numberOf3 - 1;
+                                    if (wholeList[3][i3] == 1) numberOf1 = numberOf1 - 1;
+                                    if (wholeList[3][i3] == 0) numberOf0 = numberOf0 - 1;
+                                }
+                            }
+
+                            if (unfixedColumn.includes(2)) {
+                                if (wholeList[2][i2] == 3) numberOf3 = numberOf3 - 1;
+                                if (wholeList[2][i2] == 1) numberOf1 = numberOf1 - 1;
+                                if (wholeList[2][i2] == 0) numberOf0 = numberOf0 - 1;
+                            }
+                        }
+                        
+                        if (unfixedColumn.includes(1)) {
+                            if (wholeList[1][i1] == 3) numberOf3 = numberOf3 - 1;
+                            if (wholeList[1][i1] == 1) numberOf1 = numberOf1 - 1;
+                            if (wholeList[1][i1] == 0) numberOf0 = numberOf0 - 1;
+                        }
+                    }
+                    
+                    if (unfixedColumn.includes(0)) {
+                        if (wholeList[0][i] == 3) numberOf3 = numberOf3 - 1;
+                        if (wholeList[0][i] == 1) numberOf1 = numberOf1 - 1;
+                        if (wholeList[0][i] == 0) numberOf0 = numberOf0 - 1;
+                    }
+                }
+                    
+                
+//                m = getFixedCombination(fixedList); // Return m[0], m[1], m[2] for three rows with fixed numbers
+//                // unfixedCombination = getUnfixedCombination(flexibleWin, flexibleDraw, flexibleLose);
+//
+//                m = addUnfixedCombination("3", unfixedWin, m, threeLow, threeUp);
+//
+//                m = addUnfixedCombination("1", unfixedDraw, m, oneLow, oneUp);
+//                m = addUnfixedCombination("0", unfixedLose, m, zeroLow, zeroUp);
+
+
+                s = "01 02 03 04 05 06 07 08 09 10 11 12 13 14&#160;&#160;&#160;&#160;<br>";
+                countChoice = 0;
+
+                for (var i = 0; i < m.length; i++) { //m.length
+                    s += m[i] + "<br />";
+                    countChoice++;
+                }
+
+
+                s += "总数： " + countChoice;
+
+                return s;
+            }
+
+            function countWin(m, number) {
+                count = 0;
+                for (var i = 0; i < m.length; i++)
+                    if (m[i] == number)
+                        count++;
+                return count;
+            }
+
+
+            function addUnfixedCombination(status, unfixed, m, low, up) {
+
+                unfixedList = getUnfixedList(unfixed, low, up);
+
+                mm = [];
+                for (var i = 0; i < unfixedList.length; i++)
+                    for (var j = 0; j < m.length; j++) {
+                        three = [];
+                        for (var k = 0; k < 3; k++)
+                            three.push(m[j][k].slice(0));
+                        mm.push(three);
+                    }
+
+                size = mm.length;
+
+                for (var i = 0; i < unfixedList.length; i++) { // unfixedList.length
+                    for (var j = 0; j < unfixedList[i].length; j++) {
+                        for (var k = i * size / unfixedList.length; k < (i + 1) * size / unfixedList.length; k++) {
+                            if (status === "3") {
+                                mm[k][0][unfixedList[i][j]] = "<span style = 'color:red'>3</span>";
+                            } else if (status === "1")
+                                mm[k][1][unfixedList[i][j]] = "<span style = 'color:red'>1</span>";
+                            if (status === "0")
+                                mm[k][2][unfixedList[i][j]] = "<span style = 'color:red'>0</span>";
+                        }
+                    }
+                }
+                return mm;
+            }
+
+            function getUnfixedList(unfixed, low, up) {
+                unfixedList = [];
+                if (low <= 1 && up >= 1)
+                    // Get 1s
+                    for (var i = 0; i < unfixed.length; i++) {
+                        lst = [];
+                        lst.push(unfixed[i]);
+                        unfixedList.push(lst);
+                    }
+
+
+                if (low <= 2 && up >= 2)
+                    // Get 2s
+                    for (var i = 0; i < unfixed.length; i++) {
+                        lst = [];
+                        for (var j = i + 1; j < unfixed.length; j++) {
+                            lst = [];
+                            lst.push(unfixed[i]);
+                            lst.push(unfixed[j]);
+                            unfixedList.push(lst);
+                        }
+                    }
+
+                if (low <= 3 && up >= 3)
+                    // Get 3s
+                    for (var i = 0; i < unfixed.length; i++) {
+
+                        for (var j = i + 1; j < unfixed.length; j++)
+                            for (var k = j + 1; k < unfixed.length; k++) {
+                                lst = [];
+                                lst.push(unfixed[i]);
+                                lst.push(unfixed[j]);
+                                lst.push(unfixed[k]);
+                                unfixedList.push(lst);
+                            }
+                    }
+
+                return unfixedList;
+            }
+
+
+            // Return [[14 fixedValues], [14 fixedValues], ..., [14 fixedValues]]
+            function getFixedCombination(fixed) {
+                size = 1;
+                for (var i = 0; i < fixed.length; i++)
+                    if (fixed[i].length > 0)
+                        size *= fixed[i].length;
+
+                m = [];
+                for (var i = 0; i < size; i++)
+                    m.push([["", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]);
+
+                // f = [fixed[0][0], fixed[1][0], fixed[2][0], fixed[3][0], fixed[4][0], ....  ];
+                // f = [fixed[0][0], fixed[1][0], fixed[2][0], fixed[3][0], fixed[4][1], ....  ];
+
+                for (var i = 0; i < fixed.length; i++) {
+                    for (var j = 0; j < fixed[i].length; j++) {
+                        setM(i, j, m, fixed);
+                    }
+                }
+
+                return m;
+            }
+
+            function setM(i, j, m, fixed) {
+
+                for (var k = j * size / fixed[i].length; k < (j + 1) * size / fixed[i].length; k++) {
+                    for (var d = 0; d < fixed[i][j].length; d++)
+                        for (var h = 0; h < fixed[i][j][d].length; h++)
+                            if (fixed[i][j][d][h] == "3")
+                                m[k][0][i] = "3";
+                            else if (fixed[i][j][d][h] == "1") {
+                                m[k][1][i] = "1";
+                            } else if (fixed[i][j][d][h] == "0") {
+                                m[k][2][i] = "0";
+                            }
+                }
+            }
+
+            function getUnfixedCombination(flexibleWin, flexibleDraw, flexibleLose) {
+                unfixedCombination = [];
+
+                // for (var i = 0; i < flexibleWin.length; i++) 
+                unfixedCombination.push([['W', flexibleWin[0]], ['D', flexibleDraw[0]], ['L', flexibleLose[0]]]);
+
+                return fixedCombination;
+            }
+
+            function getCombination(k, input) {
+                var subsets = [];
+                sc = [];
+                for (var i = 0; i < k; i++)
+                    sc.push(0);
+
+// here we'll keep indices 
+                // pointing to elements in input array
+
+                if (k <= input.length) {
+                    // first index sequence: 0, 1, 2, ...
+                    for (var i = 0; (sc[i] = i) < k - 1; i++)
+                        ;
+                    subsets.push(getSubset(input, sc));
+                    for (; ; ) {
+                        var i;
+                        // find position of item that can be incremented
+                        for (i = k - 1; i >= 0 && sc[i] == input.length - k + i; i--)
+                            ;
+                        if (i < 0) {
+                            break;
+                        }
+                        sc[i]++;                    // increment this item
+                        for (++i; i < k; i++) {    // fill up remaining items
+                            sc[i] = sc[i - 1] + 1;
+                        }
+                        subsets.push(getSubset(input, sc));
+                    }
+                }
+
+                return subsets;
+            }
+
+            // generate actual subset by index sequence
+            function getSubset(input, subset) {
+                result1 = [];
+                for (var i = 0; i < subset.length; i++) {
+                    result1.push(input[subset[i]]);
+                }
+                return result1;
+            }
+        </script>
+    </head>
+
+    <body onload="init()" onresize="" style="font-family: courier new;"> 
+        <div style="display: table; overflow: hidden; width: 90%; margin: 0 auto;">
+            <script>
+                input();
+            </script>      
+        </div>
+
+        <div id ="result">
+
+        </div>
+    </body>
+</html>
+
