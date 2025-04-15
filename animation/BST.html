@@ -23,7 +23,7 @@
 
         // Reset size will clear the canvas, but not for IE9
         canvas.width = window.innerWidth - 20;
-        canvas.height = 230; // window.innerHeight - 180;
+        canvas.height = window.innerHeight - 180;
         context.clearRect(0, 0, canvas.width, canvas.height); // For IE 9
 
         context.font = "14px sans-serif";
